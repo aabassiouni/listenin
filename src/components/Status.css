@@ -1,0 +1,66 @@
+
+.wrapper {
+    display:flex;
+    width: 300px;
+    height: 100px;
+    background-color: grey;
+    border-radius: 10px;
+    align-items: center;
+    text-align: left;
+}
+.song-text {
+    color: white;
+    font-size: 15px;
+    justify-self: right;
+    font-family: Gotham;
+    margin-left: 0px;
+    margin-right: 0px;
+    padding-right: 10px;
+    flex-grow: 4;
+    overflow: hidden;
+}
+
+.song-text > p {
+    margin: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    padding: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-top: 0px;
+    width: 200px;   
+    height: 20px;
+    
+}
+img {
+    height: 70px;
+    margin-left: 13px;
+    margin-right: 0px;
+    padding: 0px;
+}
+.image {
+    margin: 0px;
+    margin-right: 7px;
+}
+.marq {
+    margin: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    padding: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-top: 0px;
+}
+.center {
+    text-align: center;
+}
+/* .user{
+    
+}
+.song{
+
+} */
