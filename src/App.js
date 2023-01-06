@@ -1,13 +1,27 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
-import SpotifyWebApi from 'spotify-web-api-js';
-import { token } from "./spotify/spotify";
-import React, { useState, useEffect} from 'react';
-import Status from './components/Status';
-import LoginButton from './components/LoginButton';
+// import SpotifyWebApi from 'spotify-web-api-js';
+// import { token } from "./spotify/spotify";
+import React, { useState, useEffect, useContext} from 'react';
+import {UserContext} from './context/userContext';
+// import Status from './components/Status';
+import LoginButton from './components/LoginButton/LoginButton';
+// import LikeButton from './components/LikeButton';
+import Card from './components/Card/Card';
+import Login from './pages/Login';
 
+import Home from './pages/Home.js';
 
-const spotifyApi = new SpotifyWebApi();
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Redirect,
+  Navigate,
+} from "react-router-dom";
+import { UserContextProvider } from './context/userContext';
+
+// const spotifyApi = new SpotifyWebApi();
 
 // class App extends Component {
 
@@ -78,27 +92,63 @@ const spotifyApi = new SpotifyWebApi();
 
 function App(){
 
+  console.log("App.js is being rendered");
 
-  const [access_token, setAccessToken] = useState(null);
+  const {user, dispatch } = useContext(UserContext);
+  const [isLoading, setIsLoading] = useState(true);
+  // console.log("user in app from context is " + user.user.email);
+  // console.log("token in app from context is " + user.token);
+  // console.log("isLoggedIn is " + user.isLoggedIn);
 
   useEffect(() => {
-    setAccessToken(token);
-  },[])
-  
-  console.log("token is " + token)
-  return (
+    try {
+      if(!user.isLoggedIn){
+        setIsLoading(false);
+      };
+    } catch (error) {
+      console.log("there is no user in app component", error);
+    }   
+    
+  }, [user])
 
-    <div>
-      {access_token ? <Status /> : (
-      <div className='loginContainer'>
-        <div className='loginWrapper'>
-          <p className='loginHeader'>Login using Spotify</p>
-          <LoginButton />
-          <a href="http://localhost:8888/login">Log in to Spotify</a>
-        </div>
-      </div>
-      )}
+  // user.isLoggedIn ? <Home /> : <Navigate replace to = {"/login"} />
+  return (
+    <div className="App">
+      {/* {isLoading ? <div>Loading...</div> : */}
+    <Router>
+
+      <Routes>
+        <Route exact path="/login" element = {
+        // isLoading ? <Navigate replace to = {"/"} /> : 
+        <Login />
+        } />
+        <Route path="/" element = {
+          // isLoading ? <Navigate replace to = {"/login"} /> :
+         <Home />
+        } />   
+      </Routes>
+    </Router> 
+      {/* } */}
     </div>
+
+          
+
+    // <div>
+    //   {access_token ? (
+    //   <>
+    //   <Card />
+    //   {/* <Chat theme={'messaging light'} /> */}
+    //   </>
+    //    ): (
+    //   <div className='loginContainer'>
+    //     <div className='loginWrapper'>
+    //       <p className='loginHeader'>Login using Spotify</p>
+    //       <LoginButton />
+    //       <a href="http://localhost:8888/login">Log in to Spotify</a>
+    //     </div>
+    //   </div>
+    //   )}
+    // </div>
   );
 }
 

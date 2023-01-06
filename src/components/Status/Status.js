@@ -1,31 +1,53 @@
 import SpotifyWebApi from "spotify-web-api-js";
-import React, { useState, useEffect } from "react";
-import { token } from "../spotify/spotify";
+import React, { useState, useEffect, useContext } from "react";
+// import { token } from "../../spotify/spotify";
 import "./Status.css";
 import Marquee from "react-fast-marquee";
+import LikeButton from "../LikeButton/LikeButton";
+import { UserContext } from "../../context/userContext";
 // import "./App.css";
 
-const spotifyApi = new SpotifyWebApi();
-spotifyApi.setAccessToken(token);
+
+// spotifyApi.setAccessToken(token);
 
 function Status() {
 
-  console.log("Status called")
+
+  console.log("Status is being rendered")
+
+  const {user} = useContext(UserContext);
+  console.log("User in status component from context is", user);
+//   useEffect(() => {
+//     if (!user) {
+//     // Do something while waiting for the user to be set in context
+//     return <div>Loading...</div>;
+//     }
+// }, [user]);
+  // console.log("User in status component from context is", user.user.email);
+
+  // var access_token = localStorage.getItem('token');
+  console.log("access_token", user.token);
+  const spotifyApi = new SpotifyWebApi();
+  spotifyApi.setAccessToken(user.token);
+
+
 
   // Use state to store current song information
   const [song, setSong] = useState({name: "Not Checked", 
-                                    albumArt: "http://localhost:8080/acf3edeb055e7b77114f9e393d1edeeda37e50c9.png",
+                                    albumArt: "http://localhost:8888/acf3edeb055e7b77114f9e393d1edeeda37e50c9.png",
                                     artist: "" } );
 
                         
   function handleClick() {
     console.log("clicked");
     spotifyApi.getMyCurrentPlaybackState().then((response) => {
+      console.log("response is", response);
       setSong({
             name: response.item.name,
             albumArt: response.item.album.images[0].url,
             artist: response.item.artists[0].name
       });
+  
     })
   }
 
@@ -55,18 +77,19 @@ function Status() {
 
   return(
   // <div className="Status">
-    <div className = "wrapper" onClick={handleClick}> 
+    <div className = "wrapper" onClick={handleClick}>
+        
         <div class = "image">
             <img src={song.albumArt} alt=""/>
         </div>
-        <div class = "song-text">
+        <div className = "song-text">
             <p class = "center">Ali Bassiouni</p>
             <br/>
             {/* <p >{song.nowPlaying.name}</p> */}
             {/* <p >{song.nowPlaying.artist}</p> */}
             {
-            song.name.length > 30 ?
-             <Marquee gradient={false} speed={30} className='marq'>{song.name}</Marquee> 
+            song.name.length > 25 ?
+             <Marquee delay = "2" gradient={false} speed={30} className='marq'>{song.name}</Marquee> 
              : <p>{song.name}</p>
              }
              {song.artist.length > 30 ?
@@ -77,6 +100,8 @@ function Status() {
             {/* <Marquee > {song.nowPlaying.name} - {song.nowPlaying.artist}</Marquee> */}
             {/* <marquee behavior="scroll" >{song.nowPlaying.name} - {song.nowPlaying.artist} </marquee> */}
         </div>
+
+        
     {/* </div> */}
     {/* <h1>{song.nowPlaying.name.length}</h1> */}
     {/* <Marquee gradient={false} speed={30}>{song.nowPlaying.name} - {song.nowPlaying.artist}</Marquee> */}

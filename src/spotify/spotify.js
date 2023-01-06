@@ -4,14 +4,15 @@ import React, { useState, useEffect } from "react";
 
 
 
-export const spotifyApi = new SpotifyWebApi();
+// export const spotifyApi = new SpotifyWebApi();
 
 
-const params = getHashParams();
-console.log(params);
-export const token = params.access_token;
-if (token) {
-    spotifyApi.setAccessToken(token);
-    localStorage.setItem('token', token); 
-}
+// const params = getHashParams();
+// console.log("params", params);
+// export const token = params.access_token;
+
+// if (token) {
+//     spotifyApi.setAccessToken(token);
+//     localStorage.setItem('token', token); 
+// }
 
