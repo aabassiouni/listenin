@@ -3,6 +3,8 @@ var request = require('request'); // "Request" library
 var cors = require('cors');
 var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
+const path = require("path");
+const StreamChat = require('stream-chat').StreamChat
 
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
@@ -46,37 +48,20 @@ var generateRandomString = function(length) {
 
 var app = express();
 
-app.use(express.static(__dirname + '/public'))
+var static = express.static(path.join(__dirname, "public/images"));
+
+app.use("/images", static)
    .use(cors())
    .use(cookieParser());
 
 const http = require('http').Server(app);
 
-http.listen(4000, () => {
-  console.log(`Server listening on 4000`);
-});
-
-const socketIO = require('socket.io')(http, {
-  cors: {
-      origin: "http://localhost:3000"
-  }
-});
-
-
-socketIO.on('connection', (socket) => {
-  console.log(`⚡: ${socket.id} user just connected!`);
-  socket.on('disconnect', () => {
-    console.log('🔥: A user disconnected');
-  });
-});
-
 app.use(express.json());
-// app.use("/users", userRoute);
+
 // app.use("/register", registerRoute);
-
-
 app.use('/login', loginRoute);
 app.use('/callback', callbackRoute);
+app.use('/users', userRoute);
 
 
 // app.get('/callback', function(req, res) {
@@ -165,5 +150,5 @@ app.get('/refresh_token', function(req, res) {
   });
 });
 
-console.log('Listening on 8888');
+console.log('Express Server listening on 8888');
 app.listen(8888);
