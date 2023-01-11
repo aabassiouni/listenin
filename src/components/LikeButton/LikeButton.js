@@ -13,11 +13,14 @@ function LikeButton() {
 
   const likeIcon = "http://localhost:8888/images/like-heart-icon.png";
   return (
-        <button className ="like-button" onClick={() => setLiked(!liked)}>
-          {/* {liked ? "Unlike" : "Like"} */}
-          <img className = "like-button-img" src={likeIcon} alt= "" />
-        </button>
-      
+    <div className ="like-button">
+        <div onClick={() => setLiked(!liked)} className = "like-button-img" >
+          {/* <button  > */}
+            {/* {liked ? "Unlike" : "Like"} */}
+            <img className ="like-button-img" src={likeIcon} alt= "" />
+          {/* </button> */}
+      </div>  
+    </div>
   );
 }
 

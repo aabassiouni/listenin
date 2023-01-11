@@ -88,13 +88,6 @@ router.get('/', function(req, res) {
           var access_token = body.access_token,
               refresh_token = body.refresh_token;
           
-
-          // useless code, was used in old request.get method
-          // var options = {
-          //   url: 'https://api.spotify.com/v1/me',
-          //   headers: { 'Authorization': 'Bearer ' + access_token },
-          //   json: true
-          // };
           
           console.log("going to call getUserData")
           var response = await getUserData(access_token);
@@ -109,27 +102,6 @@ router.get('/', function(req, res) {
           console.log("spotifyID is:", spotifyID);
 
 
-          // use the access token to access the Spotify Web API
-          // request.get(options, function(error, response, body) {
-
-          //   console.log(response.statusCode)
-          //   console.log(body);
-          //   console.log("body.email is: ", body.email);
-
-
-          //   userEmail = body.email;
-          //   profilePic = body.images[0].url;
-          //   spotifyID = body.id;
-
-
-          //   console.log("userEmail inside the get is:",userEmail);
-          //   // console.log(profilePic);
-          //   // console.log(spotifyID);
-          //   // console.log(body.email);
-
-          // });
-
-          // Save the user's access token to the database
           try{
               console.log("saving user to database");
 
@@ -157,7 +129,6 @@ router.get('/', function(req, res) {
               userID: spotifyID
             }));
 
-          
 
         } else {
           res.redirect('http://localhost:3000' +

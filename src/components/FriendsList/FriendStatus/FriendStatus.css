@@ -1,15 +1,15 @@
 
-.status-wrapper {
+.friendstatus-wrapper {
     display:flex;
-    width: 300px;
+    width: 260px;
     height: 100px;
     background-color: grey;
-    border-radius: 10px 10px 10px 10px;
+    border-radius: 10px 0px 0px 10px;
     align-items: center;
     text-align: left;
     cursor: pointer;
 }
-.status-song-text-wrapper {
+.friendstatus-song-text-wrapper {
     color: white;
     font-size: 15px;
     justify-self: right;
@@ -17,12 +17,11 @@
     margin-left: 0px;
     margin-right: 0px;
     padding-right: 10px;
-    padding-left: 10px;
     flex-grow: 4;
     overflow: hidden;
 }
 
-.status-song-text-wrapper > p {
+.friendstatus-song-text-wrapper > p {
     margin: 0px;
     margin-left: 0px;
     margin-right: 0px;
@@ -35,8 +34,9 @@
     padding-top: 0px;
     width: 200px;   
     height: 20px;
+    
 }
-.status-song-image {
+.friendstatus-song-image {
     height: 70px;
     margin-left: 13px;
     margin-right: 0px;
@@ -59,9 +59,3 @@
 .center {
     text-align: center;
 }
-/* .user{
-    
-}
-.song{
-
-} */

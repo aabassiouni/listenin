@@ -14,10 +14,12 @@ export const useStreamClient = ({ apiKey, userData, tokenOrProvider }) => {
       tokenOrProvider = client.devToken(userData.id);
       // prevents application from setting stale client (user changed, for example)
       let didUserConnectInterrupt = false;
-  
-      const connectionPromise = client.connectUser(userData, tokenOrProvider).then(() => {
-        if (!didUserConnectInterrupt) setChatClient(client);
-      });
+      
+      const connectionPromise = 
+        client.connectUser(userData, tokenOrProvider)
+              .then(() => {
+                if (!didUserConnectInterrupt) setChatClient(client);
+              });
   
       return () => {
         didUserConnectInterrupt = true;

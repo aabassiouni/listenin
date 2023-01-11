@@ -1,0 +1,12 @@
+.card{
+    display: flex;
+    flex-direction: row;
+    /* width: 400px; */
+}
+.like-button-container{
+    display: absoulute;
+    
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

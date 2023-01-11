@@ -3,9 +3,20 @@
     display: flex;
     /* background-color: black; */
 }
+
 .chat-menu{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    align-items: center;
+}
+.chat-menu-wrapper{
     flex: 3.5;
-    background-color: aquamarine;
+    background-color: #043b17;
+}
+.chat-box-wrapper{
+    background-color: darkorange;
+    height: 50vh;
 }
 .chat-box{
     flex: 6.5;
@@ -18,12 +29,8 @@
     margin: 10px;
     /* display: none; */
 }
-.chat-menu-wrapper{
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    align-items: center;
-}
+
+
 .LogoutButton{
     display: none;
     /* align-items: center; */

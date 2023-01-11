@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect,useContext, useReducer } from "react";
+import { createContext, useState, useEffect,useContext, useReducer,useMemo } from "react";
 import { spotifyApi } from "../spotify/spotify";
 import { getHashParams } from "../util/util";
 import axios from "axios";
@@ -31,6 +31,7 @@ export const authReducer = (state, action) => {
 export function UserContextProvider({ children }) {
 
   const [state, dispatch] = useReducer(authReducer, initialState);
+  // const value = useMemo(() => ({ state, dispatch }), [state, dispatch]);
 
   useEffect(() => {
 

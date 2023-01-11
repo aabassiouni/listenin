@@ -15,6 +15,9 @@ const registerRoute = require("./routes/register.js");
 const loginRoute = require("./routes/login.js");
 const callbackRoute = require("./routes/callback.js");
 
+const User = require("./models/User");
+
+
 const client_id = '2d06712101474795ab9fa2bd91fa6000'; // Your client id
 const client_secret = '6b993945947f416f87025d975c6f4ccb'; // Your secret
 const redirect_uri = 'http://localhost:8888/callback'; // Your redirect uri
@@ -64,67 +67,7 @@ app.use('/callback', callbackRoute);
 app.use('/users', userRoute);
 
 
-// app.get('/callback', function(req, res) {
 
-//   // your application requests refresh and access tokens
-//   // after checking the state parameter
-
-//   var code = req.query.code || null;
-//   var state = req.query.state || null;
-//   var storedState = req.cookies ? req.cookies[stateKey] : null;
-
-//   if (state === null || state !== storedState) {
-//     res.redirect('/#' +
-//       querystring.stringify({
-//         error: 'state_mismatch'
-//       }));
-//   } else {
-//     res.clearCookie(stateKey);
-//     var authOptions = {
-//       url: 'https://accounts.spotify.com/api/token',
-//       form: {
-//         code: code,
-//         redirect_uri: redirect_uri,
-//         grant_type: 'authorization_code'
-//       },
-//       headers: {
-//         'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64'))
-//       },
-//       json: true
-//     };
-
-//     request.post(authOptions, function(error, response, body) {
-//       if (!error && response.statusCode === 200) {
-
-//         var access_token = body.access_token,
-//             refresh_token = body.refresh_token;
-
-//         var options = {
-//           url: 'https://api.spotify.com/v1/me',
-//           headers: { 'Authorization': 'Bearer ' + access_token },
-//           json: true
-//         };
-
-//         // use the access token to access the Spotify Web API
-//         request.get(options, function(error, response, body) {
-//           console.log(body);
-//         });
-
-//         // we can also pass the token to the browser to make requests from there
-//         res.redirect('http://localhost:3000/#' +
-//           querystring.stringify({
-//             access_token: access_token,
-//             refresh_token: refresh_token
-//           }));
-//       } else {
-//         res.redirect('http://localhost:3000' +
-//           querystring.stringify({
-//             error: 'invalid_token'
-//           }));
-//       }
-//     });
-//   }
-// });
 
 app.get('/refresh_token', function(req, res) {
 
@@ -149,6 +92,21 @@ app.get('/refresh_token', function(req, res) {
     }
   });
 });
+
+// var emails = ["test1@email.com","test2@email.com","test3@email.com","test4@email.com"];
+// var streamIDs = ["test1","test2","test3","test4"];
+
+// for (var i = 0; i < emails.length; i++) {
+//   profilepicstring = "images/test" + i + ".jpg";
+//   const newUser = new User({
+//     email: emails[i],
+//     profilePicture: profilepicstring,
+//     streamID: streamIDs[1]
+//   });
+
+//   const user = newUser.save();
+//   console.log(newUser.email + " saved to database");
+// }
 
 console.log('Express Server listening on 8888');
 app.listen(8888);

@@ -10,19 +10,20 @@ import { UserContext } from "../../context/userContext";
 
 // spotifyApi.setAccessToken(token);
 
-function Status() {
+function Status(props) {
 
 
   console.log("Status is being rendered")
 
   const {user} = useContext(UserContext);
+  
   console.log("User in status component from context is", user);
-//   useEffect(() => {
-//     if (!user) {
-//     // Do something while waiting for the user to be set in context
-//     return <div>Loading...</div>;
-//     }
-// }, [user]);
+  //   useEffect(() => {
+  //     if (!user) {
+  //     // Do something while waiting for the user to be set in context
+  //     return <div>Loading...</div>;
+  //     }
+  // }, [user]);
   // console.log("User in status component from context is", user.user.email);
 
   // var access_token = localStorage.getItem('token');
@@ -34,7 +35,7 @@ function Status() {
 
   // Use state to store current song information
   const [song, setSong] = useState({name: "Not Checked", 
-                                    albumArt: "http://localhost:8888/acf3edeb055e7b77114f9e393d1edeeda37e50c9.png",
+                                    albumArt: "http://localhost:8888/images/acf3edeb055e7b77114f9e393d1edeeda37e50c9.png",
                                     artist: "" } );
 
                         
@@ -47,7 +48,7 @@ function Status() {
             albumArt: response.item.album.images[0].url,
             artist: response.item.artists[0].name
       });
-  
+      
     })
   }
 
@@ -77,16 +78,14 @@ function Status() {
 
   return(
   // <div className="Status">
-    <div className = "wrapper" onClick={handleClick}>
+    <div className = "status-wrapper" onClick={handleClick}>
         
-        <div class = "image">
-            <img src={song.albumArt} alt=""/>
+        <div className = "status-song-image-wrapper">
+            <img className = "status-song-image" src={song.albumArt} alt=""/>
         </div>
-        <div className = "song-text">
-            <p class = "center">Ali Bassiouni</p>
+        <div className = "status-song-text-wrapper">
+            <p className = "status-song-text">Ali Bassiouni</p>
             <br/>
-            {/* <p >{song.nowPlaying.name}</p> */}
-            {/* <p >{song.nowPlaying.artist}</p> */}
             {
             song.name.length > 25 ?
              <Marquee delay = "2" gradient={false} speed={30} className='marq'>{song.name}</Marquee> 
@@ -109,10 +108,6 @@ function Status() {
   //   <div>
   //     <img src={song.nowPlaying.albumArt} style={{ height: 150 }}/>
   //   </div>
-
-  //     <button onClick={() => this.getNowPlaying()}>
-  //       Check Now Playing
-  //     </button>
   // </div>
 );
 }

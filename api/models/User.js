@@ -2,18 +2,11 @@ const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema(
   {
-    // username: {
-    //   type: String,
-    //   require: true,
-    //   min: 3,
-    //   max: 20,
-    //   unique: true,
-    // },
     email: {
       type: String,
       // required: true,
       max: 50,
-      // unique: true,
+      unique: true,
     },
 
     profilePicture: {
@@ -26,7 +19,7 @@ const UserSchema = new mongoose.Schema(
       default: [],
     },
 
-    followings: {
+    following: {
       type: Array,
       default: [],
     },
