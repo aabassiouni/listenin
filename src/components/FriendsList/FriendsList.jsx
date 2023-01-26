@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Divider, Chip } from '@mui/material';
-import Card from '../Card/Card.js';
-import FriendCard from './FriendCard/FriendCard.js';
+import Card from '../Card/Card.jsx';
+import FriendCard from './FriendCard/FriendCard.jsx';
 import './FriendsList.css';
 
 

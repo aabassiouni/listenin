@@ -4,16 +4,15 @@ import { UserContext } from "./context/userContext";
 import LoginButton from "./components/LoginButton/LoginButton";
 import Card from "./components/Card/Card";
 import Login from "./pages/Login";
-import Home from "./pages/Home.js";
+import Home from "./pages/Home.jsx";
 
 import {
 	BrowserRouter as Router,
 	Routes,
 	Route,
-	Redirect,
-	Navigate,
+
 } from "react-router-dom";
-import { UserContextProvider } from "./context/userContext";
+import { UserContextProvider } from "./context/userContext.jsx";
 
 function App() {
 	console.log("App.js is being rendered");

@@ -3,11 +3,11 @@ import { StreamChat } from 'stream-chat';
 import { Chat, SendButton, Channel, ChannelList, ChannelHeader, MessageInput, MessageList, VirtualizedMessageList, Thread, Window,useChatContext, InfiniteScroll } from 'stream-chat-react'
 import { useStreamClient } from '../../hooks/UseStreamClient.js'
 import { UserContext } from '../../context/userContext';
-import { CustomPreview } from '../CustomPreview/CustomPreview.js';
+import { CustomPreview } from '../CustomPreview/CustomPreview.jsx';
 import axios from 'axios';
 // import 'stream-chat-react/dist/css/v2/index.css';
-import CustomChannelHeader from '../CustomChannelHeader/CustomChannelHeader.js';
-import { TypingIndicator } from '../TypingIndicator/TypingIndicator.js';
+import CustomChannelHeader from '../CustomChannelHeader/CustomChannelHeader.jsx';
+import { TypingIndicator } from '../TypingIndicator/TypingIndicator.jsx';
 // import { useStreamClient } from 'C:\\Users\\Ali Bassiouni\\Documents\\PROJECTS\\listenin\\src\\hooks\\UseStreamClient.js';
 
 import './Messenger.css';

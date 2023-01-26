@@ -1,5 +1,4 @@
 import { createContext, useState, useEffect,useContext, useReducer,useMemo } from "react";
-import { spotifyApi } from "../spotify/spotify";
 import { getHashParams } from "../util/util";
 import axios from "axios";
 

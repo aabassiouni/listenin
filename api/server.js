@@ -1,8 +1,8 @@
-var express = require('express'); // Express web server framework
-var request = require('request'); // "Request" library
-var cors = require('cors');
-var querystring = require('querystring');
-var cookieParser = require('cookie-parser');
+let express = require('express'); // Express web server framework
+let request = require('request'); // "Request" library
+let cors = require('cors');
+let querystring = require('querystring');
+let cookieParser = require('cookie-parser');
 const path = require("path");
 const StreamChat = require('stream-chat').StreamChat
 
@@ -21,7 +21,7 @@ const User = require("./models/User");
 const client_id = '2d06712101474795ab9fa2bd91fa6000'; // Your client id
 const client_secret = '6b993945947f416f87025d975c6f4ccb'; // Your secret
 const redirect_uri = 'http://localhost:8888/callback'; // Your redirect uri
-var stateKey = 'spotify_auth_state';
+let stateKey = 'spotify_auth_state';
 
 dotenv.config();
 
@@ -39,21 +39,21 @@ mongoose.connect(
  * @param  {number} length The length of the string
  * @return {string} The generated string
  */
-var generateRandomString = function(length) {
-  var text = '';
-  var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+let generateRandomString = function(length) {
+  let text = '';
+  let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     text += possible.charAt(Math.floor(Math.random() * possible.length));
   }
   return text;
 };
 
-var app = express();
+let app = express();
 
-var static = express.static(path.join(__dirname, "public/images"));
 
-app.use("/images", static)
+
+app.use("/images", express.static(path.join(__dirname, "public/images")))
    .use(cors())
    .use(cookieParser());
 
@@ -74,7 +74,7 @@ app.get('/refresh_token', function(req, res) {
 
   // requesting access token from refresh token
   
-    var refresh_token = req.query.refresh_token;
+    let refresh_token = req.query.refresh_token;
     console.log("refresh token is ", refresh_token);
     if (!refresh_token) {
       console.log("refresh_token is null");
@@ -82,7 +82,7 @@ app.get('/refresh_token', function(req, res) {
         'access_token': null
       });
     }
-    var authOptions = {
+    let authOptions = {
       url: 'https://accounts.spotify.com/api/token',
       headers: { 'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64')) },
       form: {
@@ -95,7 +95,7 @@ app.get('/refresh_token', function(req, res) {
     request.post(authOptions, function(error, response, body) {
       if (!error && response.statusCode === 200) {
         console.log(body);
-        var access_token = body.access_token;
+        let access_token = body.access_token;
         res.send({
           'access_token': access_token
         });
@@ -108,10 +108,10 @@ app.get('/refresh_token', function(req, res) {
 
 });
 
-// var emails = ["test1@email.com","test2@email.com","test3@email.com","test4@email.com"];
-// var streamIDs = ["test1","test2","test3","test4"];
+// let emails = ["test1@email.com","test2@email.com","test3@email.com","test4@email.com"];
+// let streamIDs = ["test1","test2","test3","test4"];
 
-// for (var i = 0; i < emails.length; i++) {
+// for (let i = 0; i < emails.length; i++) {
 //   profilepicstring = "images/test" + i + ".jpg";
 //   const newUser = new User({
 //     email: emails[i],

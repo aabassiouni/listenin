@@ -118,7 +118,7 @@ function Home() {
                                     <FriendsList following={following} />
                                 </div>
                             </div>
-                        <div className=" w-full chat-box">
+                        <div className=" w-full chat-box h-screen grid place-items-center bg-red-900">
                             <div className="chat-box-wrapper">
                                 <Messenger />
                             </div>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import LikeButton from "../../LikeButton/LikeButton";
 import Status from '../../Status/Status';
-import FriendStatus from "../FriendStatus/FriendStatus.js";
+import FriendStatus from "../FriendStatus/FriendStatus.jsx";
 import "./FriendCard.css";
 
 
