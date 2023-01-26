@@ -14,9 +14,7 @@ function Card(props) {
   return (
     <div className="card">
       <Status />
-      <div className = 'like-button-container'>
-        {/* <LikeButton /> */}
-      </div>
+
     </div>
   );
 }

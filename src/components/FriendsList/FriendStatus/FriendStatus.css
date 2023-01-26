@@ -3,7 +3,8 @@
     display:flex;
     width: 260px;
     height: 100px;
-    background-color: grey;
+    background: radial-gradient(circle, rgba(80,213,183,1) 0%, rgba(6,125,104,1) 100%);
+
     border-radius: 10px 0px 0px 10px;
     align-items: center;
     text-align: left;
@@ -37,7 +38,7 @@
     
 }
 .friendstatus-song-image {
-    height: 70px;
+    /* height: 70px; */
     margin-left: 13px;
     margin-right: 0px;
     padding: 0px;

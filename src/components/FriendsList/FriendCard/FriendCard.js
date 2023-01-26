@@ -11,7 +11,7 @@ function FriendCard(props) {
   const user = props.user;
 
   return (
-    <div className="card">
+    <div className="friend-card">
       <FriendStatus user= {user}/>
       <div className = 'like-button-container'>
         <LikeButton />

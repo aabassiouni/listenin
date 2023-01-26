@@ -14,12 +14,16 @@ function FriendsList(props) {
     console.log("following in FriendsList is", following);
     return (
         <div className="friends-list">
-            <div className='friends-list-header'>
-                <p className='title'>Friends List</p>
-                <p className='title'>num friends: {following.length}</p>
-            </div>
+            {/* <div className='flex flex-col place-content-center'>
+                <div className="clapyResets root">
+                    <div className="friendsList">
+                        <div className="textBlock">Friends List</div>
+                    </div>
+                </div> */}
+                <p className='title text-center'>num friends: {following.length}</p>
+            {/* </div> */}
             <Divider />
-            <div className='friends-list-card-container'>
+            <div className='friends-list-card-container py-4 space-y-4 '>
                 {following.map((friend) => {
                     return <FriendCard user={friend} />
                 })}

@@ -70,27 +70,42 @@ app.use('/users', userRoute);
 
 
 app.get('/refresh_token', function(req, res) {
+  console.log("refresh_token called");
 
   // requesting access token from refresh token
-  var refresh_token = req.query.refresh_token;
-  var authOptions = {
-    url: 'https://accounts.spotify.com/api/token',
-    headers: { 'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64')) },
-    form: {
-      grant_type: 'refresh_token',
-      refresh_token: refresh_token
-    },
-    json: true
-  };
-
-  request.post(authOptions, function(error, response, body) {
-    if (!error && response.statusCode === 200) {
-      var access_token = body.access_token;
+  
+    var refresh_token = req.query.refresh_token;
+    console.log("refresh token is ", refresh_token);
+    if (!refresh_token) {
+      console.log("refresh_token is null");
       res.send({
-        'access_token': access_token
+        'access_token': null
       });
     }
-  });
+    var authOptions = {
+      url: 'https://accounts.spotify.com/api/token',
+      headers: { 'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64')) },
+      form: {
+        grant_type: 'refresh_token',
+        refresh_token: refresh_token
+      },
+      json: true
+    };
+
+    request.post(authOptions, function(error, response, body) {
+      if (!error && response.statusCode === 200) {
+        console.log(body);
+        var access_token = body.access_token;
+        res.send({
+          'access_token': access_token
+        });
+      }
+    });
+  // } catch (err) {
+  //   console.log(err);
+  //   res.status(403).json("somethings weird");
+  // }
+
 });
 
 // var emails = ["test1@email.com","test2@email.com","test3@email.com","test4@email.com"];

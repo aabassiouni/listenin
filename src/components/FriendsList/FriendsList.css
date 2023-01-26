@@ -14,7 +14,7 @@
     overflow: scroll;
 }
 .title{
-    text-align: center;
+    /* text-align: center; */
 }
 .friends-list-card-container{
     display: flex;
@@ -25,3 +25,39 @@
     /* width: fill-available; */
     /* overflow: scroll; */
 }
+.root {
+    position: relative;
+    width: 183px;
+    height: 45px;
+    align-items: center;
+    outline: solid 3px #3fe180;
+    outline-offset: -3px;
+    border-radius: 16px;
+    background-color: #145930;
+    overflow: hidden;
+  }
+  .friendsList {
+    position: absolute;
+    left: calc(50% - 0.5px);
+    top: calc(50% - 2.5px);
+    width: 118px;
+    height: 12px;
+    text-align: center;
+    align-items: center;
+    flex-direction: column;
+    transform: translate(-50%, -50%);
+  }
+  .textBlock {
+    color: #fff;
+    font-size: 19px;
+    font-family: Gotham, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',
+      'Liberation Sans', sans-serif;
+  }
+  .textBlock2 {
+    margin-top: 0;
+    color: #fff;
+    font-size: 19px;
+    font-family: Gotham, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',
+      'Liberation Sans', sans-serif;
+  }
+  

@@ -24,3 +24,4 @@ yarn-error.log*
 .vscode/launch.json
 api/.env
 listenin.mongodb
+.prettierrc

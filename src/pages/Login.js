@@ -9,7 +9,7 @@ import LoginButton from '../components/LoginButton/LoginButton';
 function Login() {
 
     console.log("Login is being rendered");
-
+    
     
     return (
         <div className='loginContainer'>

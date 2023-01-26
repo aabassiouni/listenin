@@ -1,17 +1,46 @@
+/* @import 'C:\\Users\\Ali Bassiouni\\Documents\\PROJECTS\\listenin\\node_modules\\stream-chat-react\\dist\\css\\v2\\index.css'; */
 
-.str-chat__channel-list {
-  width: 30%;
-}
-.str-chat__channel {
-  width: 400px;
-}
-.str-chat__thread {
-  width: 45%;
+@import '../../../node_modules/stream-chat-react/dist/css/v2/index.css';
+
+.str-chat{
+  /* width: 100%; */
+  /* height: max-content; */
+  /* height: 100%; */
+  --str-chat__text-color: rgb(3, 55, 199);
+  --str-chat__channel-border-block-start: 10px;
+  /* --str-chat__body-medium-text: 15px; */
+  /* --str-chat__body-text: 5px; */
+  /* --str-chat__message-textarea-border: 300px solid #00000029; */
+  /* --str-chat__body2-text: 3px; */
+  --str-chat__body2-text: 30px;
+  /* --str-chat__virtual-list-border-radius: 50px; */
+  /* --str-chat__channel-preview-border-radius: 50px; */
+  /* --str-chat__channel-border-radius: 50px; */
+  /* --str-chat__channel-header-border-radius: 80px; */
+  /* --str-chat__message-list-border-radius: 80px; */
+  --str-chat__message-list-background-color: rgb(2, 53, 29);
+  --str-chat__message-list-border: 100px solid #00000029;
+  /* --str-chat__font-family:'Times New Roman'; */
+  /* --str-chat__message-bubble-border-block-start: 100px; */
+
+  /* The border radius used for the borders of the message bubble */
+  --str-chat__message-bubble-border-radius: 10px;
+ 
 }
 
-/* .chat{
-  display: flex;
-  flex-direction: row;
-  height: 400px;
-  width: 400px;
-} */
+.str-chat__message-input {
+
+  /* The border radius used for the borders of the message input */
+  --str-chat__message-input-border-radius: 100px 100px;
+  border: 10px red;
+}
+
+.str-chat__main-panel-inner{
+  max-height: 50vh;
+}
+.str-chat-channel{
+  /* position: absolute; */
+  
+  color: blueviolet;
+  border-radius: 16px 16px 20px 0px;
+}

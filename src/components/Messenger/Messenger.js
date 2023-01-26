@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { StreamChat } from 'stream-chat';
-import { Chat, Channel, ChannelList, ChannelHeader, MessageInput, MessageList, Thread, Window,useChatContext, InfiniteScroll } from 'stream-chat-react'
+import { Chat, SendButton, Channel, ChannelList, ChannelHeader, MessageInput, MessageList, VirtualizedMessageList, Thread, Window,useChatContext, InfiniteScroll } from 'stream-chat-react'
 import { useStreamClient } from '../../hooks/UseStreamClient.js'
 import { UserContext } from '../../context/userContext';
 import { CustomPreview } from '../CustomPreview/CustomPreview.js';
 import axios from 'axios';
-import 'stream-chat-react/dist/css/v2/index.css';
+// import 'stream-chat-react/dist/css/v2/index.css';
+import CustomChannelHeader from '../CustomChannelHeader/CustomChannelHeader.js';
+import { TypingIndicator } from '../TypingIndicator/TypingIndicator.js';
 // import { useStreamClient } from 'C:\\Users\\Ali Bassiouni\\Documents\\PROJECTS\\listenin\\src\\hooks\\UseStreamClient.js';
 
-// import './Messenger.css';
+import './Messenger.css';
 
 
 
@@ -28,11 +30,11 @@ function Messenger() {
 
     //wait for user to be set in the context
     const {user, dispatch} = useContext(UserContext);
-   
+    const {channel} = useChatContext();
     
     console.log("user value in messenger component from context is", user);
 
-    const activeuser = user.user;
+    const activeuser = user?.user;
     var userObj = {};
 
 
@@ -46,45 +48,37 @@ function Messenger() {
         console.log("error while trying to set userObj", error);
     }
 
-    const chatClient = useStreamClient({ apiKey: 'vvucrr6yge97', userData: userObj, tokenOrProvider: '' });
+
+    // const chatClient = useStreamClient({ apiKey: 'vvucrr6yge97', userData: userObj, tokenOrProvider: '' });
 
     // const filters = { type: 'messaging', members: { $in: [userObj.id] } };
 
-    const handleFollow = async () => {
-        console.log("follow button clicked");
-        try {
-            var userID = user.user.streamID;
-            const res = await axios.put(`http://localhost:8888/users/aabassiouni/follow`, {
-                target_id: "test1"});
 
-            const conversation = chatClient.channel('messaging', {
-                members: ["test1-918aa4db-e8e3-4090-ab0d-64aba5a75b49", "aabassiouni"],
-                });
-
-            await conversation.watch();
-            console.log(res);
-        } catch (err) {
-            console.log(err);
-        }
-    }
-
-    if (!chatClient) {
-            return <div>Loading: no chat client</div>;
-        }
+    // if (!chatClient) {
+    //         return <div>Loading: no chat client</div>;
+    //     }
     
     return (
-        <Chat client={chatClient} theme='str-chat__theme-dark'>       
-            <button onClick = {handleFollow} className = "follow-button" >Follow</button>
-            <ChannelList />
-            <Channel>
-                <Window>
-                    <ChannelHeader />
-                    <MessageList />
-                    <MessageInput />
-                </Window>
-            <Thread />
-            </Channel>
-        </Chat>
+    //     // <Chat client={chatClient} theme='str-chat__theme-dark'>       
+            
+            <div className = "messenger-container rounded-2xl">
+                {/* <ChannelList /> */}
+                <Channel channel={channel} TypingIndicator={() => null}>
+                    <Window>
+                        {/* <ChannelHeader /> */}
+                        <CustomChannelHeader />
+                        {/* <VirtualizedMessageList disableDateSeparator /> */}
+                        <div className = "max-h-screen overflow-scroll message-list-container">
+                            <MessageList messageActions = {[]} disableDateSeparator/>
+                        </div>
+                        <div className = "relative bottom-0 message-input-container ">
+                            <MessageInput />
+                        </div>
+                    </Window>
+                {/* <Thread /> */}
+                </Channel>
+            </div>
+        // {/* </Chat> */}
     )  
 }
 

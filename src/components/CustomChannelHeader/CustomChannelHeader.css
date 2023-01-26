@@ -1,0 +1,12 @@
+.header-title {
+    padding: 5px 7px;
+    /* font-weight: 100; */
+  }
+  
+  .header-pound {
+    color: #006cff;
+    font-weight: 800;
+    padding-right: 2px;
+  }
+  
+  /* --str-chat__message-textarea-border: 2px solid #00000029; */

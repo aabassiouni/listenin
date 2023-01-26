@@ -5,6 +5,9 @@ import "./Status.css";
 import Marquee from "react-fast-marquee";
 import LikeButton from "../LikeButton/LikeButton";
 import { UserContext } from "../../context/userContext";
+import {useNavigate} from "react-router-dom"
+import axios from "axios";
+
 // import "./App.css";
 
 
@@ -16,8 +19,8 @@ function Status(props) {
   console.log("Status is being rendered")
 
   const {user} = useContext(UserContext);
-  
-  console.log("User in status component from context is", user);
+  const navigate = useNavigate();
+  // console.log("User in status component from context is", user);
   //   useEffect(() => {
   //     if (!user) {
   //     // Do something while waiting for the user to be set in context
@@ -27,9 +30,9 @@ function Status(props) {
   // console.log("User in status component from context is", user.user.email);
 
   // var access_token = localStorage.getItem('token');
-  console.log("access_token", user.token);
+  // console.log("access_token", user?.access_token);
   const spotifyApi = new SpotifyWebApi();
-  spotifyApi.setAccessToken(user.token);
+  spotifyApi.setAccessToken(user?.access_token);
 
 
 
@@ -38,18 +41,43 @@ function Status(props) {
                                     albumArt: "http://localhost:8888/images/acf3edeb055e7b77114f9e393d1edeeda37e50c9.png",
                                     artist: "" } );
 
-                        
-  function handleClick() {
+  
+  async function handleClick() {
     console.log("clicked");
-    spotifyApi.getMyCurrentPlaybackState().then((response) => {
-      console.log("response is", response);
-      setSong({
-            name: response.item.name,
-            albumArt: response.item.album.images[0].url,
-            artist: response.item.artists[0].name
-      });
-      
-    })
+
+    spotifyApi.getMyCurrentPlaybackState()
+      .catch ((err) => {
+        console.log("error is", err);
+      })
+      .then((response) => {
+
+        if (!response) {
+          console.log("401 error");
+          console.log("fetching new access token");
+          console.log("refresh token is", user?.refresh_token);
+
+          axios.get(`http://localhost:8888/refresh_token/?refresh_token=${user?.refresh_token}`)
+            .catch((err) => {
+              console.log("error fetching refresh token:", err);
+            })
+            .then((response) => {
+              // console.log("response is", response);
+              // var access_token = response.data.access_token;
+              // console.log("access token is", access_token);
+              spotifyApi.setAccessToken(response.data.access_token);
+              // localStorage.setItem('token', access_token);
+            }
+            );
+        }
+
+        console.log("response is", response);
+        setSong({
+              name: response.item.name,
+              albumArt: response.item.album.images[0].url,
+              artist: response.item.artists[0].name
+        });
+      })
+
   }
 
   /*  
@@ -81,7 +109,7 @@ function Status(props) {
     <div className = "status-wrapper" onClick={handleClick}>
         
         <div className = "status-song-image-wrapper">
-            <img className = "status-song-image" src={song.albumArt} alt=""/>
+            <img className = "status-song-image max-h-[70px]" src={song.albumArt} alt=""/>
         </div>
         <div className = "status-song-text-wrapper">
             <p className = "status-song-text">Ali Bassiouni</p>

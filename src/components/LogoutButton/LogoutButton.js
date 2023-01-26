@@ -6,7 +6,7 @@ import { Navigate } from 'react-router-dom';
 function LogoutButton (){
 
     const {user, dispatch} = React.useContext(UserContext);
-    console.log("user in login button is", user);
+    // console.log("user in login button is", user);
     console.log("LoginButton is being rendered");
 
   
