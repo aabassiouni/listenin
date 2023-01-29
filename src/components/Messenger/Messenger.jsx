@@ -69,8 +69,8 @@ function Messenger() {
                     <Window>
                         <ChannelHeader />
                         {/* <CustomChannelHeader /> */}
-                        <div className = " message-list-container">
-                            <MessageList messageActions = {[]} disableDateSeparator/>
+                        <div className = "message-list-container">
+                            <MessageList noGroupByUser= {true} messageActions = {[]} disableDateSeparator/>
                         </div>
                         <div className = "absolute w-full bottom-0 message-input-container ">
                             <MessageInput />
