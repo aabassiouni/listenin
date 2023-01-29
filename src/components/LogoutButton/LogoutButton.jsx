@@ -20,8 +20,8 @@ function LogoutButton (){
 
     return (
         
-        <button type="button" className='logoutButton' onClick={handleClick}>
-            <span className = 'logoutButtonText'>Logout</span>
+        <button type="button" className='logoutButton rounded-xl shadow-neomorphism bg-[#16DB65] btn-ghost p-3 ' onClick={handleClick}>
+            <span className = "logoutButtonText font-bold font-['Gotham'] text-shadow text-white text-center text-xl">Logout</span>
         </button>
 
     );

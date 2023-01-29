@@ -33,7 +33,7 @@ export default function CustomChannelHeader(props) {
 
     return (
         <>
-            <div className='flex h-12 rounded-t-lg justify-center bg-slate-800'>
+            <div className='flex h-12 rounded-t-lg justify-center bg-[#5B8266] min-h-12'>
             
                 <div className='header-title font-[1100] text-slate-50 '>
                     {title}

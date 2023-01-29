@@ -9,21 +9,3 @@
     background: linear-gradient(to right, #093637, #44A08D) /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
-.chat-box-wrapper{
-    background-color: darkorange;
-    width: 550px;
-    height: 300px;
-    overflow: scroll;
-    /* margin: auto;*/
-    /* overflow: visible;  */
-} 
-.chat-box{
-    /* flex: 6.5; */
-    /* height: 100%; */
-    /* background-color: red; */
-    /* max-height: 100%; */
-    /* display: flex; */
-    /* align-items: center; */
-    /* justify-content: center; */
-}
-

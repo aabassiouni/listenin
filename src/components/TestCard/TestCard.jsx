@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import { UserContext } from "../../context/userContext";
-import { useNavigate } from "react-router-dom";
 import SpotifyWebApi from "spotify-web-api-js";
 import axios from "axios";
 
@@ -10,18 +9,8 @@ export default function TestCard() {
     console.log("Status is being rendered");
 
     const { user } = useContext(UserContext);
-    const navigate = useNavigate();
-    // console.log("User in status component from context is", user);
-    //   useEffect(() => {
-    //     if (!user) {
-    //     // Do something while waiting for the user to be set in context
-    //     return <div>Loading...</div>;
-    //     }
-    // }, [user]);
-    // console.log("User in status component from context is", user.user.email);
 
-    // var access_token = localStorage.getItem('token');
-    // console.log("access_token", user?.access_token);
+    // Create new spotify api instance
     const spotifyApi = new SpotifyWebApi();
     spotifyApi.setAccessToken(user?.access_token);
 
@@ -33,6 +22,7 @@ export default function TestCard() {
         artist: "",
     });
 
+    //
     async function handleClick() {
         console.log("clicked");
 
@@ -74,18 +64,33 @@ export default function TestCard() {
             });
     }
     return (
-        <div
-            onClick={handleClick}
-            className="flex w-[260px] bg-gradient-r h-[95px] p-[10px] max-h-full gap-2 rounded-[10px] items-start"
-        >
-            <div className="testImg w-[70px]">
-                <img src={song.albumArt} alt="test" />
-            </div>
-            <div className="frame2 flex flex-col">
-                <div className="aliBassiouni">Ali Bassiouni</div>
-                <div className="songTitle text-sm">{song.name}</div>
-                <div className="artist text-sm">{song.artist}</div>
+        <>
+        {/* <div class="py-8 px-4 max-w-sm mx-auto bg-green-600 rounded-xl shadow-lg space-y-2 sm:py-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-6">
+            <img class="block border-4 mx-auto h-24  sm:mx-0 sm:shrink-0" src={song.albumArt} alt="Woman's Face" />
+            <div class="text-center space-y-2 sm:text-left">
+                <div class="space-y-0.5">
+                    <p class="text-lg text-black font-semibold">
+                        {user? user.user.streamID : "User not logged in"}
+                    </p>
+                    <p class="text-slate-500 font-medium">
+                        Product Engineer
+                    </p>
+                </div>
+                <button class="px-4 py-1 text-sm text-black font-semibold rounded-full border border-purple-200 hover:text-white hover:bg-purple-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2">Message</button>
             </div>
         </div>
+
+        <br></br> */}
+
+        <div onClick={handleClick} className="flex w-2/3 bg-[#04471C] px-4 py-4 shadow-lg max-h-[136px] cursor-pointer gap-2 rounded-[10px] items-start">
+            <img className="song-img block mx-auto h-24" src={song.albumArt} alt="test" />
+            {/* <div className=""></div> */}
+            <div className="text-container flex flex-col w-full justify-center items-center ">
+                    <span className="username text-white text-lg font-['Gotham'] font-bold text-shadow max-w-full overflow-hidden text-ellipsis">{user? user.user.streamID +'' : "User not logged in"}</span>
+                    <span className="song-title text-white text-lg font-['Gotham'] font-[450] max-h-7 self-start overflow-hidden text-ellipsis text-shadow ">{song.name}</span>
+                    <span className="artist-name text-white text-lg font-['Gotham'] font-[400] self-start text-shadow ">{song.artist}</span>
+            </div>
+        </div>
+        </>
     );
 }

@@ -98,30 +98,32 @@ function FriendStatus(props) {
   */
 
   return(
-  // <div className="Status">
-     <div className = "friendstatus-wrapper" onClick={handleClick}>
-        
+     <div className = "friendstatus-wrapper flex items-center text-left cursor-pointer w-full h-[100px] bg-gradient-r rounded-l-xl" onClick={handleClick}>
         <div className = "friendstatus-song-image-wrapper">
-            <img className = "friendstatus-song-image max-h-[70px]" src={song.albumArt} alt=""/>
+            <img className = "friendstatus-song-image px-3 max-h-[70px]" src={song.albumArt} alt=""/>
         </div>
-        <div className = "friendstatus-song-text-wrapper">
-            <p className = "friendstatus-song-text">{friend.email}</p>
-            <br/>
-            {
-            song.name.length > 25 ?
-             <Marquee delay = "2" gradient={false} speed={30} className='marq'>{song.name}</Marquee> 
-             : <p>{song.name}</p>
-             }
-             {song.artist.length > 30 ?
-             <Marquee gradient={false} speed={30} className='marq'>{song.artist}</Marquee>
-             : <p>{song.artist}</p>
-             }
+        <div className = "friendstatus-song-text-wrapper flex flex-col text-white text-base font-['Gotham']">
+            <span className = "friendstatus-song-text ">{friend.email}</span>
+            <span className="">{song.name}</span>            
+            <span className="">{song.artist}</span>           
         </div>
-
-        
-
-  </div>
-
+      </div>
+    // <div onClick={handleClick} className="friend-status flex w-[80%] bg-green-600 p-[10px] max-h-full cursor-pointer gap-2 rounded-[10px] items-start">
+    //   <div className="testImg w-full max-w-[100px]">
+    //       <img src={song.albumArt} alt="test" />
+    //   </div>
+    //   <div className="text-container space space-y-1 w-full justify-center items-center flex flex-col">
+    //       <div className="username text-2xl font-bold text-shadow font-['Gotham'] text-white">
+    //           <span>{friend.email}</span>
+    //       </div>
+    //       <div className="song-title text-white self-start font-[450] text-shadow text-xl font-['Gotham']">
+    //           <span>{song.name}</span>
+    //       </div>
+    //       <div className="artist-name text-white self-start font-[400] text-shadow text-xl font-['Gotham']">
+    //           {song.artist}
+    //       </div>
+    //   </div>
+    // </div>
 );
 }
 

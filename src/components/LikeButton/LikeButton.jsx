@@ -4,22 +4,15 @@ import "./LikeButton.css";
 
 
 function LikeButton() {
+
   console.log("LikeButton is being rendered");
   const [liked, setLiked] = useState(false);
 
-//   useEffect(() => {
-//     document.title = liked ? "You liked this." : "You didn't like this.";
-//   });
+  const likeIcon = "http://localhost:8888/images/heart.svg";
 
-  const likeIcon = "http://localhost:8888/images/like-heart-icon.png";
   return (
-    <div className ="like-button">
-        <div onClick={() => setLiked(!liked)} className = "like-button-img" >
-          {/* <button  > */}
-            {/* {liked ? "Unlike" : "Like"} */}
-            <img className ="like-button-img" src={likeIcon} alt= "" />
-          {/* </button> */}
-      </div>  
+    <div className ="like-button flex justify-center items-center h-full cursor-pointer bg-[#0D2818] hover:bg-[#961a1a] active:bg-[#e93131] rounded-r-lg w-[40px]">
+      <img className ="like-button-img max-w-[26px] max-h-[26px] " src={likeIcon} alt= "" /> 
     </div>
   );
 }

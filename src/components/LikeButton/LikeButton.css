@@ -1,27 +1,22 @@
 .like-button {
-    display: flex;
-    border: none;
+    /* display: flex;
     outline: none;
     cursor: pointer;
-    /* padding: 10px 20px; */
-    /* color: #fff; */
     background-color: #3b5998;
     border-radius: 0px 10px 10px 0px;
     transition: background-color 0.2s ease-out;
     height: 100px;
-    width: 40px;
+    width: 40px; */
   }
 
   .like-button-img {
-    display: flex;
+    /* display: flex;
     justify-content: center;
     width: 20px;
-    height: 20px;
-    /* margin-right: 5px; */
-    
+    height: 20px;  */
   }
   
-  .like-button:hover {
+  /* .like-button:hover {
     background-color: #961a1a;
   }
   
@@ -39,5 +34,5 @@
   
   .like-button.liked:active {
     background-color: #bd1b12;
-  }
+  } */
   
