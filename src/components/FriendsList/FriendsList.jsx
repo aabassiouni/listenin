@@ -14,7 +14,7 @@ function FriendsList(props) {
     console.log("following in FriendsList is", following);
     return (
         <div className="friends-list flex flex-col w-full overflow-hidden">
-            <div className='friends-list-card-container flex flex-col justify-center items-center w-[100%] p-4 space-y-2 '>
+            <div className='friends-list-card-container flex flex-col justify-center items-center w-[100%]  space-y-2 '>
                 {following.map((friend) => {
                     return <>
                     <FriendCard user={friend} />

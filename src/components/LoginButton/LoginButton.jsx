@@ -15,8 +15,8 @@ function LoginButton (){
 
   return (
     <a href="http://localhost:8888/login">
-      <button type="button" className='loginButton bg-green-500 p-3 rounded border cursor-pointer'>
-        <span className = 'loginButtonText text-white font-bold font-gotham'>Login</span>
+      <button type="button" className='loginButton bg-[#16DB65] p-3 rounded border cursor-pointer'>
+        <span className = 'loginButtonText text-white text-2xl font-bold font-gotham'>Login</span>
       </button>
     </a>
   );

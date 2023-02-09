@@ -25,7 +25,7 @@
 
   /* The border radius used for the borders of the message bubble */
   --str-chat__message-bubble-border-radius: 10px;
-  --str-chat__channel-header-border-radius: 10px;
+  --str-chat__channel-header-border-radius: 10px 10px 0px 0px;
   max-height: 400;
  
 }

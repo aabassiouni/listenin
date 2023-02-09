@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
-
 import Card from "../components/Card/Card";
 import Messenger from "../components/Messenger/Messenger";
 import { Chat, ChannelList, useChatContext, ChatDown } from "stream-chat-react";
-import "./home.css";
 import { useStreamClient } from "../hooks/UseStreamClient";
 import { UserContextProvider } from "../context/userContext";
 import { UserContext } from "../context/userContext";
@@ -97,13 +95,17 @@ function Home() {
 	}, [user]);
 
 	if (isLoading) {
-		return <div>Loading...</div>;
+		return (
+		<div className="flex h-screen w-screen justify-center items-center bg-palette-400">
+			<span className="font-bold font-['Gotham'] text-shadow text-neutral-50 text-3xl">Loading...</span>
+		</div>
+		)
 	}
 
 	return (
-		<div className="Home">
+		<div className="Home bg-[#0D2818] h-screen max-w-screen max-h-screen overflow-hidden">
 			<NavBar />
-			<div className="Messenger bg-[#020202] flex max-h-[calc(100vh_-_80px)]">
+			<div className="Messenger flex max-h-[calc(100vh_-_77px)]">
 				{isLoading ? (
 					<ChatDown />
 					) : (
@@ -112,18 +114,21 @@ function Home() {
 								<div className="flex flex-col w-[80%] flex-grow-0 items-center max-h-[90%] rounded-xl overflow-scroll bg-[#16DB65] max-w-[80%]">
 									<div className="Spacer p-2"></div>
 									<TestCard />
-									<p className='title text-center'>num friends: {following.length}</p>
-									
-									<div className="p-2">
-										<Divider />
+									<div className="Spacer p-3"></div>
+
+									<div className="friends-list-header p-2 rounded-xl bg-palette-400">
+										<p className="title text-center text-white font-bold font-['Gotham'] text-shadow text-lg">Friends: {following.length}</p>
 									</div>
-									<div className="overflow-scroll w-full">
+
+									<div className="Spacer p-2"></div>
+
+									<div className="border overflow-scroll w-full">
 										<FriendsList following={following} />
 									</div>
 								</div>
 							</div>
-						<div className=" w-4/5 chat-box bg-[#020202] grid place-items-center max-h-full">
-							<div className="chat-box-wrapper bg-[#020202] w-[80%] h-[80%] max-h-full">
+						<div className=" w-4/5 chat-box grid place-items-center max-h-full">
+							<div className="chat-box-wrapper w-[80%] h-[80%] max-h-full">
 								<Messenger />
 							</div>
 						</div>

@@ -5,8 +5,21 @@ module.exports = {
   content: [    
   "./index.html",
   "./src/**/*.{js,ts,jsx,tsx}",
+  'node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}'
   ],
   theme: {
+    colors: {
+      transparent: 'transparent',
+      current: 'currentColor',
+      white: '#ffffff',
+      palette: {
+          100: "#16DB65",
+          200: "#058C42",
+          300: "#04471C",
+          400: "#0D2818",
+          500: "#020202",
+      },
+    },
     extend: {
       boxShadow: {
         'neomorphism': "-20px 20px 60px #13ba56, 20px -20px 60px #19fc74"
@@ -37,7 +50,9 @@ module.exports = {
       'gotham': ['Gotham', 'sans-serif']
     },
   },
+
   plugins: [
+    require('flowbite/plugin'),
     require("daisyui"),
     plugin(function ({ matchUtilities, theme }) {
       matchUtilities(
