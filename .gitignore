@@ -26,3 +26,4 @@ api/.env
 listenin.mongodb
 .prettierrc
 testing.jsx
+jsconfig.json

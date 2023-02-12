@@ -1,32 +1,23 @@
-import React from 'react';
-import './LogoutButton.css';
-import { UserContext } from '../../context/userContext';
-import { Navigate } from 'react-router-dom';
+import React from "react";
+import { useUser } from "../../context/userContext";
+import { useNavigate } from "react-router-dom";
 
-function LogoutButton (){
+function LogoutButton() {
+	console.log("LogoutButton is being rendered");
 
-    const {user, dispatch} = React.useContext(UserContext);
-    // console.log("user in login button is", user);
-    console.log("LoginButton is being rendered");
+	const { logout } = useUser();
+	const navigate = useNavigate();
 
-  
-    function handleClick(e) {
-        // e.preventDefault();
-        // console.log('The link was clicked.');
-        dispatch({type: 'LOGOUT'});
-        // return  <Navigate replace to = {"/login"} />
-    }
+	function handleClick() {
+		logout();
+		navigate("/login");
+	}
 
-
-    return (
-        
-        <button type="button" className='logoutButton rounded-xl shadow-neomorphism bg-[#16DB65] btn-ghost p-3 ' onClick={handleClick}>
-            <span className = "logoutButtonText font-bold font-['Gotham'] text-shadow text-white text-center text-xl">Logout</span>
-        </button>
-
-    );
-};
-
-
+	return (
+		<button type="button" onClick={handleClick} className="logoutButton btn-ghost rounded-xl bg-[#16DB65] p-3 shadow-neomorphism ">
+			<span className="logoutButtonText text-center font-['Gotham'] text-xl font-bold text-white text-shadow">Logout</span>
+		</button>
+	);
+}
 
 export default LogoutButton;

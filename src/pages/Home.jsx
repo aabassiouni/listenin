@@ -1,104 +1,79 @@
-import React, { useState, useEffect, useContext } from "react";
-import Card from "../components/Card/Card";
+import React, { useState, useEffect } from "react";
+import SpotifyWebApi from "spotify-web-api-js";
 import Messenger from "../components/Messenger/Messenger";
-import { Chat, ChannelList, useChatContext, ChatDown } from "stream-chat-react";
-import { useStreamClient } from "../hooks/UseStreamClient";
-import { UserContextProvider } from "../context/userContext";
-import { UserContext } from "../context/userContext";
-import LogoutButton from "../components/LogoutButton/LogoutButton";
-import { getHashParams } from "../util/util.js";
-import { Divider } from "@mui/material";
+import { Chat } from "stream-chat-react";
+import { useUser } from "../context/userContext";
 import axios from "axios";
 import FriendsList from "../components/FriendsList/FriendsList";
 import { StreamChat } from "stream-chat";
 import NavBar from "../components/NavBar/NavBar";
 import TestCard from "../components/TestCard/TestCard";
+import LoadingPage from "../components/LoadingPage";
 
 function Home() {
-	const { user, dispatch } = useContext(UserContext);
+	console.log("Home component is being rendered");
+
+	const {token, isLoggedIn} = useUser();
+	const [id, setId] = useState(null);
+	const [user, setUser] = useState(null);
 	const [isLoading, setIsLoading] = useState(true);
 	const [following, setFollowing] = useState([]);
 	const [chatClient, setChatClient] = useState(null);
 
-	console.log("user value in home component from context is", user);
 
-	var userObj = {};
-	let didUserConnectInterrupt = false;
-
-	if (user != null) {
-		const activeuser = user.user;
-		userObj = {
-			id: activeuser.streamID,
-			name: activeuser.email,
-			image: activeuser.profilePicture,
-		};
-	} else {
-		console.log("error while trying to set userObj");
-	}
-
-	// const chatClient = new StreamChat('vvucrr6yge97');
-	// console.log("chatClient value in home component: ", chatClient);
-	// const stream_token = chatClient.devToken(userObj.id);
-	// console.log("stream_token value in home component: ", stream_token);
-
-	// const chatClient = useStreamClient({ apiKey: 'vvucrr6yge97', userData: userObj, tokenOrProvider: '' });
-	// console.log("chatClient value in home component: ", chatClient);
-
+    const spotifyApi = new SpotifyWebApi();
+	
 	useEffect(() => {
-		const getFollowing = async () => {
-			try {
-				var userID = user?.user.streamID;
-				const res = await axios.get(
-					`http://localhost:8888/users/${userID}/following`
-				);
-				setFollowing(res.data);
-			} catch (err) {
-				console.log("error fetching friends in home component");
-				console.log(err);
-			}
-		};
 
-		async function connectUser() {
+		console.log("useEffect in home component is being called");
+		
+		spotifyApi.setAccessToken(token);
+		async function fetchData(){
+			
+			const spotifyProfile = await spotifyApi.getMe();
+			console.log("spotifyProfile:", spotifyProfile);
+
+			const spotifyID = spotifyProfile.id;
+			setId(spotifyID);
+			console.log("id:", id);
+
+			const userProfile = await axios.get(`http://localhost:8888/users/?userID=${spotifyID}`);
+			setUser(userProfile.data);
+			console.log("userProfile:", userProfile);
+
+			const following = await axios.get(`http://localhost:8888/users/${spotifyID}/following`);
+			setFollowing(following.data);
+			console.log("following:", following);
+
+			const userObj = {
+				id: userProfile.data.streamID,
+				name: userProfile.data.email,
+				image: userProfile.data.profilePicture,
+			};
+			console.log("userObj:", userObj);
+
+			const chatClient = new StreamChat("vvucrr6yge97");
+			const stream_token = chatClient.devToken(userObj.id);
 			await chatClient.connectUser(userObj, stream_token);
-			console.log("user connected to chatClient");
-			return;
+
+			setChatClient(chatClient);
+
 		}
 
-		const chatClient = new StreamChat("vvucrr6yge97");
-		setChatClient(chatClient);
-
-		const stream_token = chatClient.devToken(userObj.id);
-
-		getFollowing();
-		connectUser();
-
-		return () => {
-			didUserConnectInterrupt = true;
-			setChatClient(null);
-			// wait for connection to finish before initiating closing sequence
-			chatClient
-				.disconnectUser()
-				.catch((err) => {
-					console.log("error disconnecting user", err);
-				})
-				.then(() => {
-					console.log("connection closed");
-				});
-		};
-	}, [user]);
+		fetchData()
+		
+	}, []);
 
 	// check if there is a user before rendering the page
 	useEffect(() => {
-		if (user) {
+		if (chatClient) {			
 			setIsLoading(false);
 		}
-	}, [user]);
+	}, [chatClient]);
 
 	if (isLoading) {
 		return (
-		<div className="flex h-screen w-screen justify-center items-center bg-palette-400">
-			<span className="font-bold font-['Gotham'] text-shadow text-neutral-50 text-3xl">Loading...</span>
-		</div>
+		<LoadingPage />
 		)
 	}
 
@@ -106,14 +81,11 @@ function Home() {
 		<div className="Home bg-[#0D2818] h-screen max-w-screen max-h-screen overflow-hidden">
 			<NavBar />
 			<div className="Messenger flex max-h-[calc(100vh_-_77px)]">
-				{isLoading ? (
-					<ChatDown />
-					) : (
-					<Chat client={chatClient} theme='str-chat__theme-dark'>
+					<Chat client={chatClient} theme='str-chat__theme-dark'>					
 							<div className="chat-sidebar flex flex-col flex-grow-0 justify-center items-center w-1/2">
 								<div className="flex flex-col w-[80%] flex-grow-0 items-center max-h-[90%] rounded-xl overflow-scroll bg-[#16DB65] max-w-[80%]">
 									<div className="Spacer p-2"></div>
-									<TestCard />
+									<TestCard spotifyApi={spotifyApi} user = {user}/>
 									<div className="Spacer p-3"></div>
 
 									<div className="friends-list-header p-2 rounded-xl bg-palette-400">
@@ -133,7 +105,6 @@ function Home() {
 							</div>
 						</div>
 					</Chat>
-				)}
 			</div>
 		</div>
 	);

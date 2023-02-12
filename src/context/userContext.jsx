@@ -1,87 +1,57 @@
-import { createContext, useState, useEffect,useContext, useReducer,useMemo } from "react";
+import { createContext, useState, useEffect, useContext, useReducer, useMemo } from "react";
 import { getHashParams } from "../util/util";
-import axios from "axios";
 
-export const UserContext = createContext();
-
-const initialState = {
-    access_token: null,
-    refresh_token: null,
-    isLoggedIn: false,
-    user: null,
-};
-
-export const authReducer = (state, action) => {
-  switch (action.type) {
-    case 'LOGIN':
-      return {access_token: null,
-        refresh_token: null,
-        isLoggedIn: false,
-        user: action.payload
-        }
-    case 'LOGOUT':
-      return {access_token: null,
-        refresh_token: null,
-        isLoggedIn: false,
-        user: null}
-    default:
-      return state
-  }
-};
-
+export const UserContext = createContext({
+	token: null,
+	isLoggedIn: false,
+  isLoading: true,
+});
 
 export function UserContextProvider({ children }) {
+	const [token, setToken] = useState(null);
+	const [isLoading, setIsLoading] = useState(true);
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const [state, dispatch] = useReducer(authReducer, initialState);
-  const value = useMemo(() => ({ state, dispatch }), [state, dispatch]);
+	useEffect(() => {
+		let localToken = localStorage.getItem("access_token");
+		let localRefreshToken = localStorage.getItem("refresh_token");
 
-  useEffect(() => {
+		if (localToken) {
+			setToken(localToken);
+			setIsLoggedIn(true);
+		} else {
+			localStorage.removeItem("access_token");
+			// localStorage.removeItem("refresh_token");
 
-      console.log("useEffect in user context is being run");
-      console.log("state is", state);
-      if(!state.isLoggedIn){
-          console.log("user is null");
-          const params = getHashParams();
-          const access_token = params.access_token;
-          const refresh_token = params.refresh_token;
-          const userID = params.userID;
-          console.log("params are", params);
-          console.log("token is", access_token);
-          console.log("userID is", userID);
-          console.log("refresh_token is", refresh_token);
+			const params = getHashParams();
+			const access_token = params.access_token;
+			const refresh_token = params.refresh_token;
 
-          if (!userID) {
-              console.log("no userID");
-              return;
-          }
+			if (access_token) {
+				setToken(access_token);
+				setIsLoggedIn(true);
+				localStorage.setItem("access_token", access_token);
+				localStorage.setItem("refresh_token", refresh_token);
+			}
+		}
 
-          axios.get(`http://localhost:8888/users/?userID=${userID}`).then((res) => {
-              console.log("res is", res);
-              var userFromApi = res.data;
-              console.log("userFromApi is", userFromApi);
-              dispatch({type: 'LOGIN',   payload: {access_token: access_token,
-                                                    refresh_token: refresh_token,
-                                                    isLoggedIn: true,
-                                                    user: userFromApi}});
-          });
-          return;
-      }
-  }, []);
+		setIsLoading(false);
+	}, []);
 
-  return (
-    <UserContext.Provider value={{...state, dispatch}}>
-      {children}
-    </UserContext.Provider>
-  )
+	function logout() {
+		setToken(null);
+		setIsLoggedIn(false);
+		localStorage.removeItem("access_token");
+		localStorage.removeItem("refresh_token");
+	}
+
+	return <UserContext.Provider value={{ token, isLoggedIn, isLoading, logout }}>{children}</UserContext.Provider>;
 }
 
-  export function useUser() {
-    const context = useContext(UserContext);
-    if (context === undefined) {
-      throw new Error("Context must be used within a Provider");
-    }
-    return context;
-  }
-
-
-
+export function useUser() {
+	const context = useContext(UserContext);
+	if (context === undefined) {
+		throw new Error("Context must be used within a Provider");
+	}
+	return context;
+}

@@ -1,51 +1,53 @@
-import "./App.css";
-import React, { useState, useEffect, useContext } from "react";
-import { UserContext } from "./context/userContext";
-import LoginButton from "./components/LoginButton/LoginButton";
-import Card from "./components/Card/Card";
+import React from "react";
+import { useUser } from "./context/userContext";
 import Login from "./pages/Login";
 import Home from "./pages/Home.jsx";
+import LoadingPage from "./components/LoadingPage";
 
 import {
 	BrowserRouter as Router,
 	Routes,
 	Route,
-
+	Navigate
 } from "react-router-dom";
-import { UserContextProvider } from "./context/userContext.jsx";
+
+function RequireAuth({ children }) {
+	const {token, isLoggedIn, isLoading} = useUser();
+
+	console.log("token in require auth is", token);
+	console.log("isLoggedIn in require auth is", isLoggedIn);
+	console.log("isLoading in require auth is", isLoading);
+
+	if (isLoading) {
+		return <LoadingPage />;
+	}
+
+	return isLoggedIn  ? children : <Navigate replace to = {"/login"} />;
+}
 
 function App() {
 	console.log("App.js is being rendered");
 
-	const { user, dispatch } = useContext(UserContext);
-	const [isLoading, setIsLoading] = useState(true);
-	// console.log("user in app from context is " + user.user.email);
-	// console.log("token in app from context is " + user.token);
-	// console.log("isLoggedIn is " + user.isLoggedIn);
+	const {token, isLoggedIn} = useUser();
 
-	useEffect(() => {
-		try {
-			if (!user.isLoggedIn) {
-				setIsLoading(false);
-			}
-		} catch (error) {
-			console.log("there is no user in app component", error);
-		}
-	}, [user]);
+	console.log("token in app is " + token);
 
-	// user.isLoggedIn ? <Home /> : <Navigate replace to = {"/login"} />
 	return (
 		<div>
-			{/* {isLoading ? <div>Loading...</div> : */}
 			<Router>
 				<Routes>
-					<Route exact path="/login" element={
-							// isLoading ? <Navigate replace to = {"/"} /> :
-							<Login />
-						}/>
 					<Route path="/" element={
-							// isLoading ? <Navigate replace to = {"/login"} /> :
-							<Home />
+								<RequireAuth >
+									<Navigate replace to = {"/home"} />
+								</RequireAuth>
+						} />
+					<Route exact path="/login" element={
+							token ? <Navigate replace to = {"/"} /> : <Login /> 
+						}/>
+					<Route path="/home" element={
+							<RequireAuth>
+								<Home />
+							</RequireAuth>
 						}/>
 				</Routes>
 			</Router>

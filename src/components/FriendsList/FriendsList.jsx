@@ -1,34 +1,29 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { Divider, Chip } from '@mui/material';
-import Card from '../Card/Card.jsx';
-import FriendCard from './FriendCard/FriendCard.jsx';
-import './FriendsList.css';
-
+import React from "react";
+import FriendCard from "./FriendCard/FriendCard.jsx";
 
 function FriendsList(props) {
+	console.log("FriendsList is being rendered");
 
-    
-    console.log("FriendsList is being rendered");
-
-    const following = props.following;
-    console.log("following in FriendsList is", following);
-    return (
-        <div className="friends-list flex flex-col w-full overflow-hidden">
-            <div className='friends-list-card-container flex flex-col justify-center items-center w-[100%]  space-y-2 '>
-                {following.map((friend) => {
-                    return <>
-                    <FriendCard user={friend} />
-                    <FriendCard user={friend} />
-                    </>
-
-                })}
-                {/* <h1>test</h1>
+	const following = props.following;
+	console.log("following in FriendsList is", following);
+	return (
+		<div className="friends-list flex w-full flex-col overflow-hidden">
+			<div className="friends-list-card-container flex w-[100%] flex-col items-center justify-center  space-y-2 ">
+				{following.map((friend, idx) => {
+					return (
+						<>
+							<FriendCard key={idx} user={friend} />
+							<FriendCard key={idx} user={friend} />
+						</>
+					);
+				})}
+				{/* <h1>test</h1>
                 <h1>test</h1> */}
-                {/* <h1>test</h1>
+				{/* <h1>test</h1>
                 <h1>test</h1> */}
-            </div>
-        </div>
-    );
+			</div>
+		</div>
+	);
 }
 
 export default FriendsList;

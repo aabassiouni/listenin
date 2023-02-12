@@ -10,6 +10,10 @@ export const useStreamClient = ({ apiKey, userData, tokenOrProvider }) => {
     console.log("useStreamClient is being run");
     console.log("userData in useStreamClient is", userData);
 
+    if (userData === null) {
+      return null;
+    }
+    
     useEffect(() => {
       const client = new StreamChat(apiKey);
       console.log("client is", client);
