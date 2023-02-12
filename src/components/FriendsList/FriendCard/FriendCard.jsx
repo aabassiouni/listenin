@@ -4,12 +4,12 @@ import { useChatContext } from "stream-chat-react";
 import axios from "axios";
 
 function FriendCard(props) {
-	console.log("Card is being rendered");
+	// console.log("Card is being rendered");
 
 	const [friend, setFriend] = useState({});
 	const { client, setActiveChannel } = useChatContext();
 
-	console.log("friend being rendered is", friend);
+	// console.log("friend being rendered is", friend);
 	var propsUser = props.user;
 
 	const [song, setSong] = useState({ name: "Not Checked", albumArt: "http://localhost:8888/images/acf3edeb055e7b77114f9e393d1edeeda37e50c9.png", artist: "" });
@@ -29,7 +29,7 @@ function FriendCard(props) {
 
 		const filter = { members: { $in: ["test-user-2"] } };
 		const channels = await client.queryChannels(filter);
-		console.log("channels are", channels);
+		// console.log("channels are", channels);
 		setActiveChannel(channels[0]);
 	}
 

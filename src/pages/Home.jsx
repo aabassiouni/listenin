@@ -55,11 +55,11 @@ function Home() {
 			// console.log("id:", id);
 			
 			console.log("fetching user profile")
-			const userProfile = await axios.get(`http://localhost:8888/users/?userID=${spotifyID}`);
+			const userProfile = await axios.get(import.meta.env.VITE_API_URL + `/users/?userID=${spotifyID}`);
 			console.log("userProfile:", userProfile);
 
 			console.log("fetching following")
-			const following = await axios.get(`http://localhost:8888/users/${spotifyID}/following`);
+			const following = await axios.get(import.meta.env.VITE_API_URL + `/users/${spotifyID}/following`);
 			console.log("following:", following);
 
 			const userObj = {

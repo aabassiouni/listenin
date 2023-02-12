@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 function LikeButton() {
-	console.log("LikeButton is being rendered");
+	// console.log("LikeButton is being rendered");
 	const [liked, setLiked] = useState(false);
 
 	const likeIcon = "http://localhost:8888/images/heart.svg";

@@ -53,7 +53,6 @@ module.exports = {
 
   plugins: [
     require('flowbite/plugin'),
-    require("daisyui"),
     plugin(function ({ matchUtilities, theme }) {
       matchUtilities(
         {
