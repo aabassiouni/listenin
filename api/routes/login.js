@@ -22,7 +22,7 @@ var generateRandomString = function(length) {
 
 const client_id = '2d06712101474795ab9fa2bd91fa6000'; // Your client id
 var client_secret = '6b993945947f416f87025d975c6f4ccb'; // Your secret
-var redirect_uri = 'https://listenin-cvwos.ondigitalocean.app/callback'; // Your redirect uri
+var redirect_uri = 'http://localhost:8888/callback'; // Your redirect uri
 
 var stateKey = 'spotify_auth_state';
 

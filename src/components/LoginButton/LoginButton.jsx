@@ -4,7 +4,7 @@ function LoginButton() {
 	console.log("LoginButton is being rendered");
 
 	return (
-		<a href="https://listenin-cvwos.ondigitalocean.app/login">
+		<a href="http://localhost:8888/login">
 			<button type="button" className="loginButton cursor-pointer rounded border bg-[#16DB65] p-3">
 				<span className="loginButtonText font-gotham text-2xl font-bold text-white">Login</span>
 			</button>

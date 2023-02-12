@@ -37,11 +37,11 @@ function Home() {
 			setId(spotifyID);
 			console.log("id:", id);
 
-			const userProfile = await axios.get(`https://listenin-cvwos.ondigitalocean.app/users/?userID=${spotifyID}`);
+			const userProfile = await axios.get(`http://localhost:8888/users/?userID=${spotifyID}`);
 			setUser(userProfile.data);
 			console.log("userProfile:", userProfile);
 
-			const following = await axios.get(`https://listenin-cvwos.ondigitalocean.app/users/${spotifyID}/following`);
+			const following = await axios.get(`http://localhost:8888/users/${spotifyID}/following`);
 			setFollowing(following.data);
 			console.log("following:", following);
 
