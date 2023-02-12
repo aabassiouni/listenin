@@ -8,7 +8,7 @@ const User = require("../models/User");
 
 const client_id = '2d06712101474795ab9fa2bd91fa6000'; // Your client id
 const client_secret = '6b993945947f416f87025d975c6f4ccb'; // Your secret
-const redirect_uri = 'http://localhost:8888/callback'; // Your redirect uri
+const redirect_uri = 'http://listenin-cvwos.ondigitalocean.app/callback'; // Your redirect uri
 
 var stateKey = 'spotify_auth_state';
 
@@ -121,7 +121,7 @@ router.get('/', function(req, res) {
 
           // console.log("the user's email is outside the response:", userEmail);
           // we can also pass the token to the browser to make requests from there
-          res.redirect('http://localhost:3000/#' +
+          res.redirect('https://listenin.vercel.app/#' +
             querystring.stringify({
               access_token: access_token,
               refresh_token: refresh_token,
@@ -130,7 +130,7 @@ router.get('/', function(req, res) {
 
 
         } else {
-          res.redirect('http://localhost:3000' +
+          res.redirect('https://listenin.vercel.app/' +
             querystring.stringify({
               error: 'invalid_token'
             }));
