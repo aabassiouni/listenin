@@ -42,7 +42,7 @@ function App() {
 								</RequireAuth>
 						} />
 					<Route exact path="/login" element={
-							token ? <Navigate replace to = {"/"} /> : <Login /> 
+							<Login /> 
 						}/>
 					<Route path="/home" element={
 							<RequireAuth>

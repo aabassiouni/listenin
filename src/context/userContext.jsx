@@ -17,6 +17,7 @@ export function UserContextProvider({ children }) {
 		let localRefreshToken = localStorage.getItem("refresh_token");
 
 		if (localToken) {
+			console.log("setting token to local storage token")
 			setToken(localToken);
 			setIsLoggedIn(true);
 		} else {
@@ -28,6 +29,7 @@ export function UserContextProvider({ children }) {
 			const refresh_token = params.refresh_token;
 
 			if (access_token) {
+				console.log("settting token to params token")
 				setToken(access_token);
 				setIsLoggedIn(true);
 				localStorage.setItem("access_token", access_token);
@@ -38,6 +40,16 @@ export function UserContextProvider({ children }) {
 		setIsLoading(false);
 	}, []);
 
+	async function getRefreshToken() {
+		console.log("getRefreshToken is being called")
+		// setIsLoading(true);
+		const refresh_token = localStorage.getItem("refresh_token");
+		const response = await fetch(`http://localhost:8888/refresh_token?refresh_token=${refresh_token}`);
+		const data = await response.json();
+		setToken(data.access_token);
+		// setIsLoading(false);
+	}
+
 	function logout() {
 		setToken(null);
 		setIsLoggedIn(false);
@@ -45,7 +57,7 @@ export function UserContextProvider({ children }) {
 		localStorage.removeItem("refresh_token");
 	}
 
-	return <UserContext.Provider value={{ token, isLoggedIn, isLoading, logout }}>{children}</UserContext.Provider>;
+	return <UserContext.Provider value={{ token, isLoggedIn, isLoading, logout, getRefreshToken }}>{children}</UserContext.Provider>;
 }
 
 export function useUser() {
