@@ -2,7 +2,9 @@
 var querystring = require('querystring');
 const router = require("express").Router();
 const User = require("../models/User.js");
+const dotenv = require("dotenv");
 
+dotenv.config();
 
 /**
  * Generates a random string containing numbers and letters
@@ -22,7 +24,7 @@ var generateRandomString = function(length) {
 
 const client_id = '2d06712101474795ab9fa2bd91fa6000'; // Your client id
 var client_secret = '6b993945947f416f87025d975c6f4ccb'; // Your secret
-var redirect_uri = 'http://localhost:8888/callback'; // Your redirect uri
+var redirect_uri = process.env.API_URL + '/callback'; // Your redirect uri
 
 var stateKey = 'spotify_auth_state';
 

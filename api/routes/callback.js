@@ -3,13 +3,16 @@ const router = require('express').Router();
 var querystring = require('querystring');
 var request = require('request'); // "Request" library
 var axios = require('axios');
+const dotenv = require("dotenv");
 
 const User = require("../models/User");
 
+dotenv.config();
+
 const client_id = '2d06712101474795ab9fa2bd91fa6000'; // Your client id
 const client_secret = '6b993945947f416f87025d975c6f4ccb'; // Your secret
-const redirect_uri = 'http://localhost:8888/callback'; // Your redirect uri
-
+const redirect_uri = process.env.API_URL + '/callback'; // Your redirect uri
+console.log("redirect_uri is:", redirect_uri);
 var stateKey = 'spotify_auth_state';
 
 async function getUserData(access_token) {
@@ -120,8 +123,9 @@ router.get('/', function(req, res) {
 
 
           // console.log("the user's email is outside the response:", userEmail);
+          console.log(process.env.SITE_URL + '/#')
           // we can also pass the token to the browser to make requests from there
-          res.redirect('http://localhost:3000/#' +
+          res.redirect(process.env.SITE_URL + '/#' +
             querystring.stringify({
               access_token: access_token,
               refresh_token: refresh_token,
@@ -130,7 +134,7 @@ router.get('/', function(req, res) {
 
 
         } else {
-          res.redirect('http://localhost:3000' +
+          res.redirect(process.env.SITE_URL +
             querystring.stringify({
               error: 'invalid_token'
             }));
