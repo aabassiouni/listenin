@@ -1,6 +1,5 @@
 
 var querystring = require('querystring');
-var cookieParser = require('cookie-parser');
 const router = require("express").Router();
 const User = require("../models/User.js");
 

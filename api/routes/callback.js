@@ -1,7 +1,6 @@
 
 const router = require('express').Router();
 var querystring = require('querystring');
-var cookieParser = require('cookie-parser');
 var request = require('request'); // "Request" library
 var axios = require('axios');
 

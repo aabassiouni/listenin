@@ -1,15 +1,10 @@
 let express = require('express'); // Express web server framework
 let request = require('request'); // "Request" library
 let cors = require('cors');
-let querystring = require('querystring');
 let cookieParser = require('cookie-parser');
 const path = require("path");
-const StreamChat = require('stream-chat').StreamChat
-
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-
-const router = express.Router();
 const userRoute = require("./routes/users.js");
 const registerRoute = require("./routes/register.js");
 const loginRoute = require("./routes/login.js");

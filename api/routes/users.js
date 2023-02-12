@@ -1,11 +1,6 @@
 const router = require('express').Router();
 const User = require("../models/User");
-const StreamChat = require('stream-chat').StreamChat;
 
-
-
-
-const serverClient = StreamChat.getInstance('vvucrr6yge97','ngcj3ryargkfkutegjb37aspm27qpbxyppkt8zyssthryy6q7ueewbsxcmazudca');
 
 
 router.get('/', function(req, res) {
