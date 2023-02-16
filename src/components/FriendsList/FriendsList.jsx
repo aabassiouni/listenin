@@ -7,8 +7,8 @@ function FriendsList(props) {
 	const following = props.following;
 	console.log("following in FriendsList is", following);
 	return (
-		<div className="friends-list flex w-full flex-col overflow-hidden">
-			<div className="friends-list-card-container flex w-[100%] flex-col items-center justify-center  space-y-2 ">
+		<div className="friends-list flex flex-col rounded-xl h-96 w-80 bg-palette-100">
+			<div className="friends-list-card-container gap-3 py-3 px-3 flex flex-col items-center overflow-scroll">
 				{following.map((friend, idx) => {
 					return (
 						<>
