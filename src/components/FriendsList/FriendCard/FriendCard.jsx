@@ -40,7 +40,7 @@ function FriendCard(props) {
 				<div className="text-container flex w-full flex-col items-center justify-center ">
 					<span className="username max-w-full overflow-hidden text-ellipsis font-['Gotham'] text-sm font-bold text-white text-shadow">{friend.email ? friend.email + "" : "User not logged in"}</span>
 					<span className="song-title max-h-7 self-start overflow-hidden text-ellipsis font-['Gotham'] text-sm font-[450] text-white text-shadow ">{song.name}</span>
-					<span className="artist-name self-start font-['Gotham'] text-sm font-[400] text-white text-shadow ">{song.artist}</span>
+					<span className="artist-name self-start font-['Gotham'] text-sm font-extralight text-white text-shadow ">{song.artist}</span>
 					{/* </div> */}
 				</div>
 			</div>
