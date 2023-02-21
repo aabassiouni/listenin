@@ -26,7 +26,7 @@ const UserSchema = new mongoose.Schema(
     lastPlayed:{
       type: Object,
       default: {name: "Not Checked", 
-                albumArt: "http://localhost:8888/acf3edeb055e7b77114f9e393d1edeeda37e50c9.png",
+                albumArt: null,
                 artist: "" },
     },
     streamID: {

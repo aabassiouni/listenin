@@ -65,7 +65,7 @@ app.use('/users', userRoute);
 
 
 app.get('/refresh_token', function(req, res) {
-  console.log("refresh_token called");
+  console.log("//////////////// refresh_token called //////////////////////");
 
   // requesting access token from refresh token
   

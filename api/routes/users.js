@@ -6,8 +6,8 @@ const User = require("../models/User");
 router.get('/', function(req, res) {
 
 
-    console.log("//////////////////////////////////////////////////////")
-    console.log("User route called");
+
+    console.log("//////////////// User route called //////////////////////");
     const userID = req.query.userID;
     console.log("Fetching " + userID + " from database");
     
@@ -23,7 +23,7 @@ router.get('/', function(req, res) {
 });
 
 router.get(":userID/lastPlayed", async (req, res) => {
-    console.log("lastPlayed route called");
+    console.log("//////////////// lastPlayed route called //////////////////////");
     console.log("Fetching" + req.params.userID + "'s LastPlayed from database");
     try {
         const user = await User.findOne({ userID: req.params.userID });
@@ -35,7 +35,7 @@ router.get(":userID/lastPlayed", async (req, res) => {
 });
 
 router.get("/:userId/following", async (req, res) => {
-    console.log("following route called");
+    console.log("//////////////// following route called //////////////////////");
     console.log("Fetching" + req.params.userId + "'s following from database");
     try {
       const user = await User.findOne({ userID: req.params.userId });
@@ -63,7 +63,7 @@ router.get("/:userId/following", async (req, res) => {
 });
 
 router.put("/:userID/follow", async (req, res) => {
-    console.log("follow route called");
+    console.log("//////////////// follow route called //////////////////////");
     console.log(req.body.target_id + " is following " + req.params.userID)
 
 
