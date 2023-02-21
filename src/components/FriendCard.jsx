@@ -16,10 +16,11 @@ function FriendCard(props) {
 
 	const [song, setSong] = useState({ name: "Not Checked", albumArt: EmptyAlbumArt, artist: "" });
 
-	async function handleClick() {
+	useEffect(() => {
+		// console.log("useEffect in Card is being called");
 		var userID = propsUser;
 
-		await axios.get(`http://localhost:8888/users/?userID=${userID}`).then((res) => {
+		axios.get(import.meta.env.VITE_API_URL + `/users/?userID=${userID}`).then((res) => {
 			var userFromApi = res.data;
 			setFriend(userFromApi);
 			setSong({
@@ -28,16 +29,29 @@ function FriendCard(props) {
 				artist: res.data.lastPlayed.artist,
 			});
 		});
+	}, []);
+	// async function handleClick() {
+	// 	var userID = propsUser;
 
-		// const filter = { members: { $in: ["test-user-2"] } };
-		// const channels = await client.queryChannels(filter);
-		// console.log("channels are", channels);
-		// setActiveChannel(channels[0]);
-	}
+	// 	await axios.get(`http://localhost:8888/users/?userID=${userID}`).then((res) => {
+	// 		var userFromApi = res.data;
+	// 		setFriend(userFromApi);
+	// 		setSong({
+	// 			name: res.data.lastPlayed.name,
+	// 			albumArt: EmptyAlbumArt,
+	// 			artist: res.data.lastPlayed.artist,
+	// 		});
+	// 	});
+
+	// 	// const filter = { members: { $in: ["test-user-2"] } };
+	// 	// const channels = await client.queryChannels(filter);
+	// 	// console.log("channels are", channels);
+	// 	// setActiveChannel(channels[0]);
+	// }
 
 	return (
 		<div className="friend-card flex min-w-full">
-			<div onClick={handleClick} className="flex w-full cursor-pointer items-start gap-2 rounded-l-lg bg-palette-300 p-2 ">
+			<div  className="flex w-full cursor-pointer items-start gap-2 rounded-l-lg bg-palette-300 p-2 ">
 				<img className="song-img block h-16 w-16" src={song.albumArt} alt="test" />
 				<div className="text-container flex w-full flex-col items-center justify-center ">
 					<span className="username max-w-full overflow-hidden text-ellipsis font-['Gotham'] text-sm font-bold text-white text-shadow">{friend.email ? friend.email + "" : "User not logged in"}</span>

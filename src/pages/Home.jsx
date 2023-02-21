@@ -105,58 +105,21 @@ function Home() {
 	}
 
 	return (
-		// <div className="Home max-w-screen h-screen max-h-screen overflow-hidden bg-[#0D2818]">
-		// 	<NavBar />
-		// 	<div className="Messenger flex max-h-[calc(100vh_-_77px)]">
-		// 		<Chat client={chatClient} theme="str-chat__theme-dark">
-		// 			<div className="chat-sidebar flex sm:w-1/2 flex-grow-0 flex-col items-center justify-center">
-		// 				<div className="flex max-h-[90%] w-[80%] max-w-[80%] flex-grow-0 flex-col items-center overflow-scroll rounded-xl bg-[#16DB65]">
-		// 					<div className="Spacer p-2"></div>
-		// 					<TestCard spotifyApi={spotifyApi} user={user} />
-		// 					<div className="Spacer p-3"></div>
-
-		// 					<div className="friends-list-header rounded-xl bg-palette-400 p-2">
-		// 						<p className="title text-center font-['Gotham'] text-lg font-bold text-white text-shadow">Friends: {following.length}</p>
-		// 					</div>
-
-		// 					<div className="Spacer p-2"></div>
-
-		// 					<div className="w-full overflow-scroll">
-		// 						<FriendsList following={following} />
-		// 					</div>
-		// 				</div>
-		// 			</div>
-		// 			{/* <div className=" invisible chat-box grid max-h-full sm:w-4/5 place-items-center">
-		// 				<div className="chat-box-wrapper h-[80%] max-h-full w-[80%]">
-		// 					<Messenger />
-		// 				</div>
-		// 			</div> */}
-		// 		</Chat>
-		// 	</div>
-		// </div>
 		<div className="Home max-h-screen h-screen overflow-clip bg-palette-400">
 			<NavBar />
 			<div className="Spacer p-2"></div>
 
 			<div className="Messenger flex flex-col items-center gap-7 bg-palette-400">
 				<Chat client={chatClient} theme="str-chat__theme-dark">
-					{/* <div className="chat-sidebar bg-pink-800 flex sm:w-1/2 flex-grow-0 flex-col items-center justify-center"> */}
-					{/* <div className="flex max-h-[90%] w-[80%] max-w-[80%] flex-grow-0 flex-col items-center overflow-scroll rounded-xl bg-[#16DB65]"> */}
 					<div className="flex flex-col items-center rounded-xl bg-palette-100 ">
 						<div className="Spacer p-2"></div>
 						<Card spotifyApi={spotifyApi} user={user} />
 						<div className="Spacer p-2"></div>
 					</div>
-
 					<div className="friends-list-header rounded-xl bg-palette-100 p-2">
 						<p className="title text-center font-['Gotham'] text-lg font-bold text-white text-shadow">Friends: {following.length}</p>
 					</div>
-
-					{/* <div className="w-full overflow-scroll py-2"> */}
 					<FriendsList following={following} />
-					{/* </div> */}
-
-					{/* </div>	 */}
 				</Chat>
 			</div>
 		</div>
