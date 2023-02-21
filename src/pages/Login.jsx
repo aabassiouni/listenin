@@ -1,6 +1,6 @@
 
 import React from 'react'
-import LoginButton from '../components/LoginButton/LoginButton';
+import LoginButton from '../components/LoginButton';
 
 
 function Login() {
@@ -13,7 +13,6 @@ function Login() {
             <div className='loginWrapper flex flex-col bg-white w-3/4 p-5 sm:w-1/4 sm:p-5 min-w-fit justify-center items-center rounded-xl'>
                 <p className="loginHeader font-bold font-['Gotham'] text-5xl text-black normal-case">ListenIn</p>
                 <div className="Spacer h-5"></div>
-                {/* <h1>{import.meta.env.VITE_API_URL + "/login"}</h1> */}
                 <LoginButton />
             </div>
         </div>

@@ -1,5 +1,5 @@
 import React from "react";
-import FriendCard from "./FriendCard/FriendCard.jsx";
+import FriendCard from "./FriendCard.jsx";
 
 function FriendsList(props) {
 	console.log("FriendsList is being rendered");
@@ -13,7 +13,7 @@ function FriendsList(props) {
 					return (
 						<>
 							<FriendCard key={idx} user={friend} />
-							<FriendCard key={idx} user={friend} />
+							{/* <FriendCard key={idx} user={friend} /> */}
 						</>
 					);
 				})}

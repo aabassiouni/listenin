@@ -1,18 +1,21 @@
 import React, { useContext, useState } from "react";
-import { UserContext } from "../../context/userContext";
+import { UserContext } from "../context/userContext";
 import SpotifyWebApi from "spotify-web-api-js";
 import axios from "axios";
+import EmptyAlbumArt from "../assets/empty-album-art.png";
+import { spotifyApi } from "../spotify/spotify";
+
+
 
 export default function Card(props) {
 	console.log("TestCard is being rendered");
 
-	const spotifyApi = props.spotifyApi;
 	const user = props.user;
 	console.log("user is", user);
 	// Use state to store current song information
 	const [song, setSong] = useState({
 		name: "Not Checked",
-		albumArt: "http://localhost:8888/images/acf3edeb055e7b77114f9e393d1edeeda37e50c9.png",
+		albumArt: EmptyAlbumArt,
 		artist: "",
 	});
 	const [isLoading, setIsLoading] = useState(true);
@@ -77,10 +80,10 @@ export default function Card(props) {
 		<div onClick={handleClick} className="mx-3 flex min-w-[20rem] max-w-xs gap-2 rounded-xl bg-palette-300 p-4">
 			{}
 			<img className="song-img block h-24" src={song.albumArt} alt="test" />
-			<div className="text-container flex w-full text-ellipsis flex-col items-center justify-center">
+			<div className="text-container flex w-full flex-col items-center justify-center">
 				<p className="username max-w-full overflow-hidden text-ellipsis font-['Gotham'] text-lg font-bold text-white text-shadow">{user ? user?.streamID + "" : "User not logged in"}</p>
-				<p className="song-title max-h-7 self-start overflow-hidden  font-['Gotham'] text-lg font-[450] text-white text-shadow ">{song.name}</p>
-				<p className="artist-name self-start font-['Gotham'] text-lg font-[400] text-white text-shadow ">{song.artist}</p>
+				<p className="song-title max-h-7 self-start overflow-hidden text-ellipsis font-['Gotham'] text-lg font-[450] text-white text-shadow ">{song.name}</p>
+				<span className="artist-name self-start font-['Gotham'] text-clip text-lg font-[400] text-white text-shadow ">{song.artist}</span>
 			</div>
 		</div>
 	);

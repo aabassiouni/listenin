@@ -4,12 +4,13 @@ import Messenger from "../components/Messenger/Messenger";
 import { Chat } from "stream-chat-react";
 import { useUser } from "../context/userContext";
 import axios from "axios";
-import FriendsList from "../components/FriendsList/FriendsList";
+import FriendsList from "../components/FriendsList";
 import { StreamChat } from "stream-chat";
-import NavBar from "../components/NavBar/NavBar";
-import Card from "../components/TestCard/TestCard";
+import NavBar from "../components/NavBar";
+import Card from "../components/Card";
 import LoadingPage from "../components/LoadingPage";
 import { useNavigate } from "react-router-dom";
+import { spotifyApi } from "../spotify/spotify";
 
 function Home() {
 	console.log("Home component is being rendered");
@@ -23,7 +24,7 @@ function Home() {
 
 	const navigate = useNavigate();
 
-	const spotifyApi = new SpotifyWebApi();
+	// const spotifyApi = new SpotifyWebApi();
 
 	useEffect(() => {
 		console.log("useEffect in home component is being called");

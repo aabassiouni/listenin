@@ -1,5 +1,5 @@
 import React from "react";
-import { useUser } from "../../context/userContext";
+import { useUser } from "../context/userContext";
 import { useNavigate } from "react-router-dom";
 
 function LogoutButton() {
@@ -14,7 +14,7 @@ function LogoutButton() {
 	}
 
 	return (
-		<button type="button" onClick={handleClick} className="logoutButton hidden sm:block btn-ghost rounded-xl bg-[#16DB65] p-3">
+		<button type="button" onClick={handleClick} className="logoutButton rounded-lg bg-[#16DB65] p-2 sm:block sm:p-3">
 			<span className="logoutButtonText text-center font-['Gotham'] text-xl font-bold text-white text-shadow">Logout</span>
 		</button>
 	);

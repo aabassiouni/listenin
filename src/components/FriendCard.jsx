@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-import LikeButton from "../../LikeButton/LikeButton";
+import LikeButton from "./LikeButton";
 import { useChatContext } from "stream-chat-react";
 import axios from "axios";
+import EmptyAlbumArt from "../assets/empty-album-art.png";
+
 
 function FriendCard(props) {
 	// console.log("Card is being rendered");
@@ -12,7 +14,7 @@ function FriendCard(props) {
 	// console.log("friend being rendered is", friend);
 	var propsUser = props.user;
 
-	const [song, setSong] = useState({ name: "Not Checked", albumArt: "http://localhost:8888/images/acf3edeb055e7b77114f9e393d1edeeda37e50c9.png", artist: "" });
+	const [song, setSong] = useState({ name: "Not Checked", albumArt: EmptyAlbumArt, artist: "" });
 
 	async function handleClick() {
 		var userID = propsUser;
@@ -22,7 +24,7 @@ function FriendCard(props) {
 			setFriend(userFromApi);
 			setSong({
 				name: res.data.lastPlayed.name,
-				albumArt: res.data.lastPlayed.albumArt,
+				albumArt: EmptyAlbumArt,
 				artist: res.data.lastPlayed.artist,
 			});
 		});
@@ -39,13 +41,13 @@ function FriendCard(props) {
 				<img className="song-img block h-16 w-16" src={song.albumArt} alt="test" />
 				<div className="text-container flex w-full flex-col items-center justify-center ">
 					<span className="username max-w-full overflow-hidden text-ellipsis font-['Gotham'] text-sm font-bold text-white text-shadow">{friend.email ? friend.email + "" : "User not logged in"}</span>
-					<span className="song-title max-h-7 self-start overflow-hidden text-ellipsis font-['Gotham'] text-sm font-[450] text-white text-shadow ">{song.name}</span>
+					<span className="song-title max-h-7 self-start overflow-hidden text-ellipsis font-['Gotham'] text-sm font-[500] text-white text-shadow ">{song.name}</span>
 					<span className="artist-name self-start font-['Gotham'] text-sm font-extralight text-white text-shadow ">{song.artist}</span>
 					{/* </div> */}
 				</div>
 			</div>
 			{/* <div className="like-button-container"> */}
-			<LikeButton />
+			<LikeButton song = {song} friend= {friend}/>
 			{/* </div> */}
 		</div>
 	);
