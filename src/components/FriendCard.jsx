@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import LikeButton from "./LikeButton";
-import { useChatContext } from "stream-chat-react";
 import axios from "axios";
 import EmptyAlbumArt from "../assets/empty-album-art.png";
 
@@ -9,7 +8,7 @@ function FriendCard(props) {
 	// console.log("Card is being rendered");
 
 	const [friend, setFriend] = useState({});
-	const { client, setActiveChannel } = useChatContext();
+
 
 	// console.log("friend being rendered is", friend);
 	var propsUser = props.user;
@@ -42,12 +41,6 @@ function FriendCard(props) {
 	// 			artist: res.data.lastPlayed.artist,
 	// 		});
 	// 	});
-
-	// 	// const filter = { members: { $in: ["test-user-2"] } };
-	// 	// const channels = await client.queryChannels(filter);
-	// 	// console.log("channels are", channels);
-	// 	// setActiveChannel(channels[0]);
-	// }
 
 	return (
 		<div className="friend-card flex min-w-full">
