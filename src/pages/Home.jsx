@@ -78,7 +78,7 @@ function Home() {
 			<NavBar />
 			<div className="Spacer p-2"></div>
 
-			<div className="Messenger flex flex-col items-center gap-7 bg-palette-400">
+			<div className="Messenger flex flex-col items-center gap-5 bg-palette-400">
 				{/* <Chat client={chatClient} theme="str-chat__theme-dark"> */}
 				<div className="flex flex-col items-center rounded-xl bg-palette-100 p-3">
 					{/* <div className="Spacer p-2"></div> */}

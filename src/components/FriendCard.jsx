@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import LikeButton from "./LikeButton";
+import SendButton from "./SendButton";
 import axios from "axios";
 import EmptyAlbumArt from "../assets/empty-album-art.png";
 
@@ -26,6 +26,7 @@ function FriendCard(props) {
 				name: res.data.lastPlayed.name,
 				albumArt: EmptyAlbumArt,
 				artist: res.data.lastPlayed.artist,
+				// id: res.data.lastPlayed.id,
 			});
 		});
 	}, []);
@@ -54,7 +55,7 @@ function FriendCard(props) {
 				</div>
 			</div>
 			{/* <div className="like-button-container"> */}
-			<LikeButton song = {song} friend= {friend}/>
+			<SendButton song = {song} friend= {friend}/>
 			{/* </div> */}
 		</div>
 	);

@@ -44,7 +44,7 @@ export function UserContextProvider({ children }) {
 		console.log("getRefreshToken is being called")
 		// setIsLoading(true);
 		const refresh_token = localStorage.getItem("refresh_token");
-		const response = await fetch(`http://localhost:8888/refresh_token?refresh_token=${refresh_token}`);
+		const response = await fetch(import.meta.env.VITE_API_URL + `/refresh_token?refresh_token=${refresh_token}`);
 		const data = await response.json();
 		setToken(data.access_token);
 		// setIsLoading(false);

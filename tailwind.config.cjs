@@ -1,9 +1,9 @@
 /** @type {import('tailwindcss').Config} */
 const plugin = require("tailwindcss/plugin");
-const { violet, blackA, mauve, green } = require('@radix-ui/colors');
+const { blackA} = require("@radix-ui/colors");
 
 module.exports = {
-	content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}", "node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}"],
+	content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}", "node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}", "./node_modules/flowbite/**/*.jsx"],
 	theme: {
 		colors: {
 			transparent: "transparent",
@@ -16,10 +16,8 @@ module.exports = {
 				400: "#0D2818",
 				500: "#020202",
 			},
-      ...blackA,
-      ...mauve,
-      ...violet,
-      ...green,
+			...blackA,
+
 		},
 		extend: {
 			boxShadow: {
