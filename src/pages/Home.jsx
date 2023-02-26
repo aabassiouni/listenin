@@ -7,6 +7,8 @@ import Card from "../components/Card";
 import LoadingPage from "../components/LoadingPage";
 import { useNavigate } from "react-router-dom";
 import { spotifyApi } from "../spotify/spotify";
+import Messages from "../components/Messages";
+import { createClient } from "@supabase/supabase-js";
 
 function Home() {
 	console.log("Home component is being rendered");
@@ -17,10 +19,7 @@ function Home() {
 	const [isLoading, setIsLoading] = useState(true);
 	const [following, setFollowing] = useState([]);
 
-
 	const navigate = useNavigate();
-
-
 
 	useEffect(() => {
 		console.log("useEffect in home component is being called");
@@ -79,18 +78,19 @@ function Home() {
 			<div className="Spacer p-2"></div>
 
 			<div className="Messenger flex flex-col items-center gap-5 bg-palette-400">
-				{/* <Chat client={chatClient} theme="str-chat__theme-dark"> */}
+
 				<div className="flex flex-col items-center rounded-xl bg-palette-100 p-3">
 					{/* <div className="Spacer p-2"></div> */}
 					<Card spotifyApi={spotifyApi} user={user} />
 					<div className="Spacer p-1"></div>
-					<div className="min-w-[20rem] max-w-xs gap-2 rounded-xl bg-palette-200 p-4 text-center font-['Gotham'] text-white text-shadow">Messages</div>
+					{/* <div className="min-w-[20rem] max-w-xs gap-2 rounded-xl bg-palette-200 p-4 text-center font-['Gotham'] text-white text-shadow">Messages</div> */}
+					<Messages />
 				</div>
 				<div className="friends-list-header rounded-xl bg-palette-100 p-2">
 					<p className="title text-center font-['Gotham'] text-lg font-bold text-white text-shadow">Friends: {following.length}</p>
 				</div>
 				<FriendsList following={following} />
-				{/* </Chat> */}
+
 			</div>
 		</div>
 	);
