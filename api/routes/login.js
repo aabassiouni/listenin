@@ -29,6 +29,7 @@ var redirect_uri = process.env.API_URL + '/callback'; // Your redirect uri
 var stateKey = 'spotify_auth_state';
 
 router.get("/", async (req, res) => {
+    console.log("////////////////login called//////////////////////");
     var state = generateRandomString(16);
     res.cookie(stateKey, state);
 

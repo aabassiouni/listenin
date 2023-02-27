@@ -36,7 +36,6 @@ function SendButton(props) {
 
 	const friend = props.friend;
 	const song = props.song;
-	console.log("friend is", friend);
 
 	function handleSearchClick() {
 		const options = {

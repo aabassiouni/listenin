@@ -2,6 +2,7 @@ import React from "react";
 import { useUser } from "./context/userContext";
 import Login from "./pages/Login";
 import Home from "./pages/Home.jsx";
+import Setup from "./pages/Setup.jsx";
 import LoadingPage from "./components/LoadingPage";
 
 import {
@@ -43,6 +44,11 @@ function App() {
 						} />
 					<Route exact path="/login" element={
 							<Login /> 
+						}/>
+					<Route exact path= "/setup" element={
+							<RequireAuth>
+								<Setup />
+							</RequireAuth>
 						}/>
 					<Route path="/home" element={
 							<RequireAuth>

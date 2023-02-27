@@ -52,22 +52,17 @@ function Messages() {
 				table: "messages",
 			},
 			(payload) => {
-				console.log("there is an update to the messages table");
-				console.log("payload is", payload.new);
 				setMessages(messages.push(payload.new));
 				// console.log(payload)
 			}
 		)
 		.subscribe();
 
-	console.log("channel is", channel);
 
 	useEffect(() => {
 		async function fetchMessages() {
 			console.log("fetching messages");
 			const { data, error } = await supabase.from("messages").select();
-			console.log(data);
-			console.log("error is", error);
 			return data;
 		}
 		const data = fetchMessages();

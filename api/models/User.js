@@ -8,12 +8,6 @@ const UserSchema = new mongoose.Schema(
       max: 50,
       unique: true,
     },
-
-    profilePicture: {
-      type: String,
-      default: "",
-    },
-
     followers: {
       type: Array,
       default: [],
@@ -27,12 +21,21 @@ const UserSchema = new mongoose.Schema(
       type: Object,
       default: {name: "Not Checked", 
                 albumArt: null,
-                artist: "" },
+                artist: "",
+                id: null },
     },
-    streamID: {
+    username: {
       type: String,
-      default: "",
+      default: null,
     },
+    spotifyID: {
+      type: String,
+      default: null,
+    },
+    accountSetup:{
+      type: Boolean,
+      default: false,
+    }
   },
   { timestamps: true }
 );

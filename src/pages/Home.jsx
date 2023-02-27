@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { spotifyApi } from "../spotify/spotify";
 import Messages from "../components/Messages";
 import AddFriendsButton from "../components/AddFriendsButton";
+import Setup from "./Setup";
 import { createClient } from "@supabase/supabase-js";
 
 function Home() {
@@ -17,10 +18,11 @@ function Home() {
 	const { token, isLoggedIn, getRefreshToken } = useUser();
 	const [id, setId] = useState(null);
 	const [user, setUser] = useState(null);
+
 	const [isLoading, setIsLoading] = useState(true);
 	const [following, setFollowing] = useState([]);
 
-	const navigate = useNavigate();
+	// const navigate = useNavigate();
 
 	useEffect(() => {
 		console.log("useEffect in home component is being called");
@@ -29,46 +31,44 @@ function Home() {
 
 		async function fetchData() {
 			try {
-			console.log("fetchData is being called");
+				console.log("fetchData is being called");
 
-			console.log("fetching spotify profile");
-			const spotifyProfile = await spotifyApi.getMe().catch((err) => {
-				console.log("error fetching spotify profile");
-				console.log("error is", err);
+				console.log("fetching spotify profile");
+				const spotifyProfile = await spotifyApi.getMe().catch((err) => {
+					console.log("error fetching spotify profile");
+					console.log("error is", err);
 
-				getRefreshToken();
-			});
+					getRefreshToken();
+				});
 
-			console.log("spotifyProfile:", spotifyProfile);
+				console.log("spotifyProfile:", spotifyProfile);
 
-			const spotifyID = spotifyProfile?.id;
+				const spotifyID = spotifyProfile?.id;
 
-			console.log("fetching user profile");
-			const userProfile = await axios.get(import.meta.env.VITE_API_URL + `/users/?userID=${spotifyID}`);
-			console.log("userProfile:", userProfile);
+				console.log("fetching user profile");
+				const userProfile = await axios.get(import.meta.env.VITE_API_URL + `/users/${spotifyID}`);
+				console.log("userProfile:", userProfile);
 
-			console.log("fetching following");
-			const following = await axios.get(import.meta.env.VITE_API_URL + `/users/${spotifyID}/following`);
-			console.log("following:", following);
+				console.log("fetching following");
+				const following = await axios.get(import.meta.env.VITE_API_URL + `/users/${spotifyID}/following`);
+				console.log("following:", following);
 
-			const userObj = {
-				id: userProfile?.data?.streamID,
-				name: userProfile?.data?.email,
-				image: userProfile?.data?.profilePicture,
-			};
-			console.log("userObj:", userObj);
+				const userObj = {
+					id: userProfile?.data?.spotifyID,
+					name: userProfile?.data?.email,
+				};
+				console.log("userObj:", userObj);
 
-			if (userProfile.data) {
-				setUser(userProfile?.data);
-			}
-			setFollowing(following?.data);
-			setIsLoading(false);
-			console.log("setting isLoading to false");
+				if (userProfile.data) {
+					setUser(userProfile?.data);
+				}
+				setFollowing(following?.data);
+				setIsLoading(false);
+				console.log("setting isLoading to false");
 			} catch (err) {
 				console.log("error in fetchData");
 				console.log("error is", err);
 			}
-			
 		}
 
 		fetchData();
@@ -77,6 +77,8 @@ function Home() {
 
 	if (isLoading) {
 		return <LoadingPage />;
+	} else if (user?.accountSetup === false) {
+		return <Setup user={user} />;
 	}
 
 	return (

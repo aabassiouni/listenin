@@ -12,7 +12,6 @@ dotenv.config();
 const client_id = '2d06712101474795ab9fa2bd91fa6000'; // Your client id
 const client_secret = '6b993945947f416f87025d975c6f4ccb'; // Your secret
 const redirect_uri = process.env.API_URL + '/callback'; // Your redirect uri
-console.log("redirect_uri is:", redirect_uri);
 var stateKey = 'spotify_auth_state';
 
 async function getUserData(access_token) {
@@ -96,11 +95,11 @@ router.get('/', function(req, res) {
           console.log("response is:", response);
 
           userEmail = response.email;
-          profilePic = response.images[0].url;
+          // profilePic = response.images[0].url;
           spotifyID = response.id;
 
           console.log("userEmail is:", userEmail);
-          console.log("profilePic is:", profilePic);
+          // console.log("profilePic is:", profilePic);
           console.log("spotifyID is:", spotifyID);
 
 
@@ -109,8 +108,7 @@ router.get('/', function(req, res) {
 
               const newUser = new User({
                   email: userEmail,
-                  profilePicture: profilePic,
-                  streamID: spotifyID, 
+                  spotifyID: spotifyID, 
               });
 
               const user = await newUser.save();
