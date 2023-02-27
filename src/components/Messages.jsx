@@ -90,8 +90,8 @@ function Messages() {
 						{/* <div className="Spacer p-2 bg-palette-300"></div> */}
 						{/* <div className="h-[55vh] w-full max-w-[450px] rounded-[6px] bg-palette-100 px-[25px] pt-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none data-[state=open]:animate-contentShow"></div> */}
 						<Dialog.Close asChild>
-							<button className="fixed top-0 right-0 m-2 flex h-8 w-8 items-center justify-center ">
-								<Cross1Icon />
+							<button className="fixed top-0 right-0 m-1 flex h-8 w-8 items-center justify-center ">
+								<Cross1Icon className="w-6 h-6 text-white text-shadow" />
 							</button>
 						</Dialog.Close>
 					</Dialog.Content>

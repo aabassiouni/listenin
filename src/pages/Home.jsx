@@ -8,6 +8,7 @@ import LoadingPage from "../components/LoadingPage";
 import { useNavigate } from "react-router-dom";
 import { spotifyApi } from "../spotify/spotify";
 import Messages from "../components/Messages";
+import AddFriendsButton from "../components/AddFriendsButton";
 import { createClient } from "@supabase/supabase-js";
 
 function Home() {
@@ -27,6 +28,7 @@ function Home() {
 		spotifyApi.setAccessToken(token);
 
 		async function fetchData() {
+			try {
 			console.log("fetchData is being called");
 
 			console.log("fetching spotify profile");
@@ -62,6 +64,11 @@ function Home() {
 			setFollowing(following?.data);
 			setIsLoading(false);
 			console.log("setting isLoading to false");
+			} catch (err) {
+				console.log("error in fetchData");
+				console.log("error is", err);
+			}
+			
 		}
 
 		fetchData();
@@ -78,7 +85,6 @@ function Home() {
 			<div className="Spacer p-2"></div>
 
 			<div className="Messenger flex flex-col items-center gap-5 bg-palette-400">
-
 				<div className="flex flex-col items-center rounded-xl bg-palette-100 p-3">
 					{/* <div className="Spacer p-2"></div> */}
 					<Card spotifyApi={spotifyApi} user={user} />
@@ -86,11 +92,13 @@ function Home() {
 					{/* <div className="min-w-[20rem] max-w-xs gap-2 rounded-xl bg-palette-200 p-4 text-center font-['Gotham'] text-white text-shadow">Messages</div> */}
 					<Messages />
 				</div>
-				<div className="friends-list-header rounded-xl bg-palette-100 p-2">
-					<p className="title text-center font-['Gotham'] text-lg font-bold text-white text-shadow">Friends: {following.length}</p>
+				<div className="flex gap-5">
+					<div className="friends-list-header rounded-xl bg-palette-100 p-2">
+						<p className="title text-center font-['Gotham'] text-lg font-bold text-white text-shadow">Friends: {following.length}</p>
+					</div>
+					<AddFriendsButton />
 				</div>
 				<FriendsList following={following} />
-
 			</div>
 		</div>
 	);
