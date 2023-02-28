@@ -13,6 +13,7 @@ export default function Card(props) {
 		name: "Not Checked",
 		albumArt: EmptyAlbumArt,
 		artist: "",
+		id: "",
 	});
 	const [isLoading, setIsLoading] = useState(true);
 
@@ -44,7 +45,7 @@ export default function Card(props) {
 					name: response.item.name,
 					albumArt: response.item.album.images[0].url,
 					artist: response.item.artists[0].name,
-					// id: response.tracks.items[i].id,
+					id: response.item.id,
 				});
 				setIsLoading(false);
 			});
@@ -117,7 +118,7 @@ export default function Card(props) {
 					name: response.item.name,
 					albumArt: response.item.album.images[0].url,
 					artist: response.item.artists[0].name,
-					// id: response.tracks.item[i].id,
+					id: response.item.id,
 				});
 				setIsLoading(false);
 			});

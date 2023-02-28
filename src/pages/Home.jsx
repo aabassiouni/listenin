@@ -98,7 +98,7 @@ function Home() {
 					<div className="friends-list-header rounded-xl bg-palette-100 p-2">
 						<p className="title text-center font-['Gotham'] text-lg font-bold text-white text-shadow">Friends: {following.length}</p>
 					</div>
-					<AddFriendsButton />
+					<AddFriendsButton user={user}/>
 				</div>
 				<FriendsList following={following} />
 			</div>

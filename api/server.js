@@ -56,6 +56,53 @@ app.get("/me", function (req, res) {
 	console.log("//////////////// me called //////////////////////");
 });
 
+app.get("/search", function (req, res) {
+	console.log("//////////////// search called //////////////////////");
+	const query = req.query.query;
+	
+
+	if (!query) {
+		console.log("query is null");
+		res.send({});
+	}
+
+	console.log("query is ", query);
+	try {
+		const agg = [
+			{
+				$search: {
+					autocomplete: {
+						query: query,
+						path: "username",
+						fuzzy: {
+							maxEdits: 2,
+						},
+					},
+				},
+			},
+			{
+				$limit: 10,
+			},
+		];
+
+		User.aggregate(agg).then((results) => {
+
+			console.log("results are ", results.map((result) => result.email));
+			res.status(200).json(results);
+		});
+		// .exec(function (err, result) {
+		// 	if (err) {
+		// 		console.log(err);
+		// 	} else {
+		// 		console.log(result);
+		// 	}
+		// });
+	} catch (err) {
+		console.log(err);
+		res.status(403).json("somethings weird");
+	}
+});
+
 app.get("/refresh_token", function (req, res) {
 	console.log("//////////////// refresh_token called //////////////////////");
 
@@ -106,6 +153,61 @@ app.get("/refresh_token", function (req, res) {
 //   const user = newUser.save();
 //   console.log(newUser.email + " saved to database");
 // }
+
+// const agg = User.aggregate([
+// 	{
+// 		$search: {
+// 			autocomplete: {
+// 				query: "aab",
+// 				path: "username",
+// 			},
+// 		},
+// 	},
+// 	{$limit: 10},
+// 	{ $project: { _id: 1, username: 1 } }
+
+// ]);
+// const result = User.aggregate([
+// 		{
+// 			$search: {
+// 				autocomplete: {
+// 					query: "aab",
+// 					path: "username",
+// 				},
+// 			},
+// 		},
+// 		{$limit: 10},
+// 		{ $project: { _id: 1, username: 1 } }
+
+// 	])
+// User.find(
+// 	{
+// 		$text: {
+// 			$search: {
+// 				autocomplete: {
+// 					query: "aab",
+// 					path: "username",
+// 				},
+// 			},
+// 		},
+// 	},
+// 	(err, books) => {
+// 		if (err) {
+// 			console.error(err);
+// 		} else {
+// 			console.log("books", books);
+// 		}
+// 	}
+// );
+
+// User.find({ username: "aab" }, function (err, result) {
+// 	if (err) {
+// 		console.log(err);
+// 	} else {
+// 		console.log(result);
+// 	}
+// });
+// console.log("result is ", result);
 
 console.log("Express Server listening on 8888");
 app.listen(8888);

@@ -105,13 +105,18 @@ router.put("/:userID/follow", async (req, res) => {
 			console.log("in try block");
 			const currentUser = await User.findOne({ spotifyID: userID });
 			const targetUser = await await User.findOne({ spotifyID: targetID });
+			console.log("currentUser is", currentUser);
+			console.log("targetUser is", targetUser);
+			console.log(!targetUser.followers.includes(currentUser))
 
-			if (!targetUser.followers.includes(currentUser)) {
+			if (!targetUser.followers.includes(currentUser.spotifyID)) {
 				await targetUser.updateOne({ $push: { followers: userID } });
 				await currentUser.updateOne({ $push: { following: targetID} });
 
+				console.log("Follow successful");
 				res.status(200).json("Follow successful");
 			} else {
+				console.log("you already follow this user");
 				res.status(403).json("you already follow this user");
 			}
 		} catch (err) {

@@ -19,7 +19,7 @@ function SongSearchResult(props) {
 		<button onClick={handleClick} className="song-search-result flex w-full flex-row items-center gap-3 rounded-lg bg-white p-2 focus:border-2 focus:border-palette-300">
 			<img src={song.albumArt} alt="album art" className="h-12 w-12" />
 			<div className="song-search-result-info flex flex-col text-ellipsis">
-				<h1 className="font-['Gotham'] font-bold ">{song.name}</h1>
+				<span className="font-['Gotham'] font-bold text-ellipsis overflow-hidden w- whitespace-nowrap block">{song.name}</span>
 				<h1 className="text-left font-['Gotham'] text-gray-500">{song.artist}</h1>
 			</div>
 		</button>
@@ -37,7 +37,9 @@ function SendButton(props) {
 	const friend = props.friend;
 	const song = props.song;
 
-	function handleSearchClick() {
+	function handleSearchClick(event) {
+		console.log("clicked search");
+		event.preventDefault();
 		const options = {
 			// limit: 5,
 		};
@@ -82,13 +84,17 @@ function SendButton(props) {
 			<Dialog.Portal>
 				<Dialog.Overlay className="fixed inset-0 bg-blackA9 data-[state=open]:animate-overlayShow" />
 				<Dialog.Content className="fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-palette-100 px-[25px] pt-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none data-[state=open]:animate-contentShow">
-					<Dialog.Title className="pb-8 font-['Gotham'] text-xl font-medium text-mauve12">Choose a song to send to {friend.email}</Dialog.Title>
+					<Dialog.Title className="text-mauve12 pb-8 font-['Gotham'] text-lg font-medium">
+						Choose a song to send to <span className="rounded border-palette-300 bg-white p-1">{friend.username}</span>
+					</Dialog.Title>
 					{/* <Dialog.Description className="mt-[10px] mb-5 text-[15px] leading-normal text-mauve12">We'll add it to your Liked Songs playlist.</Dialog.Description> */}
-					<form>
+					<form onSubmit={(e) => {
+								e.preventDefault();
+							}}>
 						<RadioGroup.Root className="flex flex-col gap-1" defaultValue="select" onValueChange={setSelected} aria-label="View density">
 							<RadioGroup.Item value="select" id="r1" asChild>
 								<div className="flex items-center rounded-lg border-2 border-palette-500 border-opacity-70 pl-4">
-									<div className="h-4 w-4 cursor-default rounded-full bg-white shadow-[0_2px_10px] shadow-blackA7 outline-none hover:bg-violet3 focus:shadow-[0_0_0_2px] focus:shadow-palette-500">
+									<div className="hover:bg-violet3 h-4 w-4 cursor-default rounded-full bg-white shadow-[0_2px_10px] shadow-blackA7 outline-none focus:shadow-[0_0_0_2px] focus:shadow-palette-500">
 										<RadioGroup.Indicator className="relative flex h-full w-full items-center justify-center after:block after:h-2 after:w-2 after:rounded-[50%] after:bg-palette-300 after:content-['']" />
 									</div>
 
@@ -99,11 +105,11 @@ function SendButton(props) {
 							</RadioGroup.Item>
 							<RadioGroup.Item value="current" id="r2" asChild>
 								<div className="flex items-center rounded-lg border-2 border-palette-500 border-opacity-70 pl-4">
-									<div className="h-4 w-4 cursor-default rounded-full bg-white shadow-[0_2px_10px] shadow-blackA7 outline-none hover:bg-violet3 focus:shadow-[0_0_0_2px] focus:shadow-black">
+									<div className="hover:bg-violet3 h-4 w-4 cursor-default rounded-full bg-white shadow-[0_2px_10px] shadow-blackA7 outline-none focus:shadow-[0_0_0_2px] focus:shadow-black">
 										<RadioGroup.Indicator className="relative flex h-full w-full items-center justify-center after:block after:h-2 after:w-2 after:rounded-[50%] after:bg-palette-300 after:content-['']" />
 									</div>
 									<label className="ml-2 w-full py-4 font-['Gotham'] text-sm font-medium text-palette-400" htmlFor="r2">
-										Use {friend.email}'s last played
+										Use {friend.username}'s last played
 									</label>
 								</div>
 							</RadioGroup.Item>
@@ -112,8 +118,10 @@ function SendButton(props) {
 					<div className="Spacer p-2"></div>
 					{selected === "select" ? (
 						<>
-							<div className="flex h-[64px] max-w-[300px] flex-col items-center justify-center overflow-scroll">
-								<form>
+							<div className="flex flex-col justify-center overflow-scroll">
+								<form onSubmit={(e) => {
+								e.preventDefault();
+							}}>
 									<label htmlFor="default-search" class="sr-only mb-2 font-gotham text-sm font-medium text-gray-900 dark:text-white">
 										Search
 									</label>
@@ -133,7 +141,7 @@ function SendButton(props) {
 										<input
 											type="text"
 											id="default-search"
-											class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-4 pl-10 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+											class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-4 pl-4 text-sm text-gray-900 focus:border-palette-300 focus:ring-palette-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
 											placeholder="Search"
 											autoComplete="off"
 											required
@@ -141,7 +149,7 @@ function SendButton(props) {
 										<button
 											type="button"
 											onClick={handleSearchClick}
-											class="absolute right-2.5 bottom-2.5 rounded-lg bg-blue-700 px-2 py-2 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+											class="absolute right-2.5 bottom-2.5 rounded-lg bg-palette-300 px-2 py-2 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
 										>
 											Search
 										</button>
@@ -163,7 +171,7 @@ function SendButton(props) {
 								<ScrollArea.Root className="flex h-full w-full rounded-xl bg-white shadow-[0_2px_10px] shadow-blackA7">
 									<ScrollArea.Viewport className="h-full w-full ">
 										<div className="flex h-32 flex-col gap-2 overflow-scroll">
-											{searchResults.map((song) => {
+											{searchResults.map((song,idx) => {
 												return (
 													// <div className="h-3 overflow-scroll">
 													<>
@@ -183,7 +191,7 @@ function SendButton(props) {
 					) : (
 						<></>
 					)}
-					
+
 					{selected === "current" ? <SongSearchResult song={song} /> : <></>}
 					<Dialog.Close />
 				</Dialog.Content>
