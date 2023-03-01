@@ -17,44 +17,8 @@ export default function Card(props) {
 	});
 	const [isLoading, setIsLoading] = useState(true);
 
-	useEffect(() => {
-		console.log("useEffect in Card is being called");
-		spotifyApi
-			.getMyCurrentPlaybackState()
-			.catch((err) => {
-				console.log("error is", err);
-			})
-			.then((response) => {
-				if (!response) {
-					console.log("401 error");
-					console.log("fetching new access token");
-					console.log("refresh token is", user?.refresh_token);
-
-					axios
-						.get(import.meta.env.VITE_API_URL + `/?refresh_token=${user?.refresh_token}`)
-						.catch((err) => {
-							console.log("error fetching refresh token:", err);
-						})
-						.then((response) => {
-							spotifyApi.setAccessToken(response.data.access_token);
-						});
-				}
-
-				console.log("response is", response);
-				setSong({
-					name: response.item.name,
-					albumArt: response.item.album.images[0].url,
-					artist: response.item.artists[0].name,
-					id: response.item.id,
-				});
-				setIsLoading(false);
-			});
-	}, []);
-
 	// useEffect(() => {
 	// 	console.log("useEffect in Card is being called");
-
-	// 	const interval = setInterval(() => {
 	// 	spotifyApi
 	// 		.getMyCurrentPlaybackState()
 	// 		.catch((err) => {
@@ -67,7 +31,7 @@ export default function Card(props) {
 	// 				console.log("refresh token is", user?.refresh_token);
 
 	// 				axios
-	// 					.get(import.meta.env.VITE_API_URL+`/?refresh_token=${user?.refresh_token}`)
+	// 					.get(import.meta.env.VITE_API_URL + `/?refresh_token=${user?.refresh_token}`)
 	// 					.catch((err) => {
 	// 						console.log("error fetching refresh token:", err);
 	// 					})
@@ -81,13 +45,49 @@ export default function Card(props) {
 	// 				name: response.item.name,
 	// 				albumArt: response.item.album.images[0].url,
 	// 				artist: response.item.artists[0].name,
+	// 				id: response.item.id,
 	// 			});
 	// 			setIsLoading(false);
 	// 		});
-	// 	}, 1000);
-
-	// 	return () => clearInterval(interval); //This is important
 	// }, []);
+
+	useEffect(() => {
+		console.log("useEffect in Card is being called");
+
+		const interval = setInterval(() => {
+		spotifyApi
+			.getMyCurrentPlaybackState()
+			.catch((err) => {
+				console.log("error is", err);
+			})
+			.then((response) => {
+				if (!response) {
+					console.log("401 error");
+					console.log("fetching new access token");
+					console.log("refresh token is", user?.refresh_token);
+
+					axios
+						.get(import.meta.env.VITE_API_URL+`/?refresh_token=${user?.refresh_token}`)
+						.catch((err) => {
+							console.log("error fetching refresh token:", err);
+						})
+						.then((response) => {
+							spotifyApi.setAccessToken(response.data.access_token);
+						});
+				}
+
+				console.log("response is", response);
+				setSong({
+					name: response.item.name,
+					albumArt: response.item.album.images[0].url,
+					artist: response.item.artists[0].name,
+				});
+				setIsLoading(false);
+			});
+		}, 1000);
+
+		return () => clearInterval(interval); //This is important
+	}, []);
 
 	async function handleClick() {
 		console.log("clicked");

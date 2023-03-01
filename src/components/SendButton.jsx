@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // import { Modal } from "flowbite";
 import { spotifyApi } from "../spotify/spotify";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as RadioGroup from "@radix-ui/react-radio-group";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 import * as Separator from "@radix-ui/react-separator";
+import * as Tabs from "@radix-ui/react-tabs";
+import { MagnifyingGlassIcon, PaperPlaneIcon } from "@radix-ui/react-icons";
 import EmptyAlbumArt from "../assets/empty-album-art.png";
 
 function SongSearchResult(props) {
@@ -16,10 +18,10 @@ function SongSearchResult(props) {
 		console.log("clicked songsearchresult");
 	}
 	return (
-		<button onClick={handleClick} className="song-search-result flex w-full flex-row items-center gap-3 rounded-lg bg-white p-2 focus:border-2 focus:border-palette-300">
+		<button onClick={handleClick} className="song-search-result flex  w-full flex-row items-center gap-3 rounded-lg border-2 border-gray-700 bg-white p-2 focus:border-2 focus:border-palette-300">
 			<img src={song.albumArt} alt="album art" className="h-12 w-12" />
-			<div className="song-search-result-info flex flex-col text-ellipsis">
-				<span className="font-['Gotham'] font-bold text-ellipsis overflow-hidden w- whitespace-nowrap block">{song.name}</span>
+			<div className="song-search-result-info flex flex-col truncate ">
+				<p className="self-start  font-['Gotham'] font-bold">{song.name}</p>
 				<h1 className="text-left font-['Gotham'] text-gray-500">{song.artist}</h1>
 			</div>
 		</button>
@@ -33,10 +35,13 @@ function SendButton(props) {
 	const [selected, setSelected] = useState("select");
 	const [isOpen, setIsOpen] = useState(false);
 	const [selectedSong, setSelectedSong] = useState({ name: "Not Checked", albumArt: EmptyAlbumArt, artist: "" });
-
+	const [note, setNote] = useState("");
 	const friend = props.friend;
 	const song = props.song;
 
+	function handleChange(event) {
+		setNote(event.target.value);
+	}
 	function handleSearchClick(event) {
 		console.log("clicked search");
 		event.preventDefault();
@@ -83,18 +88,102 @@ function SendButton(props) {
 			</Dialog.Trigger>
 			<Dialog.Portal>
 				<Dialog.Overlay className="fixed inset-0 bg-blackA9 data-[state=open]:animate-overlayShow" />
-				<Dialog.Content className="fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-palette-100 px-[25px] pt-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none data-[state=open]:animate-contentShow">
-					<Dialog.Title className="text-mauve12 pb-8 font-['Gotham'] text-lg font-medium">
+				<Dialog.Content className="fixed top-3/4 left-[50%] h-3/4 max-h-[85vh] w-full max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-t-[6px] bg-palette-100 px-[25px] py-[25px] pt-8 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none data-[state=open]:animate-contentShow">
+					<Dialog.Title className="pb-3 text-center font-['Gotham'] text-lg font-medium text-mauve12">
 						Choose a song to send to <span className="rounded border-palette-300 bg-white p-1">{friend.username}</span>
 					</Dialog.Title>
 					{/* <Dialog.Description className="mt-[10px] mb-5 text-[15px] leading-normal text-mauve12">We'll add it to your Liked Songs playlist.</Dialog.Description> */}
-					<form onSubmit={(e) => {
-								e.preventDefault();
-							}}>
-						<RadioGroup.Root className="flex flex-col gap-1" defaultValue="select" onValueChange={setSelected} aria-label="View density">
+					<Tabs.Root className="flex flex-col gap-1" defaultValue="select" onValueChange={setSelected} aria-label="View density">
+						<Tabs.List className="flex shrink-0 border-mauve6 pb-2">
+							<Tabs.Trigger
+								className="flex h-[45px] flex-1 cursor-default select-none items-center justify-center bg-white px-5 font-['Gotham'] text-[15px] leading-none text-palette-400 outline-none first:rounded-l-md last:rounded-r-md hover:text-palette-100 data-[state=active]:text-palette-300 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative data-[state=active]:focus:shadow-[0_0_0_2px] data-[state=active]:focus:shadow-black"
+								value="select"
+							>
+								Select Song
+							</Tabs.Trigger>
+							<Tabs.Trigger
+								value="last-played"
+								className="flex h-[45px] flex-1 cursor-default select-none items-center justify-center bg-white px-5 font-['Gotham'] text-[15px] leading-none text-palette-400 outline-none first:rounded-l-md last:rounded-r-md hover:text-palette-100 data-[state=active]:text-palette-300 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative data-[state=active]:focus:shadow-[0_0_0_2px] data-[state=active]:focus:shadow-black"
+							>
+								Use last played
+							</Tabs.Trigger>
+						</Tabs.List>
+						<Tabs.Content value="select" className="flex flex-col gap-1">
+							<div class="sticky top-0">
+								<input
+									type="text"
+									id="default-search"
+									class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-3 pl-10 text-lg  text-gray-900 focus:border-palette-300 focus:ring-palette-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+									placeholder="Search"
+									autoComplete="off"
+									// onKeyDown={handleSearchKeyDown}
+									required
+									// onChange={handleChange}
+								/>
+								<button
+									type="button"
+									onClick={handleSearchClick}
+									// disabled={selectedUser === null}
+									class="absolute right-12 bottom-2.5 rounded-lg bg-palette-300 px-2 py-2 font-['Gotham'] text-sm font-medium text-white hover:bg-palette-200 focus:outline-none focus:ring-2 focus:ring-palette-100 disabled:opacity-25"
+								>
+									<PaperPlaneIcon />
+								</button>
+								<button
+									type="button"
+									onClick={handleSearchClick}
+									// disabled={selectedUser === null}
+									class="absolute right-2.5 bottom-2.5 rounded-lg bg-palette-300 px-2 py-2 font-['Gotham'] text-sm font-medium text-white hover:bg-palette-200 focus:outline-none focus:ring-2 focus:ring-palette-100 disabled:opacity-25"
+								>
+									<MagnifyingGlassIcon />
+								</button>
+							</div>
+							{/* <div className="Spacer p-1"></div> */}
+							<textarea onChange={handleChange} className="w-full self-center rounded border-2"></textarea>
+						
+							{searchResults.length !== 0 && (
+								<ScrollArea.Root className="flex max-h-[30vh] rounded-xl  ">
+									<ScrollArea.Viewport asChild>
+										{/* <div className="py-[15px] px-5 h-full"> */}
+
+										<div className=" flex max-h-[25vh] w-full flex-col gap-1 overflow-scroll">
+											{searchResults.map((song, idx) => {
+												return (
+													<>
+														<button className="flex ">
+															<SongSearchResult song={song} />
+														</button>
+													</>
+												);
+											})}
+										</div>
+									</ScrollArea.Viewport>
+
+									<ScrollArea.Corner />
+								</ScrollArea.Root>
+							)}
+						</Tabs.Content>
+						<Tabs.Content value="last-played" className="flex flex-col gap-1">
+							<div className="Spacer p-1"></div>
+							<button className="song-search-result flex w-full flex-row items-center gap-3 rounded-lg border-2 border-gray-700 bg-white p-2 focus:border-2 focus:border-palette-300">
+								<img src={song.albumArt} alt="album art" className="h-12 w-12" />
+								<div className="song-search-result-info flex flex-col truncate ">
+									<p className="self-start  font-['Gotham'] font-bold">{song.name}</p>
+									<h1 className="text-left font-['Gotham'] text-gray-500">{song.artist}</h1>
+								</div>
+							</button>
+						</Tabs.Content>
+					</Tabs.Root>
+					{/* <form
+						onSubmit={(e) => {
+							e.preventDefault();
+						}}
+					> */}
+					{/* <Tabs.Panel value="select2" className="flex flex-col gap-1"> */}
+
+					{/* <RadioGroup.Root className="flex flex-col gap-1" defaultValue="select" onValueChange={setSelected} aria-label="View density">
 							<RadioGroup.Item value="select" id="r1" asChild>
 								<div className="flex items-center rounded-lg border-2 border-palette-500 border-opacity-70 pl-4">
-									<div className="hover:bg-violet3 h-4 w-4 cursor-default rounded-full bg-white shadow-[0_2px_10px] shadow-blackA7 outline-none focus:shadow-[0_0_0_2px] focus:shadow-palette-500">
+									<div className="h-4 w-4 cursor-default rounded-full bg-white shadow-[0_2px_10px] shadow-blackA7 outline-none hover:bg-violet3 focus:shadow-[0_0_0_2px] focus:shadow-palette-500">
 										<RadioGroup.Indicator className="relative flex h-full w-full items-center justify-center after:block after:h-2 after:w-2 after:rounded-[50%] after:bg-palette-300 after:content-['']" />
 									</div>
 
@@ -105,7 +194,7 @@ function SendButton(props) {
 							</RadioGroup.Item>
 							<RadioGroup.Item value="current" id="r2" asChild>
 								<div className="flex items-center rounded-lg border-2 border-palette-500 border-opacity-70 pl-4">
-									<div className="hover:bg-violet3 h-4 w-4 cursor-default rounded-full bg-white shadow-[0_2px_10px] shadow-blackA7 outline-none focus:shadow-[0_0_0_2px] focus:shadow-black">
+									<div className="h-4 w-4 cursor-default rounded-full bg-white shadow-[0_2px_10px] shadow-blackA7 outline-none hover:bg-violet3 focus:shadow-[0_0_0_2px] focus:shadow-black">
 										<RadioGroup.Indicator className="relative flex h-full w-full items-center justify-center after:block after:h-2 after:w-2 after:rounded-[50%] after:bg-palette-300 after:content-['']" />
 									</div>
 									<label className="ml-2 w-full py-4 font-['Gotham'] text-sm font-medium text-palette-400" htmlFor="r2">
@@ -113,84 +202,9 @@ function SendButton(props) {
 									</label>
 								</div>
 							</RadioGroup.Item>
-						</RadioGroup.Root>
-					</form>
+						</RadioGroup.Root> */}
+					{/* </form> */}
 					<div className="Spacer p-2"></div>
-					{selected === "select" ? (
-						<>
-							<div className="flex flex-col justify-center overflow-scroll">
-								<form onSubmit={(e) => {
-								e.preventDefault();
-							}}>
-									<label htmlFor="default-search" class="sr-only mb-2 font-gotham text-sm font-medium text-gray-900 dark:text-white">
-										Search
-									</label>
-									<div class="sticky top-0">
-										{/* <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-											<svg
-												aria-hidden="true"
-												class="h-5 w-5 text-gray-500 dark:text-gray-400"
-												fill="none"
-												stroke="currentColor"
-												viewBox="0 0 24 24"
-												xmlns="http://www.w3.org/2000/svg"
-											>
-												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-											</svg>
-										</div> */}
-										<input
-											type="text"
-											id="default-search"
-											class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-4 pl-4 text-sm text-gray-900 focus:border-palette-300 focus:ring-palette-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-											placeholder="Search"
-											autoComplete="off"
-											required
-										/>
-										<button
-											type="button"
-											onClick={handleSearchClick}
-											class="absolute right-2.5 bottom-2.5 rounded-lg bg-palette-300 px-2 py-2 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-										>
-											Search
-										</button>
-									</div>
-								</form>
-								{/* {JSON.stringify(searchResults)} */}
-							</div>
-							{/* <div className="flex flex-col h-32 overflow-scroll gap-2">
-								{searchResults.map((song) => {
-									return (
-										// <div className="h-3 overflow-scroll">
-										<SongSearchResult song={song} />
-										// </div>
-									);
-								})}
-							</div> */}
-							<div className="Spacer p-2"></div>
-							{searchResults.length !== 0 && (
-								<ScrollArea.Root className="flex h-full w-full rounded-xl bg-white shadow-[0_2px_10px] shadow-blackA7">
-									<ScrollArea.Viewport className="h-full w-full ">
-										<div className="flex h-32 flex-col gap-2 overflow-scroll">
-											{searchResults.map((song,idx) => {
-												return (
-													// <div className="h-3 overflow-scroll">
-													<>
-														<SongSearchResult song={song} />
-														{/* <Separator.Root className="bg-violet6 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full "/> */}
-													</>
-													// </div>
-												);
-											})}
-										</div>
-									</ScrollArea.Viewport>
-
-									<ScrollArea.Corner />
-								</ScrollArea.Root>
-							)}
-						</>
-					) : (
-						<></>
-					)}
 
 					{selected === "current" ? <SongSearchResult song={song} /> : <></>}
 					<Dialog.Close />

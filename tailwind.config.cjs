@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 const plugin = require("tailwindcss/plugin");
-const { blackA} = require("@radix-ui/colors");
+const { blackA, mauve, violet} = require("@radix-ui/colors");
 
 module.exports = {
 	content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}", "node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}", "./node_modules/flowbite/**/*.jsx"],
@@ -17,6 +17,9 @@ module.exports = {
 				500: "#020202",
 			},
 			...blackA,
+			...mauve,
+			...violet,
+			
 
 		},
 		extend: {
