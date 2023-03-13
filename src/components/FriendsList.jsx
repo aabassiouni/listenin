@@ -5,6 +5,8 @@ function FriendsList(props) {
 	console.log("FriendsList is being rendered");
 
 	const following = props.following;
+	const user = props.user;
+
 	console.log("following in FriendsList is", following);
 	return (
 		<div className="friends-list flex flex-col rounded-xl h-96 w-80 bg-palette-100">
@@ -12,7 +14,7 @@ function FriendsList(props) {
 				{following.map((friend, idx) => {
 					return (
 						<>
-							<FriendCard key={idx} user={friend} />
+							<FriendCard key={idx} user = {user} friend={friend} />
 							{/* <FriendCard key={idx} user={friend} /> */}
 						</>
 					);

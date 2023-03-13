@@ -31,3 +31,4 @@ jsconfig.json
 src/context/userContext old v2.jsx
 .env
 src/components/AddFriendsButton copy.jsx
+api/firebase_service_account_key/listenin-f7d21-firebase-adminsdk-lorx8-4994f2856b.json

@@ -1,5 +1,7 @@
 const router = require("express").Router();
 const User = require("../models/User");
+const { getAuth} = require("firebase-admin/auth");
+
 
 router.get("/:userID", function (req, res) {
 	console.log("//////////////// User route called //////////////////////");
@@ -15,12 +17,24 @@ router.get("/:userID", function (req, res) {
 		}
 	});
 	if (user) {
-		console.log("user is", user);
+		// console.log("user is", user);
 	}
 	if (!user) {
 		console.log("user is null");
 	}
 });
+
+router.get("/:spotifyID/firebase_token", async function (req, res) {
+	console.log("/////////////////////////////firebase route called/////////////////////////////");
+
+    const spotifyID = req.params.spotifyID;
+    let firebase_token = await getAuth().createCustomToken(spotifyID);
+    console.log("firebase_token is:", firebase_token);
+
+    res.status(200).json(firebase_token);
+
+});
+
 router.put("/:spotifyID/setup", async (req, res) => {
 	console.log("//////////////// Setup route called //////////////////////");
 	console.log("Updating " + req.params.spotifyID + "'s accountSetup in database");
@@ -51,11 +65,13 @@ router.put("/:spotifyID/setup", async (req, res) => {
 	}
 });
 
-router.get(":userID/lastPlayed", async (req, res) => {
+router.get("/lastPlayed", async (req, res) => {
 	console.log("//////////////// lastPlayed route called //////////////////////");
-	console.log("Fetching" + req.params.userID + "'s LastPlayed from database");
+	console.log("Fetching" + req.query.spotifyID + "'s LastPlayed from database");
+	const spotifyID = req.query.spotifyID;
+
 	try {
-		const user = await User.findOne({ userID: req.params.userID });
+		const user = await User.findOne({ spotifyID: spotifyID });
 		const lastPlayed = user.lastPlayed;
 		res.status(200).json(lastPlayed);
 	} catch (err) {

@@ -1,23 +1,28 @@
 import { createContext, useState, useEffect, useContext, useReducer, useMemo } from "react";
 import { getHashParams } from "../util/util";
+import { app } from "../firebase";
+import { getAuth, signInWithCustomToken } from "firebase/auth";
 
 export const UserContext = createContext({
 	token: null,
 	isLoggedIn: false,
-  isLoading: true,
+	isLoading: true,
 });
 
 export function UserContextProvider({ children }) {
 	const [token, setToken] = useState(null);
 	const [isLoading, setIsLoading] = useState(true);
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const [user, setUser] = useState(null);
 
 	useEffect(() => {
 		let localToken = localStorage.getItem("access_token");
 		let localRefreshToken = localStorage.getItem("refresh_token");
 
+
 		if (localToken) {
-			console.log("setting token to local storage token")
+			console.log("setting token to local storage token");
+
 			setToken(localToken);
 			setIsLoggedIn(true);
 		} else {
@@ -28,8 +33,9 @@ export function UserContextProvider({ children }) {
 			const access_token = params.access_token;
 			const refresh_token = params.refresh_token;
 
+
 			if (access_token) {
-				console.log("settting token to params token")
+				console.log("settting token to params token");
 				setToken(access_token);
 				setIsLoggedIn(true);
 				localStorage.setItem("access_token", access_token);
@@ -41,12 +47,15 @@ export function UserContextProvider({ children }) {
 	}, []);
 
 	async function getRefreshToken() {
-		console.log("getRefreshToken is being called")
+		console.log("getRefreshToken is being called");
 		// setIsLoading(true);
 		const refresh_token = localStorage.getItem("refresh_token");
+		console.log("refresh token in getRefreshToken is", refresh_token);
 		const response = await fetch(import.meta.env.VITE_API_URL + `/refresh_token?refresh_token=${refresh_token}`);
 		const data = await response.json();
 		setToken(data.access_token);
+		localStorage.setItem("access_token", data.access_token);
+
 		// setIsLoading(false);
 	}
 

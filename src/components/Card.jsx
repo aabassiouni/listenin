@@ -2,12 +2,15 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import EmptyAlbumArt from "../assets/empty-album-art.png";
 import { spotifyApi } from "../spotify/spotify";
+import { useUser } from "../context/userContext";
 
 export default function Card(props) {
 	console.log("Card is being rendered");
 
+	const { getRefreshToken } = useUser();
 	const user = props.user;
-	console.log("user is", user);
+	// console.log("user is", user);
+
 	// Use state to store current song information
 	const [song, setSong] = useState({
 		name: "Not Checked",
@@ -17,74 +20,33 @@ export default function Card(props) {
 	});
 	const [isLoading, setIsLoading] = useState(true);
 
-	// useEffect(() => {
-	// 	console.log("useEffect in Card is being called");
-	// 	spotifyApi
-	// 		.getMyCurrentPlaybackState()
-	// 		.catch((err) => {
-	// 			console.log("error is", err);
-	// 		})
-	// 		.then((response) => {
-	// 			if (!response) {
-	// 				console.log("401 error");
-	// 				console.log("fetching new access token");
-	// 				console.log("refresh token is", user?.refresh_token);
-
-	// 				axios
-	// 					.get(import.meta.env.VITE_API_URL + `/?refresh_token=${user?.refresh_token}`)
-	// 					.catch((err) => {
-	// 						console.log("error fetching refresh token:", err);
-	// 					})
-	// 					.then((response) => {
-	// 						spotifyApi.setAccessToken(response.data.access_token);
-	// 					});
-	// 			}
-
-	// 			console.log("response is", response);
-	// 			setSong({
-	// 				name: response.item.name,
-	// 				albumArt: response.item.album.images[0].url,
-	// 				artist: response.item.artists[0].name,
-	// 				id: response.item.id,
-	// 			});
-	// 			setIsLoading(false);
-	// 		});
-	// }, []);
-
 	useEffect(() => {
 		console.log("useEffect in Card is being called");
 
 		const interval = setInterval(() => {
-		spotifyApi
-			.getMyCurrentPlaybackState()
-			.catch((err) => {
-				console.log("error is", err);
-			})
-			.then((response) => {
-				if (!response) {
-					console.log("401 error");
-					console.log("fetching new access token");
-					console.log("refresh token is", user?.refresh_token);
+			spotifyApi
+				.getMyCurrentPlaybackState()
+				.catch((err) => {
+					console.log("error is", err);
+				})
+				.then((response) => {
+					if (!response) {
+						console.log("401 error");
+						console.log("fetching new access token");
+						console.log("refresh token is", user?.refresh_token);
 
-					axios
-						.get(import.meta.env.VITE_API_URL+`/?refresh_token=${user?.refresh_token}`)
-						.catch((err) => {
-							console.log("error fetching refresh token:", err);
-						})
-						.then((response) => {
-							spotifyApi.setAccessToken(response.data.access_token);
-						});
-				}
-
-				console.log("response is", response);
-				setSong({
-					name: response.item.name,
-					albumArt: response.item.album.images[0].url,
-					artist: response.item.artists[0].name,
+						getRefreshToken();
+					}
+					// console.log("response is", response);
+					setSong({
+						name: response.item.name,
+						albumArt: response.item.album.images[0].url,
+						artist: response.item.artists[0].name,
+						id: response.item.id,
+					});
+					setIsLoading(false);
 				});
-				setIsLoading(false);
-			});
-		}, 1000);
+		}, 50000);
 
 		return () => clearInterval(interval); //This is important
 	}, []);
@@ -101,16 +63,9 @@ export default function Card(props) {
 				if (!response) {
 					console.log("401 error");
 					console.log("fetching new access token");
-					console.log("refresh token is", user?.refresh_token);
+					console.log("refresh token is", localStorage.getItem("refresh_token"));
 
-					axios
-						.get(`http://localhost:8888/refresh_token/?refresh_token=${user?.refresh_token}`)
-						.catch((err) => {
-							console.log("error fetching refresh token:", err);
-						})
-						.then((response) => {
-							spotifyApi.setAccessToken(response.data.access_token);
-						});
+					getRefreshToken();
 				}
 
 				console.log("response is", response);
@@ -123,8 +78,6 @@ export default function Card(props) {
 				setIsLoading(false);
 			});
 	}
-
-
 
 	return (
 		// <div  className="flex mx-4 bg-[#04471C] px-4 py-4 shadow-lg max-h-[136px] w-[90%] cursor-pointer gap-2 rounded-[10px] items-start">

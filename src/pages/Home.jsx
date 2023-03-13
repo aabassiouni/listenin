@@ -10,7 +10,8 @@ import { spotifyApi } from "../spotify/spotify";
 import Messages from "../components/Messages";
 import AddFriendsButton from "../components/AddFriendsButton";
 import Setup from "./Setup";
-import { createClient } from "@supabase/supabase-js";
+import { getAuth, signInWithCustomToken } from "firebase/auth";
+import {app} from "../firebase";
 
 function Home() {
 	console.log("Home component is being rendered");
@@ -23,6 +24,7 @@ function Home() {
 	const [following, setFollowing] = useState([]);
 
 	// const navigate = useNavigate();
+	const auth = getAuth(app);
 
 	useEffect(() => {
 		console.log("useEffect in home component is being called");
@@ -52,6 +54,22 @@ function Home() {
 				console.log("fetching following");
 				const following = await axios.get(import.meta.env.VITE_API_URL + `/users/${spotifyID}/following`);
 				console.log("following:", following);
+				
+				const firebase_token = await axios.get(import.meta.env.VITE_API_URL + `/users/${spotifyID}/firebase_token`).then((res) => {
+					console.log("firebase_token is", res.data);
+					// return res;
+				});
+				// console.log("firebase_token:", firebase_token.data);
+				signInWithCustomToken(auth, firebase_token)
+				.then((userCredential) => {
+					// Signed in
+					// const user = userCredential.user;
+					console.log("firebase user is", user);
+				})
+				.catch((error) => {
+					
+					console.log("firebase error is", error);
+				});
 
 				const userObj = {
 					id: userProfile?.data?.spotifyID,
@@ -88,11 +106,9 @@ function Home() {
 
 			<div className="Messenger flex flex-col items-center gap-5 bg-palette-400">
 				<div className="flex flex-col items-center rounded-xl bg-palette-100 p-3">
-					{/* <div className="Spacer p-2"></div> */}
 					<Card spotifyApi={spotifyApi} user={user} />
 					<div className="Spacer p-1"></div>
-					{/* <div className="min-w-[20rem] max-w-xs gap-2 rounded-xl bg-palette-200 p-4 text-center font-['Gotham'] text-white text-shadow">Messages</div> */}
-					<Messages />
+					<Messages spotifyApi={spotifyApi} user={user}/>
 				</div>
 				<div className="flex gap-5">
 					<div className="friends-list-header rounded-xl bg-palette-100 p-2">
@@ -100,7 +116,7 @@ function Home() {
 					</div>
 					<AddFriendsButton user={user}/>
 				</div>
-				<FriendsList following={following} />
+				<FriendsList user = {user} following={following} />
 			</div>
 		</div>
 	);

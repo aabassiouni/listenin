@@ -57,7 +57,7 @@ export default function AddFriendsButton(props) {
 		// e.preventDefault();
 
 		if (e.key === "Enter") {
-			handleAddClick();
+			// handleAddClick();
 		}
 	}
 
@@ -82,22 +82,29 @@ export default function AddFriendsButton(props) {
 							clicked user: {JSON.stringify(searchResults[selectedUser]?.email)}
 						</Dialog.Title> */}
 						{/* {searchResults.map} */}
-						<Tabs.Root onValueChange={() => {
-							setSelectedUser(null);
-							setSearchResults([]);
-
-						}} defaultValue="add">
-							<Tabs.List className="border-mauve6 flex shrink-0">
-								<Tabs.Trigger className="font-['Gotham'] text-palette-400 hover:text-palette-100 data-[state=active]:text-palette-100 flex h-[45px] flex-1 cursor-default select-none items-center justify-center bg-white px-5 text-[15px] leading-none outline-none first:rounded-l-md last:rounded-r-md data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative data-[state=active]:focus:shadow-[0_0_0_2px] data-[state=active]:focus:shadow-black"
-								value="add">
+						<Tabs.Root
+							onValueChange={() => {
+								setSelectedUser(null);
+								setSearchResults([]);
+							}}
+							defaultValue="add"
+						>
+							<Tabs.List className="flex shrink-0 border-mauve6">
+								<Tabs.Trigger
+									className="flex h-[45px] flex-1 cursor-default select-none items-center justify-center bg-white px-5 font-['Gotham'] text-[15px] leading-none text-palette-400 outline-none first:rounded-l-md last:rounded-r-md hover:text-palette-100 data-[state=active]:text-palette-100 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative data-[state=active]:focus:shadow-[0_0_0_2px] data-[state=active]:focus:shadow-black"
+									value="add"
+								>
 									Add Friends
 								</Tabs.Trigger>
-								
-								<Tabs.Trigger value="tab2" className="font-['Gotham'] text-palette-400 hover:text-palette-100 data-[state=active]:text-palette-100 flex h-[45px] flex-1 cursor-default select-none items-center justify-center bg-white px-5 text-[15px] leading-none outline-none first:rounded-l-md last:rounded-r-md data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative data-[state=active]:focus:shadow-[0_0_0_2px] data-[state=active]:focus:shadow-black">
+
+								<Tabs.Trigger
+									value="tab2"
+									className="flex h-[45px] flex-1 cursor-default select-none items-center justify-center bg-white px-5 font-['Gotham'] text-[15px] leading-none text-palette-400 outline-none first:rounded-l-md last:rounded-r-md hover:text-palette-100 data-[state=active]:text-palette-100 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative data-[state=active]:focus:shadow-[0_0_0_2px] data-[state=active]:focus:shadow-black"
+								>
 									Pending Requests
 								</Tabs.Trigger>
 							</Tabs.List>
-							<Tabs.Content className ="mt-4" value="add">
+							<Tabs.Content className="mt-4" value="add">
 								<form
 									onSubmit={(e) => {
 										e.preventDefault();
@@ -143,7 +150,7 @@ export default function AddFriendsButton(props) {
 															{/* <img src={result.profilePicture} alt="" className="h-10 w-10 rounded-full" /> */}
 															<Avatar.Root className=" mx-2 inline-flex h-[45px] w-[45px] select-none items-center justify-center overflow-hidden rounded-full bg-blackA3 align-middle">
 																{/* <Avatar.Image className= "h-full  w-full rounded-[inherit] object-cover" src={} /> */}
-																<Avatar.Fallback className="leading-1 text-violet11 flex h-full w-full items-center justify-center bg-white text-xl">
+																<Avatar.Fallback className="leading-1 flex h-full w-full items-center justify-center bg-white text-xl text-violet11">
 																	AB
 																</Avatar.Fallback>
 															</Avatar.Root>
