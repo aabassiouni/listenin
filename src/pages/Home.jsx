@@ -10,7 +10,8 @@ import { spotifyApi } from "../spotify/spotify";
 import Messages from "../components/Messages";
 import AddFriendsButton from "../components/AddFriendsButton";
 import Setup from "./Setup";
-import { createClient } from "@supabase/supabase-js";
+import { getAuth, signInWithCustomToken } from "firebase/auth";
+import { app } from "../firebase";
 
 function Home() {
 	console.log("Home component is being rendered");
@@ -23,6 +24,7 @@ function Home() {
 	const [following, setFollowing] = useState([]);
 
 	// const navigate = useNavigate();
+	const auth = getAuth(app);
 
 	useEffect(() => {
 		console.log("useEffect in home component is being called");
@@ -31,33 +33,26 @@ function Home() {
 
 		async function fetchData() {
 			try {
-				console.log("fetchData is being called");
-
-				console.log("fetching spotify profile");
 				const spotifyProfile = await spotifyApi.getMe().catch((err) => {
-					console.log("error fetching spotify profile");
-					console.log("error is", err);
-
 					getRefreshToken();
 				});
 
-				console.log("spotifyProfile:", spotifyProfile);
-
 				const spotifyID = spotifyProfile?.id;
 
-				console.log("fetching user profile");
 				const userProfile = await axios.get(import.meta.env.VITE_API_URL + `/users/${spotifyID}`);
-				console.log("userProfile:", userProfile);
 
-				console.log("fetching following");
 				const following = await axios.get(import.meta.env.VITE_API_URL + `/users/${spotifyID}/following`);
-				console.log("following:", following);
+				
+				const firebase_token = await axios.get(import.meta.env.VITE_API_URL + `/users/${spotifyID}/firebase_token`);
+
+				signInWithCustomToken(auth, firebase_token.data).catch((error) => {
+					console.log("firebase error is", error);
+				});
 
 				const userObj = {
 					id: userProfile?.data?.spotifyID,
 					name: userProfile?.data?.email,
 				};
-				console.log("userObj:", userObj);
 
 				if (userProfile.data) {
 					setUser(userProfile?.data);
@@ -66,7 +61,7 @@ function Home() {
 				setIsLoading(false);
 				console.log("setting isLoading to false");
 			} catch (err) {
-				console.log("error in fetchData");
+				console.log("error in fetchData", err);
 				console.log("error is", err);
 			}
 		}
@@ -88,19 +83,17 @@ function Home() {
 
 			<div className="Messenger flex flex-col items-center gap-5 bg-palette-400">
 				<div className="flex flex-col items-center rounded-xl bg-palette-100 p-3">
-					{/* <div className="Spacer p-2"></div> */}
 					<Card spotifyApi={spotifyApi} user={user} />
 					<div className="Spacer p-1"></div>
-					{/* <div className="min-w-[20rem] max-w-xs gap-2 rounded-xl bg-palette-200 p-4 text-center font-['Gotham'] text-white text-shadow">Messages</div> */}
-					<Messages />
+					<Messages spotifyApi={spotifyApi} user={user} />
 				</div>
 				<div className="flex gap-5">
 					<div className="friends-list-header rounded-xl bg-palette-100 p-2">
 						<p className="title text-center font-['Gotham'] text-lg font-bold text-white text-shadow">Friends: {following.length}</p>
 					</div>
-					<AddFriendsButton user={user}/>
+					<AddFriendsButton user={user} />
 				</div>
-				<FriendsList following={following} />
+				<FriendsList user={user} following={following} />
 			</div>
 		</div>
 	);

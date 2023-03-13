@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview --port 3000"
   },
   "dependencies": {
     "@radix-ui/colors": "^0.1.8",
@@ -23,6 +23,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "1.2.4",
     "daisyui": "^2.51.0",
+    "firebase": "^9.17.1",
     "flowbite": "^1.6.3",
     "flowbite-react": "^0.3.8",
     "primeicons": "^6.0.1",

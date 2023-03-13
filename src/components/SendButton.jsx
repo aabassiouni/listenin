@@ -8,6 +8,8 @@ import * as Separator from "@radix-ui/react-separator";
 import * as Tabs from "@radix-ui/react-tabs";
 import { MagnifyingGlassIcon, PaperPlaneIcon } from "@radix-ui/react-icons";
 import EmptyAlbumArt from "../assets/empty-album-art.png";
+import { useUser } from "../context/userContext";
+import axios from "axios";
 
 function SongSearchResult(props) {
 	const song = props?.song;
@@ -18,7 +20,10 @@ function SongSearchResult(props) {
 		console.log("clicked songsearchresult");
 	}
 	return (
-		<button onClick={handleClick} className="song-search-result flex  w-full flex-row items-center gap-3 rounded-lg border-2 border-gray-700 bg-white p-2 focus:border-2 focus:border-palette-300">
+		<button
+			onClick={handleClick}
+			className="song-search-result flex w-full flex-row items-center gap-3 rounded-lg border-2 border-gray-700 bg-white p-2 focus:border-2 focus:border-palette-300 focus:bg-palette-200/50"
+		>
 			<img src={song.albumArt} alt="album art" className="h-12 w-12" />
 			<div className="song-search-result-info flex flex-col truncate ">
 				<p className="self-start  font-['Gotham'] font-bold">{song.name}</p>
@@ -36,7 +41,11 @@ function SendButton(props) {
 	const [isOpen, setIsOpen] = useState(false);
 	const [selectedSong, setSelectedSong] = useState({ name: "Not Checked", albumArt: EmptyAlbumArt, artist: "" });
 	const [note, setNote] = useState("");
+	// const { user } = useUser();
+	const user = props.user;
+	// console.log("user is", user);
 	const friend = props.friend;
+	// console.log("friend is", friend)
 	const song = props.song;
 
 	function handleChange(event) {
@@ -64,6 +73,28 @@ function SendButton(props) {
 			}
 			setSearchResults(songArr);
 		});
+	}
+
+	function handleSendClick() {
+		console.log("clicked send");
+		// console.log("friend is", friend);
+		// console.log("song is", song);
+		// console.log("note is", note);
+		console.log("selectedSong is", selectedSong);
+		console.log("user is", user);
+		console.log("friend is", friend);
+
+		const data = {
+			sender_id: user.spotifyID,
+			receiver_id: friend.spotifyID,
+			song_id: selectedSong,
+			note: note,
+		};
+		// console.log(data);
+		axios.put(import.meta.env.VITE_API_URL + `/send`, data).then((response) => {
+			console.log(response);
+		});
+		
 	}
 
 	return (
@@ -122,7 +153,7 @@ function SendButton(props) {
 								/>
 								<button
 									type="button"
-									onClick={handleSearchClick}
+									onClick={handleSendClick}
 									// disabled={selectedUser === null}
 									class="absolute right-12 bottom-2.5 rounded-lg bg-palette-300 px-2 py-2 font-['Gotham'] text-sm font-medium text-white hover:bg-palette-200 focus:outline-none focus:ring-2 focus:ring-palette-100 disabled:opacity-25"
 								>
@@ -138,8 +169,8 @@ function SendButton(props) {
 								</button>
 							</div>
 							{/* <div className="Spacer p-1"></div> */}
-							<textarea onChange={handleChange} className="w-full self-center rounded border-2"></textarea>
-						
+							<textarea onChange={handleChange} className="h-9 w-full self-center rounded-lg border-2 focus:ring-palette-100"></textarea>
+
 							{searchResults.length !== 0 && (
 								<ScrollArea.Root className="flex max-h-[30vh] rounded-xl  ">
 									<ScrollArea.Viewport asChild>
@@ -149,7 +180,14 @@ function SendButton(props) {
 											{searchResults.map((song, idx) => {
 												return (
 													<>
-														<button className="flex ">
+														<button
+															onClick={() => {
+																console.log(song);
+																setSelectedSong(song.id);
+																
+															}}
+															className="flex "
+														>
 															<SongSearchResult song={song} />
 														</button>
 													</>
@@ -173,37 +211,6 @@ function SendButton(props) {
 							</button>
 						</Tabs.Content>
 					</Tabs.Root>
-					{/* <form
-						onSubmit={(e) => {
-							e.preventDefault();
-						}}
-					> */}
-					{/* <Tabs.Panel value="select2" className="flex flex-col gap-1"> */}
-
-					{/* <RadioGroup.Root className="flex flex-col gap-1" defaultValue="select" onValueChange={setSelected} aria-label="View density">
-							<RadioGroup.Item value="select" id="r1" asChild>
-								<div className="flex items-center rounded-lg border-2 border-palette-500 border-opacity-70 pl-4">
-									<div className="h-4 w-4 cursor-default rounded-full bg-white shadow-[0_2px_10px] shadow-blackA7 outline-none hover:bg-violet3 focus:shadow-[0_0_0_2px] focus:shadow-palette-500">
-										<RadioGroup.Indicator className="relative flex h-full w-full items-center justify-center after:block after:h-2 after:w-2 after:rounded-[50%] after:bg-palette-300 after:content-['']" />
-									</div>
-
-									<label className="ml-2 w-full py-4 font-['Gotham'] text-sm font-medium text-palette-400" htmlFor="r1">
-										Select Song
-									</label>
-								</div>
-							</RadioGroup.Item>
-							<RadioGroup.Item value="current" id="r2" asChild>
-								<div className="flex items-center rounded-lg border-2 border-palette-500 border-opacity-70 pl-4">
-									<div className="h-4 w-4 cursor-default rounded-full bg-white shadow-[0_2px_10px] shadow-blackA7 outline-none hover:bg-violet3 focus:shadow-[0_0_0_2px] focus:shadow-black">
-										<RadioGroup.Indicator className="relative flex h-full w-full items-center justify-center after:block after:h-2 after:w-2 after:rounded-[50%] after:bg-palette-300 after:content-['']" />
-									</div>
-									<label className="ml-2 w-full py-4 font-['Gotham'] text-sm font-medium text-palette-400" htmlFor="r2">
-										Use {friend.username}'s last played
-									</label>
-								</div>
-							</RadioGroup.Item>
-						</RadioGroup.Root> */}
-					{/* </form> */}
 					<div className="Spacer p-2"></div>
 
 					{selected === "current" ? <SongSearchResult song={song} /> : <></>}

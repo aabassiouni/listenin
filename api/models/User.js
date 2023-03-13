@@ -22,7 +22,8 @@ const UserSchema = new mongoose.Schema(
       default: {name: "Not Checked", 
                 albumArt: null,
                 artist: "",
-                id: null },
+                id: null,
+                timestamp: null, },
     },
     username: {
       type: String,

@@ -6,19 +6,19 @@ import EmptyAlbumArt from "../assets/empty-album-art.png";
 
 function FriendCard(props) {
 	// console.log("Card is being rendered");
-
-	const [friend, setFriend] = useState({});
-
-
-	// console.log("friend being rendered is", friend);
-	var propsUser = props.user;
-
-	console.log("propsUser is", propsUser)
 	const [song, setSong] = useState({ name: "Not Checked", albumArt: EmptyAlbumArt, artist: "" });
+	const [friend, setFriend] = useState({});
+	const user = props.user;
+	var friendID = props.friend;
+
+
+
+	// const friend = props.friend;
 
 	useEffect(() => {
-		// console.log("useEffect in Card is being called");
-		var userID = propsUser;
+		
+		// fetch friend data from api
+		var userID = friendID;
 
 		axios.get(import.meta.env.VITE_API_URL + `/users/${userID}`).then((res) => {
 			var userFromApi = res.data;
@@ -28,7 +28,7 @@ function FriendCard(props) {
 				name: res.data.lastPlayed.name,
 				albumArt: EmptyAlbumArt,
 				artist: res.data.lastPlayed.artist,
-				// id: res.data.lastPlayed.id,
+				id: res.data.lastPlayed.id,
 			});
 		});
 	}, []);
@@ -57,7 +57,7 @@ function FriendCard(props) {
 				</div>
 			</div>
 			{/* <div className="like-button-container"> */}
-			<SendButton song = {song} friend= {friend}/>
+			<SendButton song = {song} user = {user} friend = {friend}/>
 			{/* </div> */}
 		</div>
 	);
