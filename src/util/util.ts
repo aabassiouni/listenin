@@ -1,5 +1,7 @@
-export function getHashParams(){
-    var hashParams = {};
+
+
+export function getHashParams(): any{
+    var hashParams: any = {};
     var e, r = /([^&;=]+)=?([^&;]*)/g,
         q = window.location.hash.substring(1);
     e = r.exec(q)

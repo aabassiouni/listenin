@@ -12,7 +12,10 @@ import {
 	Navigate
 } from "react-router-dom";
 
-function RequireAuth({ children }) {
+type Props = {
+	children: React.ReactNode;
+};
+function RequireAuth ({ children }: Props ) : any{
 	const {token, isLoggedIn, isLoading} = useUser();
 
 	console.log("token in require auth is", token);
@@ -42,14 +45,14 @@ function App() {
 									<Navigate replace to = {"/home"} />
 								</RequireAuth>
 						} />
-					<Route exact path="/login" element={
+					<Route path="/login" element={
 							<Login /> 
 						}/>
-					<Route exact path= "/setup" element={
+					{/* <Route path= "/setup" element={
 							<RequireAuth>
 								<Setup />
 							</RequireAuth>
-						}/>
+						}/> */}
 					<Route path="/home" element={
 							<RequireAuth>
 								<Home />

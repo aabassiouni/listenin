@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, MouseEvent } from "react";
 // import { Modal } from "flowbite";
 import { spotifyApi } from "../spotify/spotify";
 import * as Dialog from "@radix-ui/react-dialog";
@@ -10,8 +10,13 @@ import { MagnifyingGlassIcon, PaperPlaneIcon } from "@radix-ui/react-icons";
 import EmptyAlbumArt from "../assets/empty-album-art.png";
 import { useUser } from "../context/userContext";
 import axios from "axios";
+import { Song, User } from "../pages/Home";
 
-function SongSearchResult(props) {
+type SongSearchResultProps = {
+	song: Song;
+};
+
+function SongSearchResult(props: SongSearchResultProps) {
 	const song = props?.song;
 
 	function handleClick() {
@@ -33,46 +38,64 @@ function SongSearchResult(props) {
 	);
 }
 
-function SendButton(props) {
+type SendButtonProps = {
+	user: User;
+	friend: User;
+	lastPlayedSong: Song;
+};
+
+function SendButton(props: SendButtonProps) {
 	// const [friend, setFriend] = useState({});
 	// const [song, setSong] = useState({ name: "Not Checked", albumArt: EmptyAlbumArt, artist: "" });
-	const [searchResults, setSearchResults] = useState([]);
-	const [selected, setSelected] = useState("select");
-	const [isOpen, setIsOpen] = useState(false);
-	const [selectedSong, setSelectedSong] = useState({ name: "Not Checked", albumArt: EmptyAlbumArt, artist: "" });
-	const [note, setNote] = useState("");
+	const [searchResults, setSearchResults] = useState<Song[]>([]);
+	const [selected, setSelected] = useState<string>("select");
+	const [isOpen, setIsOpen] = useState<boolean>(false);
+	const [selectedSong, setSelectedSong] = useState<Song>({ name: "Not Checked", albumArt: EmptyAlbumArt, artist: "", id: "" });
+	const [note, setNote] = useState<string>("");
+	const [search, setSearch] = useState<string>("");
 	// const { user } = useUser();
 	const user = props.user;
 	// console.log("user is", user);
 	const friend = props.friend;
 	// console.log("friend is", friend)
-	const song = props.song;
+	const song = props.lastPlayedSong;
 
-	function handleChange(event) {
+	function handleNoteChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
 		setNote(event.target.value);
 	}
-	function handleSearchClick(event) {
+	function handleSearchChange(event: React.ChangeEvent<HTMLInputElement>) {
+		setSearch(event.target.value);
+	}
+
+	function handleSearchClick(event: MouseEvent<HTMLButtonElement>) {
 		console.log("clicked search");
 		event.preventDefault();
 		const options = {
 			// limit: 5,
 		};
 
-		let songArr = [];
-		spotifyApi.searchTracks(document.getElementById("default-search").value, options).then((response) => {
-			console.log("response is", response);
-			for (let i = 0; i < response.tracks.items.length; i++) {
-				console.log("response.tracks.items[i] is", response.tracks.items[i]);
-				let songObj = {
-					name: response.tracks.items[i].name,
-					albumArt: response.tracks.items[i].album.images[0].url,
-					artist: response.tracks.items[i].artists[0].name,
-					id: response.tracks.items[i].id,
-				};
-				songArr.push(songObj);
-			}
-			setSearchResults(songArr);
-		});
+		let songArr: Song[] = [];
+		const search = document.getElementById("default-search")?.innerHTML;
+		console.log("search is", search);
+
+		if (!search) {
+			return;
+		} else {
+			spotifyApi.searchTracks(search, options).then((response) => {
+				console.log("response is", response);
+				for (let i = 0; i < response.tracks.items.length; i++) {
+					console.log("response.tracks.items[i] is", response.tracks.items[i]);
+					let songObj = {
+						name: response.tracks.items[i].name,
+						albumArt: response.tracks.items[i].album.images[0].url,
+						artist: response.tracks.items[i].artists[0].name,
+						id: response.tracks.items[i].id,
+					};
+					songArr.push(songObj);
+				}
+				setSearchResults(songArr);
+			});
+		}
 	}
 
 	function handleSendClick() {
@@ -85,8 +108,8 @@ function SendButton(props) {
 		console.log("friend is", friend);
 
 		const data = {
-			sender_id: user.spotifyID,
-			receiver_id: friend.spotifyID,
+			sender_id: user?.id,
+			receiver_id: friend?.id,
 			song_id: selectedSong,
 			note: note,
 		};
@@ -94,7 +117,6 @@ function SendButton(props) {
 		axios.put(import.meta.env.VITE_API_URL + `/send`, data).then((response) => {
 			console.log(response);
 		});
-		
 	}
 
 	return (
@@ -121,7 +143,7 @@ function SendButton(props) {
 				<Dialog.Overlay className="fixed inset-0 bg-blackA9 data-[state=open]:animate-overlayShow" />
 				<Dialog.Content className="fixed top-3/4 left-[50%] h-3/4 max-h-[85vh] w-full max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-t-[6px] bg-palette-100 px-[25px] py-[25px] pt-8 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none data-[state=open]:animate-contentShow">
 					<Dialog.Title className="pb-3 text-center font-['Gotham'] text-lg font-medium text-mauve12">
-						Choose a song to send to <span className="rounded border-palette-300 bg-white p-1">{friend.username}</span>
+						Choose a song to send to <span className="rounded border-palette-300 bg-white p-1">{friend?.id}</span>
 					</Dialog.Title>
 					{/* <Dialog.Description className="mt-[10px] mb-5 text-[15px] leading-normal text-mauve12">We'll add it to your Liked Songs playlist.</Dialog.Description> */}
 					<Tabs.Root className="flex flex-col gap-1" defaultValue="select" onValueChange={setSelected} aria-label="View density">
@@ -140,22 +162,25 @@ function SendButton(props) {
 							</Tabs.Trigger>
 						</Tabs.List>
 						<Tabs.Content value="select" className="flex flex-col gap-1">
-							<div class="sticky top-0">
+							<div className="sticky top-0">
 								<input
 									type="text"
 									id="default-search"
-									class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-3 pl-10 text-lg  text-gray-900 focus:border-palette-300 focus:ring-palette-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+									className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-3 pl-10 text-lg  text-gray-900 focus:border-palette-300 focus:ring-palette-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
 									placeholder="Search"
 									autoComplete="off"
 									// onKeyDown={handleSearchKeyDown}
 									required
+									value={search}
+									onChange = {handleSearchChange}
+									
 									// onChange={handleChange}
 								/>
 								<button
 									type="button"
 									onClick={handleSendClick}
 									// disabled={selectedUser === null}
-									class="absolute right-12 bottom-2.5 rounded-lg bg-palette-300 px-2 py-2 font-['Gotham'] text-sm font-medium text-white hover:bg-palette-200 focus:outline-none focus:ring-2 focus:ring-palette-100 disabled:opacity-25"
+									className="absolute right-12 bottom-2.5 rounded-lg bg-palette-300 px-2 py-2 font-['Gotham'] text-sm font-medium text-white hover:bg-palette-200 focus:outline-none focus:ring-2 focus:ring-palette-100 disabled:opacity-25"
 								>
 									<PaperPlaneIcon />
 								</button>
@@ -163,13 +188,13 @@ function SendButton(props) {
 									type="button"
 									onClick={handleSearchClick}
 									// disabled={selectedUser === null}
-									class="absolute right-2.5 bottom-2.5 rounded-lg bg-palette-300 px-2 py-2 font-['Gotham'] text-sm font-medium text-white hover:bg-palette-200 focus:outline-none focus:ring-2 focus:ring-palette-100 disabled:opacity-25"
+									className="absolute right-2.5 bottom-2.5 rounded-lg bg-palette-300 px-2 py-2 font-['Gotham'] text-sm font-medium text-white hover:bg-palette-200 focus:outline-none focus:ring-2 focus:ring-palette-100 disabled:opacity-25"
 								>
 									<MagnifyingGlassIcon />
 								</button>
 							</div>
 							{/* <div className="Spacer p-1"></div> */}
-							<textarea onChange={handleChange} className="h-9 w-full self-center rounded-lg border-2 focus:ring-palette-100"></textarea>
+							<textarea onChange={handleNoteChange} className="h-9 w-full self-center rounded-lg border-2 focus:ring-palette-100"></textarea>
 
 							{searchResults.length !== 0 && (
 								<ScrollArea.Root className="flex max-h-[30vh] rounded-xl  ">
@@ -183,8 +208,7 @@ function SendButton(props) {
 														<button
 															onClick={() => {
 																console.log(song);
-																setSelectedSong(song.id);
-																
+																setSelectedSong(song);
 															}}
 															className="flex "
 														>

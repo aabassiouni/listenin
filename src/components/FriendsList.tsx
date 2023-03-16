@@ -1,7 +1,14 @@
 import React from "react";
+import { User } from "../pages/Home.js";
 import FriendCard from "./FriendCard.jsx";
 
-function FriendsList(props) {
+type Props = {
+	following: string[];
+	user: User;
+};
+
+
+function FriendsList(props : Props) {
 	console.log("FriendsList is being rendered");
 
 	const following = props.following;
@@ -11,18 +18,13 @@ function FriendsList(props) {
 	return (
 		<div className="friends-list flex flex-col rounded-xl h-96 w-80 bg-palette-100">
 			<div className="friends-list-card-container gap-3 py-3 px-3 flex flex-col items-center overflow-scroll">
-				{following.map((friend, idx) => {
+				{following.map((friendID, idx) => {
 					return (
 						<>
-							<FriendCard key={idx} user = {user} friend={friend} />
-							{/* <FriendCard key={idx} user={friend} /> */}
+							<FriendCard key={idx} user={user} friendID={friendID} />
 						</>
 					);
 				})}
-				{/* <h1>test</h1>
-                <h1>test</h1> */}
-				{/* <h1>test</h1>
-                <h1>test</h1> */}
 			</div>
 		</div>
 	);

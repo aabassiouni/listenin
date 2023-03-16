@@ -1,25 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, MouseEvent } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
+import { User } from "./Home";
 
-export default function Setup(props) {
+type Props = {
+	user: User;
+};
+
+export default function Setup(props: Props) {
 	console.log("Setup is being rendered");
-	const user = props.user;
+	const user: User = props.user;
 	console.log("user in setup is", user);
 	const [username, setUsername] = useState("");
 	const navigate = useNavigate();
 
-	function handleClick(event) {
+	function handleClick( event: MouseEvent<HTMLButtonElement>)  {
 		event.preventDefault();
 		console.log("username is", username);
 
-		const query = import.meta.env.VITE_API_URL + `/users/${user.spotifyID}/setup?username=${username}`;
+		const query = import.meta.env.VITE_API_URL + `/users/${user?.id}/setup?username=${username}`;
 		console.log("query is", query);
 		axios
-			.put(import.meta.env.VITE_API_URL + `/users/${user.spotifyID}/setup?username=${username}`)
+			.put(import.meta.env.VITE_API_URL + `/users/${user?.id}/setup?username=${username}`)
 			.then((response) => {
 				console.log("response is", response);
 			})

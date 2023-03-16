@@ -5,11 +5,15 @@ import * as Avatar from "@radix-ui/react-avatar";
 import * as Tabs from "@radix-ui/react-tabs";
 
 import axios from "axios";
+import { User } from "../pages/Home";
 
-export default function AddFriendsButton(props) {
-	const [query, setQuery] = useState("");
-	const [searchResults, setSearchResults] = useState([]);
-	const [selectedUser, setSelectedUser] = useState(null);
+type Props = {
+	user: User;
+};
+export default function AddFriendsButton(props: Props) {
+	const [query, setQuery] = useState<string>("");
+	const [searchResults, setSearchResults] = useState<User[]>([]);
+	const [selectedUser, setSelectedUser] = useState<number | null>(null);
 
 	const user = props.user;
 	// console.log("user is", user)
@@ -28,38 +32,49 @@ export default function AddFriendsButton(props) {
 					query: query,
 				},
 			});
-			setSearchResults(data);
+
+			const newData = data.map((user: any): User => {
+				return {
+					id: user.username,
+					email: user.email,
+					name: user.name,
+				};
+			});
+			console.log("newData is", newData);
+			console.log("data is", data);
+			setSearchResults(newData);
 		}
 		fetchData();
 	}, [query]);
 
-	const handleClick = (e) => {
+	const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
 		console.log("handleClick is being called");
-		console.log("e.target is", e.target);
-		console.log("e.target.value is", e.target.value);
+		console.log("e.target is", event.target);
+		// console.log("e.target.value is", event.target.value);
 	};
 
-	const handleChange = (e) => {
-		setQuery(e.target.value);
+	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setQuery(event.target.value);
 		setSearchResults([]);
 		setSelectedUser(null);
 	};
 
 	async function handleAddClick() {
 		console.log("handleSearchClick is being called");
-		const targetUser = searchResults[selectedUser].spotifyID;
+		if (selectedUser === null) return;
+		const targetUser = searchResults[selectedUser].id;
 		console.log("targetUser is", targetUser);
-		const { data } = await axios.put(import.meta.env.VITE_API_URL + `/users/${user.spotifyID}/follow?target_id=${targetUser}`);
+		const { data } = await axios.put(import.meta.env.VITE_API_URL + `/users/${user.id}/follow?target_id=${targetUser}`);
 		console.log(data);
 	}
 
-	function handleSearchKeyDown(e) {
-		// e.preventDefault();
+	// function handleSearchKeyDown(e) {
+	// 	// e.preventDefault();
 
-		if (e.key === "Enter") {
-			// handleAddClick();
-		}
-	}
+	// 	if (e.key === "Enter") {
+	// 		// handleAddClick();
+	// 	}
+	// }
 
 	return (
 		<>
@@ -110,25 +125,29 @@ export default function AddFriendsButton(props) {
 										e.preventDefault();
 									}}
 								>
-									<label htmlFor="default-search" class="sr-only mb-2 font-gotham text-sm font-medium text-gray-900 dark:text-white">
+									<label htmlFor="default-search" className="sr-only mb-2 font-gotham text-sm font-medium text-gray-900 dark:text-white">
 										Search
 									</label>
-									<div class="sticky top-0">
+									<div className="sticky top-0">
 										<input
 											type="text"
 											id="default-search"
-											class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-3 pl-10 text-lg  text-gray-900 focus:border-palette-300 focus:ring-palette-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+											className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-3 pl-10 text-lg  text-gray-900 focus:border-palette-300 focus:ring-palette-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
 											placeholder="Search"
 											autoComplete="off"
-											onKeyDown={handleSearchKeyDown}
+											// onKeyDown={handleSearchKeyDown}
 											required
-											onChange={handleChange}
+											onChange={(event) => {
+												setQuery(event.target.value);
+												setSearchResults([]);
+												setSelectedUser(null);
+											}}
 										/>
 										<button
 											type="button"
 											onClick={handleAddClick}
 											// disabled={selectedUser === null}
-											class="absolute right-2.5 bottom-2.5 rounded-lg bg-palette-300 px-2 py-2 font-['Gotham'] text-sm font-medium text-white hover:bg-palette-200 focus:outline-none focus:ring-4 focus:ring-blue-300 disabled:opacity-25"
+											className="absolute right-2.5 bottom-2.5 rounded-lg bg-palette-300 px-2 py-2 font-['Gotham'] text-sm font-medium text-white hover:bg-palette-200 focus:outline-none focus:ring-4 focus:ring-blue-300 disabled:opacity-25"
 										>
 											Add friend
 										</button>
@@ -154,16 +173,9 @@ export default function AddFriendsButton(props) {
 																	AB
 																</Avatar.Fallback>
 															</Avatar.Root>
-															<p className="ml-2 font-gotham text-sm font-medium text-gray-900 dark:text-white">{result.username}</p>
+															<p className="ml-2 font-gotham text-sm font-medium text-gray-900 dark:text-white">{result.id}</p>
 														</div>
-														{/* <p>{idx}</p> */}
-														{/* <button
-													type="button"
-													className="rounded-lg bg-palette-300 px-2 py-2 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-													onClick={handleClick}
-												>
-													Add Friend
-												</button> */}
+														
 													</button>
 												);
 											})}

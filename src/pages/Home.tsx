@@ -12,16 +12,33 @@ import AddFriendsButton from "../components/AddFriendsButton";
 import Setup from "./Setup";
 import { getAuth, signInWithCustomToken } from "firebase/auth";
 import { app } from "../firebase";
+import SpotifyWebApi from "spotify-web-api-js";
+
+
+export type User = {
+	id: string;
+	name: string;
+	email: string;
+	accountSetup?: boolean;
+	refresh_token?: string;
+};
+
+export type Song = {
+	name: string;
+	albumArt: string;
+	artist: string;
+	id: string;
+};
 
 function Home() {
 	console.log("Home component is being rendered");
 
 	const { token, isLoggedIn, getRefreshToken } = useUser();
-	const [id, setId] = useState(null);
-	const [user, setUser] = useState(null);
+	const [id, setId] = useState<string | null>(null);
+	const [user, setUser] = useState<User>({id: "", name: "", email: ""});
 
-	const [isLoading, setIsLoading] = useState(true);
-	const [following, setFollowing] = useState([]);
+	const [isLoading, setIsLoading] = useState<Boolean>(true);
+	const [following, setFollowing] = useState<string[]>([]);
 
 	// const navigate = useNavigate();
 	const auth = getAuth(app);
@@ -52,10 +69,12 @@ function Home() {
 				const userObj = {
 					id: userProfile?.data?.spotifyID,
 					name: userProfile?.data?.email,
+					email: userProfile?.data?.email,
 				};
 
 				if (userProfile.data) {
-					setUser(userProfile?.data);
+					console.log("setting user to", userObj);
+					setUser(userObj);
 				}
 				setFollowing(following?.data);
 				setIsLoading(false);

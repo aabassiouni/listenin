@@ -9,22 +9,32 @@ import { doc, getDocs, collection, query, where, onSnapshot } from "firebase/fir
 // import { Drawer } from "flowbite";
 import { getAuth } from "firebase/auth";
 import EmptyAlbumArt from "../assets/empty-album-art.png";
+import { Song, User } from "../pages/Home";
 
-function Message(props) {
+interface MessageProps {
+	message: any;
+	spotifyApi: any;
+}
+
+function Message(props: MessageProps) {
 	console.log("Message is being rendered");
-
 
 	const message = props.message;
 	console.log("message is", message);
 
 	const spotifyApi = props.spotifyApi;
 
-	const [song, setSong] = useState({});
-	const [isLoading, setIsLoading] = useState(true);
+	const [song, setSong] = useState<Song>({
+		name: "Not Checked",
+		albumArt: EmptyAlbumArt,
+		artist: "",
+		id: "",
+	});
+	const [isLoading, setIsLoading] = useState<boolean>(true);
 
 	useEffect(() => {
 		console.log("useEffect in Message is being called");
-		spotifyApi.getTrack(message?.song_id).then((response) => {
+		spotifyApi.getTrack(message?.song_id).then((response: { name: any; album: { images: { url: any; }[]; }; artists: { name: any; }[]; id: any; }) => {
 			console.log("song is", response);
 			setSong({
 				name: response.name,
@@ -35,8 +45,6 @@ function Message(props) {
 			setIsLoading(false);
 		});
 	}, []);
-
-
 
 	return (
 		<>
@@ -56,18 +64,23 @@ function Message(props) {
 					{/* <Avatar.Image className= "h-full  w-full rounded-[inherit] object-cover" src={} /> */}
 					<Avatar.Fallback className="leading-1 flex h-full w-full items-center justify-center bg-white text-xl text-violet11">AB</Avatar.Fallback>
 				</Avatar.Root>
-				
+
 				<p className="self-center font-['Gotham'] text-base font-medium text-white text-shadow">{message.sender_id}</p>
-				<p className="ml-5 rounded-full px-2 self-center bg-white font-['Gotham'] text-base  text-shadow">{message.note}</p>
+				<p className="ml-5 self-center rounded-full bg-white px-2 font-['Gotham'] text-base  text-shadow">{message.note}</p>
 			</div>
 		</>
 	);
 }
 
-function Messages(props) {
+type MessagesProps = {
+	user: User;
+	spotifyApi: any;
+};
+
+function Messages(props: MessagesProps) {
 	const [messages, setMessages] = useState([]);
 	const user = props.user;
-	const spotifyID = user.spotifyID;
+	const spotifyID = user.id;
 	const spotifyApi = props.spotifyApi;
 	// console.log("user is", user);
 	// console.log("messages are", messages);
@@ -94,18 +107,16 @@ function Messages(props) {
 		// }
 		// fetchMessages();
 		// const q = query(collection(db, "messages"), where("receiver_id", "==", spotifyID));
-		const docRef = doc(db, "messages", user.spotifyID);
+		const docRef = doc(db, "messages", spotifyID);
+		console.log("docRef is", docRef);
 		const unsub = onSnapshot(docRef, (snapshot) => {
 			console.log("Current data: ", snapshot.data());
 			// setMessages()
-			console.log("messages are", snapshot.data().messages);
-			setMessages(snapshot.data().messages);
-
-			});
+			console.log("messages are", snapshot.data()?.messages);
+			setMessages(snapshot.data()?.messages);
+		});
 		return unsub;
 	}, []);
-
-
 
 	return (
 		<>
@@ -115,10 +126,10 @@ function Messages(props) {
 				</Dialog.Trigger>
 				<Dialog.Portal>
 					<Dialog.Overlay className="fixed inset-0 bg-blackA9 data-[state=open]:animate-overlayShow" />
-					<Dialog.Content className="fixed top-3/4 left-[50%] h-1/2 max-h-[85vh] overflow-scroll w-full max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-t-[6px] bg-palette-100 px-[25px] py-[25px] pt-8 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none data-[state=open]:animate-contentShow">
+					<Dialog.Content className="fixed top-3/4 left-[50%] h-1/2 max-h-[85vh] w-full max-w-[450px] translate-x-[-50%] translate-y-[-50%] overflow-scroll rounded-t-[6px] bg-palette-100 px-[25px] py-[25px] pt-8 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none data-[state=open]:animate-contentShow">
 						{/* <Message spotifyApi = {spotifyApi} /> */}
 						{messages.map((message) => (
-							<Message spotifyApi = {spotifyApi} message={message} />
+							<Message spotifyApi={spotifyApi} message={message} />
 						))}
 						{/* {messages.toString()} */}
 						{/* <Dialog.Title /> */}

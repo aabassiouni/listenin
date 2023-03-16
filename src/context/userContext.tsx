@@ -3,14 +3,25 @@ import { getHashParams } from "../util/util";
 import { app } from "../firebase";
 import { getAuth, signInWithCustomToken } from "firebase/auth";
 
-export const UserContext = createContext({
+interface UserContextProps {
+	token: string | null;
+	isLoggedIn: boolean;
+	isLoading: boolean;
+	logout: () => void;
+	getRefreshToken: () => Promise<void>;
+
+}
+
+export const UserContext = createContext<UserContextProps>({
 	token: null,
 	isLoggedIn: false,
 	isLoading: true,
+	logout: () => {},
+	getRefreshToken: () => Promise.resolve(),
 });
 
-export function UserContextProvider({ children }) {
-	const [token, setToken] = useState(null);
+export function UserContextProvider({ children }: { children: React.ReactNode }) {
+	const [token, setToken] = useState<string | null >(null);
 	const [isLoading, setIsLoading] = useState(true);
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const [user, setUser] = useState(null);
