@@ -16,12 +16,12 @@ function FriendsList(props : Props) {
 
 	console.log("following in FriendsList is", following);
 	return (
-		<div className="friends-list flex flex-col rounded-xl h-96 w-80 bg-palette-100">
-			<div className="friends-list-card-container gap-3 py-3 px-3 flex flex-col items-center overflow-scroll">
+		<div className="friends-list flex flex-col rounded-xl h-full w-full bg-palette-100">
+			<div className="friends-list-card-container py-6 flex flex-col items-center overflow-scroll">
 				{following.map((friendID, idx) => {
 					return (
 						<>
-							<FriendCard key={idx} user={user} friendID={friendID} />
+							<FriendCard key={friendID} user={user} friendID={friendID} />
 						</>
 					);
 				})}
