@@ -4,6 +4,7 @@ import axios from "axios";
 import EmptyAlbumArt from "../assets/empty-album-art.png";
 import * as Avatar from "@radix-ui/react-avatar";
 import { Song, User } from "../pages/Home";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
 	user: User;
@@ -16,6 +17,7 @@ function FriendCard(props: Props) {
 	const [isLoading, setIsLoading] = useState<Boolean>(true);
 	const user = props.user;
 	var friendID = props.friendID;
+	const navigate = useNavigate();
 
 	// const friend = props.friend;
 
@@ -54,7 +56,11 @@ function FriendCard(props: Props) {
 	// 	});
 	if (isLoading) return <div>Loading...</div>;
 	return (
-		<div className="friend-card flex min-w-full">
+		<div onClick={() => {
+			console.log("clicked");
+			navigate(`/messages/${friend.id}`);
+			// console.log("friend is", friend);
+		}} className="friend-card flex min-w-full">
 			<div className="flex w-full cursor-pointer flex-col border-b border-black bg-palette-200 p-2">
 				<div className="flex">
 					<Avatar.Root className="h-[45px] w-[45px] select-none items-center justify-center rounded-full bg-blackA3">

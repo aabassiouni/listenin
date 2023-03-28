@@ -111,8 +111,8 @@ export default function NewCard(props: Props) {
 			<div onClick={handleClick} className="relative flex flex-row items-center p-3">
 				<p className="absolute right-0 top-0 m-2 text-base text-green-800 font-medium">43m</p>
 				<img className="song-img block h-20 w-20" src={song.albumArt} />
-				<div className="text-container flex w-1/2 flex-col justify-center px-4">
-					<p className="song-title max-h-7 self-start overflow-hidden text-ellipsis text-base font-['Gotham'] font-medium text-black ">{song.name}</p>
+				<div className="text-container grow flex w-1/2 flex-col justify-center px-4">
+					<p className="song-title w-full max-h-7 self-start overflow-hidden text-ellipsis text-base font-['Gotham'] font-medium text-black ">{song.name}</p>
 					<p className="artist-name self-start text-clip text-base font-medium font-['Gotham'] text-black ">{song.artist}</p>
 				</div>
 			</div>

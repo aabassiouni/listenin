@@ -11,11 +11,17 @@ import { getAuth } from "firebase/auth";
 import EmptyAlbumArt from "../assets/empty-album-art.png";
 import { Song, User } from "../pages/Home";
 
+
+type Message = {
+	note: string;
+	song_id: string;
+	sender_id: string;
+};
+
 interface MessageProps {
-	message: any;
+	message: Message;
 	spotifyApi: any;
 }
-
 function Message(props: MessageProps) {
 	console.log("Message is being rendered");
 
@@ -82,31 +88,13 @@ function Messages(props: MessagesProps) {
 	const user = props.user;
 	const spotifyID = user.id;
 	const spotifyApi = props.spotifyApi;
-	// console.log("user is", user);
-	// console.log("messages are", messages);
+
 	const auth = getAuth();
 	console.log("spotifyID is", spotifyID);
 
-	// const collectionRef = collection(db, "messages");
-	// console.log("collectionRef is", collectionRef);
-	// const docRef = doc(db, "messages", "pBk8VrcJMq50p9nJiEjr");
-	// console.log("docRef is", docRef);
-	// getDocs(collectionRef).then((querySnapshot) => {
-	// 	console.log("querySnapshot is", querySnapshot);
-	// });
 
-	// const document = doc(db, "messages", where("receiver_id", "==", spotifyID));
-	// console.log("document is", document);
 	useEffect(() => {
-		// async function fetchMessages() {
-		// 	const querySnapshot = await getDocs(collection(db, "messages"));
-		// 	querySnapshot.forEach((doc) => {
-		// 		// doc.data() is never undefined for query doc snapshots
-		// 		console.log(doc.id, " => ", doc.data());
-		// 	});
-		// }
-		// fetchMessages();
-		// const q = query(collection(db, "messages"), where("receiver_id", "==", spotifyID));
+
 		const docRef = doc(db, "messages", spotifyID);
 		console.log("docRef is", docRef);
 		const unsub = onSnapshot(docRef, (snapshot) => {
