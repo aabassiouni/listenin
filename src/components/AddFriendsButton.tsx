@@ -3,20 +3,129 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { PlusIcon } from "@radix-ui/react-icons";
 import * as Avatar from "@radix-ui/react-avatar";
 import * as Tabs from "@radix-ui/react-tabs";
-
+import toast, { Toaster } from "react-hot-toast";
+import { useFriends } from "../context/friendsContext";
 import axios from "axios";
-import { User } from "../pages/Home";
+import type { User } from "../pages/Home";
 
-type Props = {
+type AddFriendsButtonProps = {
 	user: User;
 };
-export default function AddFriendsButton(props: Props) {
+
+function SearchResult(props: { user: User; result: User }) {
+	const result = props.result;
+
+	async function handleAddClick() {
+		// console.log("handleSearchClick is being called");
+		// if (selectedUser === null) return;
+		// const targetUser = searchResults[selectedUser].id;
+		// console.log("targetUser is", targetUser);
+		// const { data } = await axios.put(import.meta.env.VITE_API_URL + `/users/${user.id}/follow?target_id=${targetUser}`);
+		// console.log(data);
+		console.log("result in search result is", result);
+		const target_id = result.spotifyID;
+		console.log("target_id is", target_id);
+		const user = props.user;
+
+		const url = import.meta.env.VITE_API_URL + `/users/${user.id}/sendFriendRequest?target_id=${target_id}`;
+		const { data } = await axios.put(url);
+		console.log("data is", data);
+		if (data.message == "already sent") {
+			console.log("i am here");
+
+			toast.error("Already sent");
+		}
+		// console.log("data is", data);
+	}
+
+	return (
+		<div className="mt-4 flex">
+			<div className="flex w-full flex-row items-center rounded-l-lg border-y border-l border-palette-500 bg-palette-200 p-2">
+				<Avatar.Root className=" mx-2 inline-flex h-[45px] w-[45px] select-none items-center justify-center overflow-hidden rounded-full bg-blackA3 align-middle">
+					{/* <Avatar.Image className= "h-full  w-full rounded-[inherit] object-cover" src={} /> */}
+					<Avatar.Fallback className="leading-1 flex h-full w-full items-center justify-center bg-white text-xl text-violet11">AB</Avatar.Fallback>
+				</Avatar.Root>
+				<p className="font-gotham ml-2 text-sm font-medium text-gray-100 dark:text-white">{result.id}</p>
+			</div>
+			<button onClick={handleAddClick} type="button" className="flex w-8 items-center justify-center rounded-r-lg bg-palette-400">
+				<PlusIcon className="h-6 w-6 text-gray-400" />
+			</button>
+		</div>
+	);
+}
+
+function PendingRequest(props: { request: any; acceptRequest: any }) {
+	const request = props.request;
+	const [friend, setFriend] = useState<User | null>(null);
+	const [isLoading, setIsLoading] = useState(true);
+
+	const acceptRequest = props.acceptRequest;
+
+	useEffect(() => {
+		console.log("request is", request);
+		axios.get(import.meta.env.VITE_API_URL + `/users/${request.user}`).then((res) => {
+			// console.log(res.data);
+			var userObj: User = {
+				id: res.data.username,
+				email: res.data.email,
+				name: res.data.name,
+				spotifyID: res.data.spotifyID,
+			};
+
+			// console.log("userFromApi is", userObj);
+			setFriend(userObj);
+			setIsLoading(false);
+		});
+	}, [request]);
+
+	return (
+		<div className="mt-4 flex flex-row items-center justify-between rounded-lg bg-palette-300 p-2">
+			<div className="flex flex-row items-center">
+				<Avatar.Root className=" mx-2 inline-flex h-[45px] w-[45px] select-none items-center justify-center overflow-hidden rounded-full bg-blackA3 align-middle">
+					{/* <Avatar.Image className= "h-full  w-full rounded-[inherit] object-cover" src={} /> */}
+					<Avatar.Fallback className="leading-1 flex h-full w-full items-center justify-center bg-white text-xl text-violet11">AB</Avatar.Fallback>
+				</Avatar.Root>
+				<p className="font-gotham ml-2 text-sm font-medium text-white dark:text-white">{friend?.id}</p>
+			</div>
+			<div className="flex flex-row items-center">
+				<button
+					type="button"
+					className="font-gotham mr-2 rounded-lg bg-palette-200 px-2 py-2 text-sm font-medium text-white"
+					onClick={() => {
+						acceptRequest(request);
+					}}
+				>
+					Accept
+				</button>
+				{/* <button
+					type="button"
+					className="rounded-lg bg-palette-200 px-2 py-2 font-gotham text-sm font-medium text-white"
+					onClick={() => {
+						// declineRequest(request);
+					}}
+				>
+					Decline
+				</button> */}
+			</div>
+		</div>
+	);
+}
+
+export default function AddFriendsButton(props: AddFriendsButtonProps) {
 	const [query, setQuery] = useState<string>("");
 	const [searchResults, setSearchResults] = useState<User[]>([]);
-	const [selectedUser, setSelectedUser] = useState<number | null>(null);
-
+	const [requests, setRequests] = useState<any[]>([]);
 	const user = props.user;
-	// console.log("user is", user)
+	console.log("user in add is", user);
+	const {setFriends} = useFriends();
+
+	async function acceptRequest(request: any) {
+		const url = import.meta.env.VITE_API_URL + `/users/${user.spotifyID}/acceptFriendRequest?target_id=${request.user}`;
+		const { data } = await axios.put(url);
+		console.log("data in accept is", data);
+		setRequests(data.user.friendRequests);
+		setFriends(data.user.friends);
+	}
 
 	useEffect(() => {
 		if (!query) {
@@ -27,6 +136,7 @@ export default function AddFriendsButton(props: Props) {
 		async function fetchData() {
 			console.log("fetching search results");
 			const url = import.meta.env.VITE_API_URL + "/search";
+
 			const { data } = await axios.get(url, {
 				params: {
 					query: query,
@@ -38,6 +148,7 @@ export default function AddFriendsButton(props: Props) {
 					id: user.username,
 					email: user.email,
 					name: user.name,
+					spotifyID: user.spotifyID,
 				};
 			});
 			console.log("newData is", newData);
@@ -47,34 +158,14 @@ export default function AddFriendsButton(props: Props) {
 		fetchData();
 	}, [query]);
 
-	const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-		console.log("handleClick is being called");
-		console.log("e.target is", event.target);
-		// console.log("e.target.value is", event.target.value);
-	};
-
-	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setQuery(event.target.value);
-		setSearchResults([]);
-		setSelectedUser(null);
-	};
-
-	async function handleAddClick() {
-		console.log("handleSearchClick is being called");
-		if (selectedUser === null) return;
-		const targetUser = searchResults[selectedUser].id;
-		console.log("targetUser is", targetUser);
-		const { data } = await axios.put(import.meta.env.VITE_API_URL + `/users/${user.id}/follow?target_id=${targetUser}`);
-		console.log(data);
-	}
-
-	// function handleSearchKeyDown(e) {
-	// 	// e.preventDefault();
-
-	// 	if (e.key === "Enter") {
-	// 		// handleAddClick();
-	// 	}
-	// }
+	useEffect(() => {
+		async function fetchData() {
+			const userProfile = await axios.get(import.meta.env.VITE_API_URL + `/users/${user.spotifyID}`);
+			console.log("userProfile in add is", userProfile);
+			setRequests(userProfile.data.friendRequests);
+		}
+		fetchData();
+	}, []);
 
 	return (
 		<>
@@ -86,20 +177,14 @@ export default function AddFriendsButton(props: Props) {
 			>
 				<Dialog.Trigger asChild={true}>
 					<button type="button" className="loginButton rounded-xl bg-palette-100 p-2">
-						{/* <p className="text-center font-['Gotham'] text-lg font-bold text-white text-shadow">Add Friends</p> */}
-						<PlusIcon className="h-6 w-6 text-white text-shadow" />
+						<PlusIcon className="text-shadow h-6 w-6 text-white" />
 					</button>
 				</Dialog.Trigger>
 				<Dialog.Portal>
 					<Dialog.Overlay className="fixed inset-0 bg-blackA9 data-[state=open]:animate-overlayShow" />
-					<Dialog.Content className="fixed top-3/4 left-[50%] h-1/2 max-h-[85vh] w-full max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-t-[6px] bg-palette-100 px-[25px] py-[25px] pt-8 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none data-[state=open]:animate-contentShow">
-						{/* <Dialog.Title className="text-center font-['Gotham'] text-lg font-bold text-gray-900 dark:text-white">
-							clicked user: {JSON.stringify(searchResults[selectedUser]?.email)}
-						</Dialog.Title> */}
-						{/* {searchResults.map} */}
+					<Dialog.Content className="fixed top-3/4 left-[50%] h-4/6 max-h-[85vh] w-full max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-t-[6px] bg-palette-100 px-[25px] py-[25px] pt-8 shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none data-[state=open]:animate-contentShow">
 						<Tabs.Root
 							onValueChange={() => {
-								setSelectedUser(null);
 								setSearchResults([]);
 							}}
 							defaultValue="add"
@@ -113,7 +198,7 @@ export default function AddFriendsButton(props: Props) {
 								</Tabs.Trigger>
 
 								<Tabs.Trigger
-									value="tab2"
+									value="pending"
 									className="flex h-[45px] flex-1 cursor-default select-none items-center justify-center bg-white px-5 font-['Gotham'] text-[15px] leading-none text-palette-400 outline-none first:rounded-l-md last:rounded-r-md hover:text-palette-100 data-[state=active]:text-palette-100 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative data-[state=active]:focus:shadow-[0_0_0_2px] data-[state=active]:focus:shadow-black"
 								>
 									Pending Requests
@@ -125,7 +210,7 @@ export default function AddFriendsButton(props: Props) {
 										e.preventDefault();
 									}}
 								>
-									<label htmlFor="default-search" className="sr-only mb-2 font-gotham text-sm font-medium text-gray-900 dark:text-white">
+									<label htmlFor="default-search" className="font-gotham sr-only mb-2 text-sm font-medium text-gray-900 dark:text-white">
 										Search
 									</label>
 									<div className="sticky top-0">
@@ -140,47 +225,27 @@ export default function AddFriendsButton(props: Props) {
 											onChange={(event) => {
 												setQuery(event.target.value);
 												setSearchResults([]);
-												setSelectedUser(null);
 											}}
 										/>
-										<button
-											type="button"
-											onClick={handleAddClick}
-											// disabled={selectedUser === null}
-											className="absolute right-2.5 bottom-2.5 rounded-lg bg-palette-300 px-2 py-2 font-['Gotham'] text-sm font-medium text-white hover:bg-palette-200 focus:outline-none focus:ring-4 focus:ring-blue-300 disabled:opacity-25"
-										>
-											Add friend
-										</button>
 									</div>
 									<div className="mt-4 overflow-scroll">
 										{searchResults.length > 0 &&
 											searchResults.map((result, idx) => {
-												return (
-													<button
-														onFocus={() => {
-															setSelectedUser(idx);
-														}}
-														// onBlur={() => {
-														// 	setSelectedUser(null);
-														// }}
-														className="mt-4 flex w-full flex-row items-center justify-between rounded-lg border-2 border-palette-500 bg-palette-200 p-2  focus:border-2 focus:border-white"
-													>
-														<div className="flex flex-row items-center">
-															{/* <img src={result.profilePicture} alt="" className="h-10 w-10 rounded-full" /> */}
-															<Avatar.Root className=" mx-2 inline-flex h-[45px] w-[45px] select-none items-center justify-center overflow-hidden rounded-full bg-blackA3 align-middle">
-																{/* <Avatar.Image className= "h-full  w-full rounded-[inherit] object-cover" src={} /> */}
-																<Avatar.Fallback className="leading-1 flex h-full w-full items-center justify-center bg-white text-xl text-violet11">
-																	AB
-																</Avatar.Fallback>
-															</Avatar.Root>
-															<p className="ml-2 font-gotham text-sm font-medium text-gray-900 dark:text-white">{result.id}</p>
-														</div>
-														
-													</button>
-												);
+												console.log("result is: ", result);
+												return <SearchResult user={user} result={result} />;
 											})}
 									</div>
 								</form>
+							</Tabs.Content>
+							<Tabs.Content className="mt-4" value="pending">
+								<div className="flex flex-col">
+									{requests && requests.map((request) => {
+										console.log("request is: ", request);
+										if (request.direction === "incoming") {
+											return <PendingRequest request={request} acceptRequest={acceptRequest} />;
+										}
+									})}
+								</div>
 							</Tabs.Content>
 						</Tabs.Root>
 
@@ -191,19 +256,3 @@ export default function AddFriendsButton(props: Props) {
 		</>
 	);
 }
-
-// {searchResults.map((result) => {
-// 	return (
-// 		<div className="flex flex-row items-center justify-between mt-4">
-// 			<div className="flex flex-row items-center">
-// 				<img src={result.profilePicture} alt="" className="h-10 w-10 rounded-full" />
-// 				<p className="ml-2 font-gotham text-sm font-medium text-gray-900 dark:text-white">{result.username}</p>
-// 			</div>
-// 			<button
-// 				type="button"
-// 				className="rounded-lg bg-palette-300 px-2 py-2 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-// 			>
-// 				Add
-// 			</button>
-// 		</div>
-// 	);

@@ -8,15 +8,6 @@ const UserSchema = new mongoose.Schema(
       max: 50,
       unique: true,
     },
-    followers: {
-      type: Array,
-      default: [],
-    },
-
-    following: {
-      type: Array,
-      default: [],
-    },
     lastPlayed:{
       type: Object,
       default: {name: "Not Checked", 
@@ -36,7 +27,15 @@ const UserSchema = new mongoose.Schema(
     accountSetup:{
       type: Boolean,
       default: false,
-    }
+    },
+    friends: {
+      type: Array,
+      default: [],
+    },
+    friendRequests: {
+      type: Array,
+      default: [],
+    },
   },
   { timestamps: true }
 );

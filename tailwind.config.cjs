@@ -23,16 +23,6 @@ module.exports = {
 
 		},
 		extend: {
-			boxShadow: {
-				neomorphism: "-20px 20px 60px #13ba56, 20px -20px 60px #19fc74",
-			},
-			textShadow: {
-				DEFAULT: "0px 4px 4px #00000040;",
-			},
-			backgroundImage: {
-				"gradient-r": "radial-gradient(circle, rgba(80,213,183,1) 0%, rgba(6,125,104,1) 100%)",
-				"gradient-test": "linear-gradient(to right, #093637, #44A08D)",
-			},
 
 			keyframes: {
 				marquee: {
@@ -58,9 +48,6 @@ module.exports = {
 				overlayShow: "overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1)",
 				contentShow: "contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1)",
 			},
-		},
-		fontFamily: {
-			gotham: ["Gotham", "sans-serif"],
 		},
 	},
 

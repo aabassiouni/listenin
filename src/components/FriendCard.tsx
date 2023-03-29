@@ -13,7 +13,7 @@ type Props = {
 function FriendCard(props: Props) {
 	// console.log("Card is being rendered");
 	const [song, setSong] = useState<Song>({ name: "Not Checked", albumArt: EmptyAlbumArt, artist: "", id: "" });
-	const [friend, setFriend] = useState<User>({ id: "", email: "", name: "" });
+	const [friend, setFriend] = useState<User>({ id: "", email: "", name: "", spotifyID: "" });
 	const [isLoading, setIsLoading] = useState<Boolean>(true);
 	const user = props.user;
 	var friendID = props.friendID;
@@ -29,6 +29,7 @@ function FriendCard(props: Props) {
 				id: res.data.username,
 				email: res.data.email,
 				name: res.data.name,
+				spotifyID: res.data.spotifyID,
 			};
 
 			console.log("userFromApi is", userObj);
