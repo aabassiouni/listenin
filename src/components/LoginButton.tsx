@@ -6,7 +6,7 @@ function LoginButton() {
 	return (
 		<a href={import.meta.env.VITE_API_URL + "/login"}>
 			<button type="button" className="loginButton bg-palette-100 cursor-pointer rounded-xl border p-3">
-				<span className="loginButtonText font-gotham text-2xl font-bold text-white">Login</span>
+				<span className="loginButtonText font-['Montserrat'] text-2xl font-bold text-white">Login</span>
 			</button>
 		</a>
 	);

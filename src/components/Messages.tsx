@@ -60,8 +60,8 @@ function Message(props: MessageProps) {
 					{/* <span className="username max-w-full overflow-hidden text-ellipsis font-['Gotham'] text-sm font-bold text-white text-shadow">
 							Test User
 						</span> */}
-					<span className="song-title max-h-7 overflow-hidden text-ellipsis text-left font-['Gotham'] text-sm font-[500] text-white text-shadow ">{song.name}</span>
-					<span className="artist-name font-['Gotham'] text-sm font-extralight text-white text-shadow ">{song.artist}</span>
+					<span className="song-title max-h-7 overflow-hidden text-ellipsis text-left font-['Montserrat'] text-sm font-[500] text-white text-shadow ">{song.name}</span>
+					<span className="artist-name font-['Montserrat'] text-sm font-extralight text-white text-shadow ">{song.artist}</span>
 				</div>
 			</div>
 			{/* <div className= "p-2"></div> */}
@@ -71,8 +71,8 @@ function Message(props: MessageProps) {
 					<Avatar.Fallback className="leading-1 flex h-full w-full items-center justify-center bg-white text-xl text-violet11">AB</Avatar.Fallback>
 				</Avatar.Root>
 
-				<p className="self-center font-['Gotham'] text-base font-medium text-white text-shadow">{message.sender_id}</p>
-				<p className="ml-5 self-center rounded-full bg-white px-2 font-['Gotham'] text-base  text-shadow">{message.note}</p>
+				<p className="self-center font-['Montserrat'] text-base font-medium text-white text-shadow">{message.sender_id}</p>
+				<p className="ml-5 self-center rounded-full bg-white px-2 font-['Montserrat'] text-base  text-shadow">{message.note}</p>
 			</div>
 		</>
 	);
@@ -110,7 +110,7 @@ function Messages(props: MessagesProps) {
 		<>
 			<Dialog.Root>
 				<Dialog.Trigger asChild={true}>
-					<button className="min-w-[20rem] max-w-xs gap-2 rounded-xl bg-palette-200 p-4 text-center font-['Gotham'] text-white text-shadow">Messages</button>
+					<button className="min-w-[20rem] max-w-xs gap-2 rounded-xl bg-palette-200 p-4 text-center font-['Montserrat'] text-white text-shadow">Messages</button>
 				</Dialog.Trigger>
 				<Dialog.Portal>
 					<Dialog.Overlay className="fixed inset-0 bg-blackA9 data-[state=open]:animate-overlayShow" />

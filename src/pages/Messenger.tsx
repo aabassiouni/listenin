@@ -83,12 +83,12 @@ function Message(props: MessageProps) {
 			<div className="relative flex flex-row items-center border-b-2 p-3">
 				<img className="song-img block h-20 w-20" src={song.albumArt} />
 				<div className="text-container flex w-1/2 grow flex-col justify-center px-4">
-					<p className="song-title max-h-7 w-full self-start overflow-hidden text-ellipsis font-['Gotham'] text-base font-medium text-black ">{song.name}</p>
-					<p className="artist-name self-start text-clip font-['Gotham'] text-base font-medium text-black ">{song.artist}</p>
+					<p className="song-title max-h-7 w-full self-start overflow-hidden text-ellipsis font-['Montserrat'] text-base font-medium text-black ">{song.name}</p>
+					<p className="artist-name self-start text-clip font-['Montserrat'] text-base font-medium text-black ">{song.artist}</p>
 				</div>
 			</div>
 			<div className="flex px-3 py-2">
-				<p className="w-full rounded-full bg-white py-1 px-2 font-gotham font-light text-black">{message.note}</p>
+				<p className="w-full rounded-full bg-white py-1 px-2 font-['Montserrat'] font-medium text-black">{message.note}</p>
 				<p></p>
 			</div>
 		</div>
@@ -148,7 +148,7 @@ export default function Messenger() {
 				<Avatar.Root className=" mx-2 inline-flex h-[45px] w-[45px] select-none items-center justify-center overflow-hidden rounded-full bg-blackA3 align-middle">
 					<Avatar.Image className="h-full  w-full rounded-[inherit] object-cover" src={EmptyAlbumArt} />
 				</Avatar.Root>
-				<p className="self-center font-gotham text-xl">{messageID}</p>
+				<p className="self-center font-['Montserrat'] text-xl">{messageID}</p>
 			</div>
 			<div className="w-full flex-1 bg-palette-400">
 				{messages.map((message) => {
@@ -156,7 +156,7 @@ export default function Messenger() {
 				})}
 			</div>
 			<div className="bg-black p-3">
-				<button className="w-full min-w-[20rem] gap-2 rounded-xl bg-palette-100 p-4 text-center font-['Gotham'] text-2xl text-white text-shadow">Send Song</button>
+				<button className="w-full min-w-[20rem] gap-2 rounded-xl bg-palette-100 p-4 text-center font-['Montserrat'] text-2xl text-white text-shadow">Send Song</button>
 				{/* <Messages spotifyApi={spotifyApi}/> */}
 			</div>
 		</div>

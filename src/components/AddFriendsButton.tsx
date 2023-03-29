@@ -85,12 +85,12 @@ function PendingRequest(props: { request: any; acceptRequest: any }) {
 					{/* <Avatar.Image className= "h-full  w-full rounded-[inherit] object-cover" src={} /> */}
 					<Avatar.Fallback className="leading-1 flex h-full w-full items-center justify-center bg-white text-xl text-violet11">AB</Avatar.Fallback>
 				</Avatar.Root>
-				<p className="font-gotham ml-2 text-sm font-medium text-white dark:text-white">{friend?.id}</p>
+				<p className="font-['Montserrat'] ml-2 text-sm font-medium text-white dark:text-white">{friend?.id}</p>
 			</div>
 			<div className="flex flex-row items-center">
 				<button
 					type="button"
-					className="font-gotham mr-2 rounded-lg bg-palette-200 px-2 py-2 text-sm font-medium text-white"
+					className="font-['Montserrat'] mr-2 rounded-lg bg-palette-200 px-2 py-2 text-sm font-medium text-white"
 					onClick={() => {
 						acceptRequest(request);
 					}}
@@ -191,7 +191,7 @@ export default function AddFriendsButton(props: AddFriendsButtonProps) {
 						>
 							<Tabs.List className="flex shrink-0 border-mauve6">
 								<Tabs.Trigger
-									className="flex h-[45px] flex-1 cursor-default select-none items-center justify-center bg-white px-5 font-['Gotham'] text-[15px] leading-none text-palette-400 outline-none first:rounded-l-md last:rounded-r-md hover:text-palette-100 data-[state=active]:text-palette-100 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative data-[state=active]:focus:shadow-[0_0_0_2px] data-[state=active]:focus:shadow-black"
+									className="flex h-[45px] flex-1 cursor-default select-none items-center justify-center bg-white px-5 font-['Montserrat'] text-[15px] leading-none text-palette-400 outline-none first:rounded-l-md last:rounded-r-md hover:text-palette-100 data-[state=active]:text-palette-100 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative data-[state=active]:focus:shadow-[0_0_0_2px] data-[state=active]:focus:shadow-black"
 									value="add"
 								>
 									Add Friends
@@ -199,7 +199,7 @@ export default function AddFriendsButton(props: AddFriendsButtonProps) {
 
 								<Tabs.Trigger
 									value="pending"
-									className="flex h-[45px] flex-1 cursor-default select-none items-center justify-center bg-white px-5 font-['Gotham'] text-[15px] leading-none text-palette-400 outline-none first:rounded-l-md last:rounded-r-md hover:text-palette-100 data-[state=active]:text-palette-100 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative data-[state=active]:focus:shadow-[0_0_0_2px] data-[state=active]:focus:shadow-black"
+									className="flex h-[45px] flex-1 cursor-default select-none items-center justify-center bg-white px-5 font-['Montserrat'] text-[15px] leading-none text-palette-400 outline-none first:rounded-l-md last:rounded-r-md hover:text-palette-100 data-[state=active]:text-palette-100 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative data-[state=active]:focus:shadow-[0_0_0_2px] data-[state=active]:focus:shadow-black"
 								>
 									Pending Requests
 								</Tabs.Trigger>
@@ -210,14 +210,14 @@ export default function AddFriendsButton(props: AddFriendsButtonProps) {
 										e.preventDefault();
 									}}
 								>
-									<label htmlFor="default-search" className="font-gotham sr-only mb-2 text-sm font-medium text-gray-900 dark:text-white">
+									<label htmlFor="default-search" className="font-['Montserrat'] sr-only mb-2 text-sm font-medium text-gray-900 dark:text-white">
 										Search
 									</label>
 									<div className="sticky top-0">
 										<input
 											type="text"
 											id="default-search"
-											className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-3 pl-10 text-lg  text-gray-900 focus:border-palette-300 focus:ring-palette-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+											className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-3 pl-10 text-lg  text-gray-900 focus:border-palette-300 focus:ring-palette-300"
 											placeholder="Search"
 											autoComplete="off"
 											// onKeyDown={handleSearchKeyDown}

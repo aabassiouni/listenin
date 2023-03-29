@@ -126,9 +126,9 @@ export default function Card(props: Props) {
 		<div onClick={handleClick} className="flex min-w-[20rem] max-w-xs gap-2 rounded-xl bg-palette-300 p-4">
 			<img className="song-img block h-24 w-24" src={song.albumArt} alt="test" />
 			<div className="text-container flex w-full flex-col items-center justify-center">
-				<p className="username max-w-full overflow-hidden text-ellipsis font-['Gotham'] text-lg font-bold text-white text-shadow">{user ? user?.id + "" : "User not logged in"}</p>
-				<p className="song-title max-h-7 self-start overflow-hidden text-ellipsis font-['Gotham'] text-lg font-[450] text-white text-shadow ">{song.name}</p>
-				<span className="artist-name self-start text-clip font-['Gotham'] text-lg font-[400] text-white text-shadow ">{song.artist}</span>
+				<p className="username max-w-full overflow-hidden text-ellipsis font-['Montserrat'] text-lg font-bold text-white text-shadow">{user ? user?.id + "" : "User not logged in"}</p>
+				<p className="song-title max-h-7 self-start overflow-hidden text-ellipsis font-['Montserrat'] text-lg font-[450] text-white text-shadow ">{song.name}</p>
+				<span className="artist-name self-start text-clip font-['Montserrat'] text-lg font-[400] text-white text-shadow ">{song.artist}</span>
 			</div>
 		</div>
 	);

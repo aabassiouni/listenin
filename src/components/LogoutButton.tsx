@@ -15,7 +15,7 @@ function LogoutButton() {
 
 	return (
 		<button type="button" onClick={handleClick} className="logoutButton rounded-lg bg-[#16DB65] p-2 sm:block sm:p-3">
-			<span className="logoutButtonText text-center font-['Gotham'] text-xl font-bold text-white text-shadow">Logout</span>
+			<span className="logoutButtonText text-center font-['Montserrat'] text-xl font-bold text-white text-shadow">Logout</span>
 		</button>
 	);
 }

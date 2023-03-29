@@ -67,7 +67,7 @@ function FriendCard(props: Props) {
 					<Avatar.Root className="h-[45px] w-[45px] select-none items-center justify-center rounded-full bg-blackA3">
 						<Avatar.Image className="rounded-full" src={song.albumArt} />
 					</Avatar.Root>
-					<p className="username max-w-full self-center overflow-hidden text-ellipsis pl-3 font-['Gotham'] text-sm font-bold text-white text-shadow">
+					<p className="username max-w-full self-center overflow-hidden text-ellipsis pl-3 font-['Montserrat'] text-sm font-medium text-white text-shadow">
 						{friend?.id ? friend?.id + "" : "User not logged in"}
 					</p>
 				</div>
@@ -81,8 +81,8 @@ function FriendCard(props: Props) {
 					{/* <span className="username max-w-full overflow-hidden text-ellipsis font-['Gotham'] text-sm font-bold text-white text-shadow">
 						{friend?.id ? friend?.id + "" : "User not logged in"}
 					</span> */}
-					<span className="song-title max-h-7  overflow-hidden text-ellipsis font-['Gotham'] text-sm font-[500] text-white text-shadow ">{song.name}</span>
-					<span className="artist-name  font-['Gotham'] text-sm font-extralight text-white text-shadow ">{song.artist}</span>
+					<span className="song-title max-h-7  overflow-hidden text-ellipsis font-['Montserrat'] text-sm font-[500] text-white text-shadow ">{song.name}</span>
+					<span className="artist-name  font-['Montserrat'] text-sm  text-white text-shadow ">{song.artist}</span>
 					{/* </div> */}
 				</div>
 			</div>
