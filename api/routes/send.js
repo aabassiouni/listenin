@@ -1,8 +1,8 @@
-const { FieldValue } = require("firebase-admin/firestore");
-const { db } = require("../server.js");
+const { FieldValue, getFirestore } = require("firebase-admin/firestore");
 const router = require("express").Router();
 
-router.put("/", function (req, res) {
+const db = getFirestore();
+router.put("/:conversationID", function (req, res) {
 	console.log("//////////////// send called //////////////////////");
 	console.log("req.body is ", req.body);
 	console.log("req.body.sender_id is ", req.body.sender_id);
@@ -10,40 +10,28 @@ router.put("/", function (req, res) {
 	console.log("req.body.song_id is ", req.body.song_id);
 	console.log("req.body.note is ", req.body.note);
 
-	async function addMessage() {
+	try {
+		console.log("req.params.conversationID is", req.params.conversationID);
+		const conversationID = req.params.conversationID;
 		let message = {
 			sender_id: req.body.sender_id,
 			song_id: req.body.song_id,
 			note: req.body.note,
+			timestamp: FieldValue.serverTimestamp(),
 		};
 
-		try {
-			const docRef = await db.collection("messages").doc(req.body.receiver_id);
+		console.log("adding message to firebase");
+		const docRef = db.collection("messages").doc(conversationID).collection("messages").add(message);
+		console.log("message added to firebase");
 
-			const doc = await docRef.get();
-			console.log("doc is ", doc);
-			if (!doc.exists) {
-				console.log("No such document!");
-				docRef = await db
-					.collection("messages")
-					.doc(req.body.receiver_id)
-					.set({
-						messages: [message],
-					});
-			} else {
-				// console.log("Document data:", doc.data());
-				const unionRes = await docRef.update({
-					messages: FieldValue.arrayUnion(message),
-				});
-			}
-		} catch (error) {
-			console.log("Error getting document:", error);
-		}
+		res.status(200).json("success");
 	}
-
-	addMessage();
-
-	res.status(200).json("success");
+	catch (err) {
+		console.log("error in send route", err);
+		res.status(500).json(err);
+	}
 });
+
+
 
 module.exports = router;

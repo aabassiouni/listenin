@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import * as Avatar from "@radix-ui/react-avatar";
 import EmptyAlbumArt from "../assets/empty-album-art.png";
+// import EmptyProfilePic from "../assets/empty-profile-pic.png";
 import { spotifyApi } from "../spotify/spotify";
 import { useUser } from "../context/userContext";
 import { Song, User } from "../pages/Home";
@@ -29,7 +30,7 @@ export default function NewCard(props: Props) {
 	useEffect(() => {
 		console.log("useEffect in Card is being called");
 
-		const interval = setInterval(async () => {
+		async function fetchSong(){
 			const currentlyPlaying: SpotifyApi.CurrentPlaybackResponse | void = await spotifyApi.getMyCurrentPlaybackState().catch((err) => {
 				console.log("error is", err);
 				console.log("401 error");
@@ -60,7 +61,8 @@ export default function NewCard(props: Props) {
 					setIsLoading(false);
 				}
 			}
-		}, 50000);
+		}
+		const interval = setInterval(fetchSong, 50000);
 
 		return () => clearInterval(interval); //This is important
 	}, []);
@@ -104,7 +106,9 @@ export default function NewCard(props: Props) {
 		<div className="mx-6 flex flex-col rounded-xl bg-palette-100 ">
 			<div className="flex flex-row items-center border-b-2 border-black/20 p-2 pl-2">
 				<Avatar.Root className=" mx-2 inline-flex h-[45px] w-[45px] select-none items-center justify-center overflow-hidden rounded-full bg-blackA3 align-middle">
-					<Avatar.Image className="h-full  w-full rounded-[inherit] object-cover" src={EmptyAlbumArt} />
+					{/* <Avatar.Image className="h-full  w-full rounded-[inherit] object-cover" src={user?.profilePicture ?? ""} /> */}
+					<Avatar.Fallback  className="leading-1 flex h-full w-full items-center justify-center rounded-full bg-white text-xl text-violet11">{user?.id ? user?.id[0].toUpperCase() : "U"}</Avatar.Fallback>
+
 				</Avatar.Root>
 				<p className="username max-w-full overflow-hidden text-ellipsis font-['Montserrat'] text-base font-bold text-black">{user ? user?.id + "" : "User not logged in"}</p>
 			</div>

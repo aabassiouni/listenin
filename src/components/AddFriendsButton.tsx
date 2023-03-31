@@ -14,14 +14,10 @@ type AddFriendsButtonProps = {
 
 function SearchResult(props: { user: User; result: User }) {
 	const result = props.result;
+	const [isLoading, setIsLoading] = useState<Boolean>(false);
 
 	async function handleAddClick() {
-		// console.log("handleSearchClick is being called");
-		// if (selectedUser === null) return;
-		// const targetUser = searchResults[selectedUser].id;
-		// console.log("targetUser is", targetUser);
-		// const { data } = await axios.put(import.meta.env.VITE_API_URL + `/users/${user.id}/follow?target_id=${targetUser}`);
-		// console.log(data);
+		setIsLoading(true);
 		console.log("result in search result is", result);
 		const target_id = result.spotifyID;
 		console.log("target_id is", target_id);
@@ -31,11 +27,9 @@ function SearchResult(props: { user: User; result: User }) {
 		const { data } = await axios.put(url);
 		console.log("data is", data);
 		if (data.message == "already sent") {
-			console.log("i am here");
-
 			toast.error("Already sent");
 		}
-		// console.log("data is", data);
+		setIsLoading(false);
 	}
 
 	return (
@@ -43,7 +37,7 @@ function SearchResult(props: { user: User; result: User }) {
 			<div className="flex w-full flex-row items-center rounded-l-lg border-y border-l border-palette-500 bg-palette-200 p-2">
 				<Avatar.Root className=" mx-2 inline-flex h-[45px] w-[45px] select-none items-center justify-center overflow-hidden rounded-full bg-blackA3 align-middle">
 					{/* <Avatar.Image className= "h-full  w-full rounded-[inherit] object-cover" src={} /> */}
-					<Avatar.Fallback className="leading-1 flex h-full w-full items-center justify-center bg-white text-xl text-violet11">AB</Avatar.Fallback>
+					<Avatar.Fallback className="leading-1 flex h-full w-full items-center justify-center bg-white text-xl text-violet11">{result.id.charAt(0).toUpperCase()}</Avatar.Fallback>
 				</Avatar.Root>
 				<p className="font-gotham ml-2 text-sm font-medium text-gray-100 dark:text-white">{result.id}</p>
 			</div>
@@ -58,12 +52,13 @@ function PendingRequest(props: { request: any; acceptRequest: any }) {
 	const request = props.request;
 	const [friend, setFriend] = useState<User | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
-
+	console.log("request in pending", request);
 	const acceptRequest = props.acceptRequest;
 
 	useEffect(() => {
-		console.log("request is", request);
-		axios.get(import.meta.env.VITE_API_URL + `/users/${request.user}`).then((res) => {
+		
+		console.log("fetching user from api in pending request")
+		axios.get(import.meta.env.VITE_API_URL + `/users/${request}`).then((res) => {
 			// console.log(res.data);
 			var userObj: User = {
 				id: res.data.username,
@@ -76,7 +71,7 @@ function PendingRequest(props: { request: any; acceptRequest: any }) {
 			setFriend(userObj);
 			setIsLoading(false);
 		});
-	}, [request]);
+	}, []);
 
 	return (
 		<div className="mt-4 flex flex-row items-center justify-between rounded-lg bg-palette-300 p-2">
@@ -85,27 +80,18 @@ function PendingRequest(props: { request: any; acceptRequest: any }) {
 					{/* <Avatar.Image className= "h-full  w-full rounded-[inherit] object-cover" src={} /> */}
 					<Avatar.Fallback className="leading-1 flex h-full w-full items-center justify-center bg-white text-xl text-violet11">AB</Avatar.Fallback>
 				</Avatar.Root>
-				<p className="font-['Montserrat'] ml-2 text-sm font-medium text-white dark:text-white">{friend?.id}</p>
+				<p className="ml-2 font-['Montserrat'] text-sm font-medium text-white dark:text-white">{friend?.id}</p>
 			</div>
 			<div className="flex flex-row items-center">
 				<button
 					type="button"
-					className="font-['Montserrat'] mr-2 rounded-lg bg-palette-200 px-2 py-2 text-sm font-medium text-white"
+					className="mr-2 rounded-lg bg-palette-200 px-2 py-2 font-['Montserrat'] text-sm font-medium text-white"
 					onClick={() => {
 						acceptRequest(request);
 					}}
 				>
 					Accept
 				</button>
-				{/* <button
-					type="button"
-					className="rounded-lg bg-palette-200 px-2 py-2 font-gotham text-sm font-medium text-white"
-					onClick={() => {
-						// declineRequest(request);
-					}}
-				>
-					Decline
-				</button> */}
 			</div>
 		</div>
 	);
@@ -117,13 +103,13 @@ export default function AddFriendsButton(props: AddFriendsButtonProps) {
 	const [requests, setRequests] = useState<any[]>([]);
 	const user = props.user;
 	console.log("user in add is", user);
-	const {setFriends} = useFriends();
+	const { setFriends } = useFriends();
 
 	async function acceptRequest(request: any) {
-		const url = import.meta.env.VITE_API_URL + `/users/${user.spotifyID}/acceptFriendRequest?target_id=${request.user}`;
+		const url = import.meta.env.VITE_API_URL + `/users/${user.spotifyID}/acceptFriendRequest?target_id=${request}`;
 		const { data } = await axios.put(url);
 		console.log("data in accept is", data);
-		setRequests(data.user.friendRequests);
+		setRequests(data.user.incomingFriendRequests);
 		setFriends(data.user.friends);
 	}
 
@@ -162,7 +148,8 @@ export default function AddFriendsButton(props: AddFriendsButtonProps) {
 		async function fetchData() {
 			const userProfile = await axios.get(import.meta.env.VITE_API_URL + `/users/${user.spotifyID}`);
 			console.log("userProfile in add is", userProfile);
-			setRequests(userProfile.data.friendRequests);
+			console.log("requests are", userProfile.data.incomingFriendRequests);
+			setRequests(userProfile.data.incomingFriendRequests);
 		}
 		fetchData();
 	}, []);
@@ -172,7 +159,6 @@ export default function AddFriendsButton(props: AddFriendsButtonProps) {
 			<Dialog.Root
 				onOpenChange={(open) => {
 					setSearchResults([]);
-					// setIsOpen(open);
 				}}
 			>
 				<Dialog.Trigger asChild={true}>
@@ -191,7 +177,7 @@ export default function AddFriendsButton(props: AddFriendsButtonProps) {
 						>
 							<Tabs.List className="flex shrink-0 border-mauve6">
 								<Tabs.Trigger
-									className="flex h-[45px] flex-1 cursor-default select-none items-center justify-center bg-white px-5 font-['Montserrat'] text-[15px] leading-none text-palette-400 outline-none first:rounded-l-md last:rounded-r-md hover:text-palette-100 data-[state=active]:text-palette-100 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative data-[state=active]:focus:shadow-[0_0_0_2px] data-[state=active]:focus:shadow-black"
+									className="flex h-[45px] flex-1 cursor-default select-none items-center font-semibold justify-center bg-white px-5 font-['Montserrat'] text-[15px] leading-none text-palette-400 outline-none first:rounded-l-md last:rounded-r-md hover:text-palette-100 data-[state=active]:text-palette-100 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative data-[state=active]:focus:shadow-[0_0_0_2px] data-[state=active]:focus:shadow-black"
 									value="add"
 								>
 									Add Friends
@@ -199,7 +185,7 @@ export default function AddFriendsButton(props: AddFriendsButtonProps) {
 
 								<Tabs.Trigger
 									value="pending"
-									className="flex h-[45px] flex-1 cursor-default select-none items-center justify-center bg-white px-5 font-['Montserrat'] text-[15px] leading-none text-palette-400 outline-none first:rounded-l-md last:rounded-r-md hover:text-palette-100 data-[state=active]:text-palette-100 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative data-[state=active]:focus:shadow-[0_0_0_2px] data-[state=active]:focus:shadow-black"
+									className="flex h-[45px] flex-1 cursor-default select-none items-center font-semibold justify-center bg-white px-5 font-['Montserrat'] text-[15px] leading-none text-palette-400 outline-none first:rounded-l-md last:rounded-r-md hover:text-palette-100 data-[state=active]:text-palette-100 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative data-[state=active]:focus:shadow-[0_0_0_2px] data-[state=active]:focus:shadow-black"
 								>
 									Pending Requests
 								</Tabs.Trigger>
@@ -210,7 +196,7 @@ export default function AddFriendsButton(props: AddFriendsButtonProps) {
 										e.preventDefault();
 									}}
 								>
-									<label htmlFor="default-search" className="font-['Montserrat'] sr-only mb-2 text-sm font-medium text-gray-900 dark:text-white">
+									<label htmlFor="default-search" className="sr-only mb-2 font-['Montserrat'] text-sm font-medium text-gray-900 dark:text-white">
 										Search
 									</label>
 									<div className="sticky top-0">
@@ -220,7 +206,6 @@ export default function AddFriendsButton(props: AddFriendsButtonProps) {
 											className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-3 pl-10 text-lg  text-gray-900 focus:border-palette-300 focus:ring-palette-300"
 											placeholder="Search"
 											autoComplete="off"
-											// onKeyDown={handleSearchKeyDown}
 											required
 											onChange={(event) => {
 												setQuery(event.target.value);
@@ -239,12 +224,13 @@ export default function AddFriendsButton(props: AddFriendsButtonProps) {
 							</Tabs.Content>
 							<Tabs.Content className="mt-4" value="pending">
 								<div className="flex flex-col">
-									{requests && requests.map((request) => {
-										console.log("request is: ", request);
-										if (request.direction === "incoming") {
-											return <PendingRequest request={request} acceptRequest={acceptRequest} />;
-										}
-									})}
+									{requests &&
+										requests.map((request) => {
+											console.log("request is: ", request);
+										
+												return <PendingRequest request={request} acceptRequest={acceptRequest} />;
+											
+										})}
 								</div>
 							</Tabs.Content>
 						</Tabs.Root>

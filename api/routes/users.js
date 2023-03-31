@@ -1,6 +1,15 @@
 const router = require("express").Router();
 const User = require("../models/User");
+const dotenv = require("dotenv");
+
+const crypto = require("crypto");
 const { getAuth } = require("firebase-admin/auth");
+
+const { getFirestore, Timestamp, FieldValue } = require("firebase-admin/firestore");
+
+const db = getFirestore();
+
+
 
 router.get("/:userID", function (req, res) {
 	console.log("//////////////// User route called //////////////////////");
@@ -77,36 +86,6 @@ router.get("/lastPlayed", async (req, res) => {
 	}
 });
 
-router.get("/:userID/following", async (req, res) => {
-	console.log("//////////////// following route called //////////////////////");
-	console.log("*********************** Deprecated ************************")
-	console.log("Fetching " + req.params.userID + "'s following from database");
-
-	try {
-		const user = await User.findOne({ spotifyID: req.params.userID });
-
-		console.log("user is", user);
-		var following = user?.following;
-		console.log("following is", following);
-
-		const friends = await Promise.all(
-			following.map((friend) => {
-				console.log("friend is", friend);
-				return friend;
-			})
-		);
-
-		let friendList = [];
-		friends.map((friend) => {
-			friendList.push(friend);
-		});
-		res.status(200).json(friendList);
-		// res.status(200).json([]);
-	} catch (err) {
-		console.log("error in followers route", err);
-		res.status(500).json(err);
-	}
-});
 
 // handle friend requests
 router.put("/:userID/sendFriendRequest", async (req, res) => {
@@ -114,17 +93,19 @@ router.put("/:userID/sendFriendRequest", async (req, res) => {
 	const userID = req.params.userID;
 	const targetID = req.query.target_id;
 
-	console.log(req.query)
+	console.log(req.query);
 
 	console.log(userID + " is sending a friend request to " + targetID);
 
 	if (targetID !== userID) {
 		try {
 			console.log("in try block");
-			
+
 			//find the users
 			const currentUser = await User.findOne({ spotifyID: userID });
+			// console.log("currentUser is", currentUser);
 			const targetUser = await User.findOne({ spotifyID: targetID });
+			// console.log("targetUser is", targetUser);
 
 			//check if users exist
 			if (!currentUser || !targetUser) {
@@ -132,37 +113,53 @@ router.put("/:userID/sendFriendRequest", async (req, res) => {
 				res.status(200).json({ message: "user not found" });
 				return;
 			}
-			
-			//check if friend request has already been sent
-			const alreadySentAtTarget = targetUser?.friendRequests.some((obj) => {
-				return obj.user == userID && obj.direction == "incoming";
+
+			const friendExistsCurrent = currentUser.friends.some((obj) => {
+				console.log("obj is", obj);
+				return obj.user == targetID;
 			});
+			console.log("friendExistsCurrent is", friendExistsCurrent);
+
+			const friendExistsTarget = targetUser.friends.some((obj) => {
+				console.log("obj is", obj);
+				return obj.user == userID;
+			});
+			console.log("friendExistsTarget is", friendExistsTarget);
+
+			if (friendExistsCurrent && friendExistsTarget) {
+				console.log("already friends");
+				res.status(200).json({ message: "already friends" });
+				return;
+			}
 
 			//check if friend request has already been sent
-			const alreadySentAtSender = currentUser?.friendRequests.some((obj) => {
-				return obj.user == targetID && obj.direction == "outgoing";
-			});
+			const requestExistsAtTarget = targetUser?.outgoingFriendRequests.includes(userID) || targetUser?.incomingFriendRequests.includes(userID); 
+			console.log("requestExistsAtTarget is", requestExistsAtTarget);
+
+			const requestExistsAtSender = currentUser?.outgoingFriendRequests.includes(targetID) || currentUser?.incomingFriendRequests.includes(targetID);
+			console.log("requestExistsAtSender is", requestExistsAtSender);
+
 
 			//if friend request has already been sent, return
-			if (alreadySentAtTarget && alreadySentAtSender) {
+			if (requestExistsAtTarget && requestExistsAtSender) {
 				console.log("already sent");
 				res.status(200).json({ message: "already sent" });
 				return;
 			}
 
 			//if friend request has not been sent, send it
-			if (!alreadySentAtTarget) {
-				targetUser?.friendRequests.push({ direction: "incoming", user: userID });
+			if (!requestExistsAtTarget && !requestExistsAtSender) {
+				console.log("sending friend request");
+				targetUser?.incomingFriendRequests.push(userID);
+				currentUser?.outgoingFriendRequests.push(targetID);
+
 				await targetUser.save();
-			}
-
-			//if friend request has not been sent, send it
-			if (!alreadySentAtSender) {
-				currentUser?.friendRequests.push({ direction: "outgoing", user: targetID });
 				await currentUser.save();
+				res.status(200).json({ user: currentUser });
+				return;
 			}
 
-			res.status(200).json({ user: currentUser });
+			return;
 		} catch (err) {
 			console.log("error in friendRequest route", err);
 			res.status(500).json(err);
@@ -185,70 +182,72 @@ router.put("/:userID/acceptFriendRequest", async (req, res) => {
 			const currentUser = await User.findOne({ spotifyID: userID });
 			const targetUser = await User.findOne({ spotifyID: targetID });
 
-			if (
-				currentUser.friendRequests.some((obj) => {
-					return obj.user == targetID && obj.direction == "incoming";
-				})
-			) {
+			const requestExistsCurrentUser = currentUser.incomingFriendRequests.includes(targetID);
+			const requestExistsTargetUser = targetUser.outgoingFriendRequests.includes(userID);
+
+
+			const friendExistsCurrent = currentUser.friends.some((obj) => {
+				return obj.user == targetID;
+			});
+
+			const friendExistsTarget = targetUser.friends.some((obj) => {
+				return obj.user == userID;
+			});
+
+			if (friendExistsCurrent){
+				console.log("friend already exists at current");
+				res.status(200).json({ message: "friend already exists at current" });
+				return;
+			}
+
+			if(friendExistsTarget){
+				console.log("friend already exists at target");
+				res.status(200).json({ message: "friend already exists at target" });
+				return;
+			}
+			if (requestExistsCurrentUser && requestExistsTargetUser && !friendExistsCurrent && !friendExistsTarget) {
+				console.log("both requests exist");
+				const conversationID = crypto.randomUUID();
+
 				console.log("removing friend request from currentUser");
-				currentUser.friendRequests.pull({ direction: "incoming", user: targetID });
-				currentUser.friends.push(targetID);
+				currentUser.incomingFriendRequests.pull(targetID);
+				if (currentUser.friends.indexOf(targetID) === -1) {
+					const friendObj = {
+						user: targetID,
+						conversationID: conversationID,
+					};
+					currentUser.friends.push(friendObj);
+				}
+
 				await currentUser.save();
-			}
-
-			if (
-				targetUser.friendRequests.some((obj) => {
-					return obj.user == userID && obj.direction == "outgoing";
-				})
-			) {
+				
 				console.log("removing friend request from targetUser");
-
-				targetUser.friendRequests.pull({ direction: "outgoing", user: userID });
-				targetUser.friends.push(userID);
+				targetUser.outgoingFriendRequests.pull(userID);
+				if (targetUser.friends.indexOf(userID) === -1) {
+					const friendObj = {
+						user: userID,
+						conversationID: conversationID,
+					};
+					targetUser.friends.push(friendObj);
+				}
 				await targetUser.save();
+				
+				console.log("creating conversation");
+				const messagesRef = db.collection("messages").doc(conversationID).set({
+					participants: [userID, targetID],
+					}); 
+				console.log("conversation created successfully");
+
+				//maybe only return friends???
+				console.log("friend added successfully")
+				res.status(200).json({ user: currentUser });
+				return;
 			}
 
-			res.status(200).json({ user: currentUser });
 		} catch (err) {
 			console.log("error in acceptfriendRequest route", err);
 			res.status(500).json(err);
 		}
-	}
-});
-
-
-router.put("/:userID/follow", async (req, res) => {
-	console.log("//////////////// follow route called //////////////////////");
-	console.log("*********************** Deprecated ************************")
-	const userID = req.params.userID;
-	const targetID = req.query.target_id;
-
-	console.log(userID + " is following " + targetID);
-
-	if (targetID !== userID) {
-		try {
-			console.log("in try block");
-			const currentUser = await User.findOne({ spotifyID: userID });
-			const targetUser = await await User.findOne({ spotifyID: targetID });
-			console.log("currentUser is", currentUser);
-			console.log("targetUser is", targetUser);
-			console.log(!targetUser.followers.includes(currentUser));
-
-			if (!targetUser.followers.includes(currentUser.spotifyID)) {
-				await targetUser.updateOne({ $push: { followers: userID } });
-				await currentUser.updateOne({ $push: { following: targetID } });
-
-				console.log("Follow successful");
-				res.status(200).json("Follow successful");
-			} else {
-				console.log("you already follow this user");
-				res.status(403).json("you already follow this user");
-			}
-		} catch (err) {
-			res.status(500);
-		}
-	} else {
-		res.status(403).json("you cant follow yourself");
 	}
 });
 

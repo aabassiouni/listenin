@@ -12,6 +12,22 @@ body {
 ::-webkit-scrollbar {
 	display: none;
 }
+.max-safe-h-screen {
+	/* equivalent to 100dvh in major browsers */
+	max-height: calc(100vh - env(safe-area-inset-bottom, 0) - env(safe-area-inset-top, 0));
+}
+.safe-h-screen{
+	height: calc(100vh - env(safe-area-inset-bottom, 0) - env(safe-area-inset-top, 0));
+}
+@supports (-webkit-touch-callout: none) {
+	.max-safe-h-screen {
+		/* for ios safari 15, safe-area-inset-bottom is 0, so a special fix apply here */
+		max-height: -webkit-fill-available;
+	}
+	.safe-h-screen{
+		height: -webkit-fill-available;
+	}
+}
 
 code {
 	font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
@@ -28,7 +44,7 @@ code {
 	font-weight: 200;
 }
 @font-face {
-  font-family: "Gotham";
-  src: local("Gotham"), url("./fonts/Gotham-Bold.otf") format("opentype");
-  font-weight: 700;
+	font-family: "Gotham";
+	src: local("Gotham"), url("./fonts/Gotham-Bold.otf") format("opentype");
+	font-weight: 700;
 }

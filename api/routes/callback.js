@@ -10,7 +10,7 @@ const server = require("../server.js");
 const User = require("../models/User");
 
 
-db = server.db;
+const db = getFirestore();
 
 const client_id = process.env.SPOTIFY_CLIENT_ID; // Your client id
 const client_secret = process.env.SPOTIFY_CLIENT_SECRET; // Your secret

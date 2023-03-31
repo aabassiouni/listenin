@@ -4,7 +4,6 @@ const UserSchema = new mongoose.Schema(
   {
     email: {
       type: String,
-      // required: true,
       max: 50,
       unique: true,
     },
@@ -32,7 +31,11 @@ const UserSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
-    friendRequests: {
+    incomingFriendRequests: {
+      type: Array,
+      default: [],
+    },
+    outgoingFriendRequests: {
       type: Array,
       default: [],
     },

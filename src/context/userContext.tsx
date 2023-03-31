@@ -9,6 +9,9 @@ interface UserContextProps {
 	isLoading: boolean;
 	logout: () => void;
 	getRefreshToken: () => Promise<void>;
+	user: any;
+	setUser: any;
+	
 
 }
 
@@ -18,6 +21,8 @@ export const UserContext = createContext<UserContextProps>({
 	isLoading: true,
 	logout: () => {},
 	getRefreshToken: () => Promise.resolve(),
+	user: {},
+	setUser: null,
 });
 
 export function UserContextProvider({ children }: { children: React.ReactNode }) {
@@ -77,7 +82,7 @@ export function UserContextProvider({ children }: { children: React.ReactNode })
 		localStorage.removeItem("refresh_token");
 	}
 
-	return <UserContext.Provider value={{ token, isLoggedIn, isLoading, logout, getRefreshToken }}>{children}</UserContext.Provider>;
+	return <UserContext.Provider value={{ token, isLoggedIn, isLoading, logout, getRefreshToken, user, setUser }}>{children}</UserContext.Provider>;
 }
 
 export function useUser() {

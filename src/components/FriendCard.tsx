@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import SendButton from "./SendButton";
 import axios from "axios";
 import EmptyAlbumArt from "../assets/empty-album-art.png";
+// import EmptyProfilePic from "../assets/empty-profile-pic.png";
 import * as Avatar from "@radix-ui/react-avatar";
 import { Song, User } from "../pages/Home";
 import { useNavigate } from "react-router-dom";
@@ -19,7 +20,6 @@ function FriendCard(props: Props) {
 	var friendID = props.friendID;
 	const navigate = useNavigate();
 
-	// const friend = props.friend;
 
 	useEffect(() => {
 		// fetch friend data from api
@@ -55,40 +55,45 @@ function FriendCard(props: Props) {
 	// 			artist: res.data.lastPlayed.artist,
 	// 		});
 	// 	});
-	if (isLoading) return <div>Loading...</div>;
+
+	if (isLoading)
+		return (
+			<div className="flex w-full cursor-pointer flex-col border-b border-black bg-palette-200 p-7">
+				<div>Loading...</div>
+			</div>
+		);
 	return (
-		<div onClick={() => {
-			console.log("clicked");
-			navigate(`/messages/${friend.id}`);
-			// console.log("friend is", friend);
-		}} className="friend-card flex min-w-full">
+		<div
+			onClick={() => {
+				console.log("clicked");
+				navigate(`/messages/${friend.spotifyID}`);
+				// console.log("friend is", friend);
+			}}
+			className="friend-card flex min-w-full"
+		>
 			<div className="flex w-full cursor-pointer flex-col border-b border-black bg-palette-200 p-2">
 				<div className="flex">
 					<Avatar.Root className="h-[45px] w-[45px] select-none items-center justify-center rounded-full bg-blackA3">
-						<Avatar.Image className="rounded-full" src={song.albumArt} />
+						{/* <Avatar.Image className="rounded-full " src={EmptyProfilePic} /> */}
+						<Avatar.Fallback className="leading-1 flex h-full w-full items-center justify-center rounded-full bg-white text-xl text-violet11">
+							{friend?.id ? friend?.id[0].toUpperCase() : "U"}
+						</Avatar.Fallback>
 					</Avatar.Root>
-					<p className="username max-w-full self-center overflow-hidden text-ellipsis pl-3 font-['Montserrat'] text-sm font-medium text-white text-shadow">
+					<p className="username text-shadow max-w-full self-center overflow-hidden text-ellipsis pl-3 font-['Montserrat'] text-sm font-medium text-white">
 						{friend?.id ? friend?.id + "" : "User not logged in"}
 					</p>
 				</div>
-				<div className="text-container py-1 gap-2 flex w-full items-center  ">
+				<div className="text-container flex w-full items-center gap-2 py-1  ">
 					<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
 						<path
 							fill="currentColor"
 							d="m12 3l.01 10.55c-.59-.34-1.27-.55-2-.55a4.001 4.001 0 1 0 0 8c2.22 0 3.99-1.79 3.99-4V7h4V3h-6zm-1.99 16c-1.1 0-2-.9-2-2s.9-2 2-2s2 .9 2 2s-.9 2-2 2z"
 						/>
 					</svg>
-					{/* <span className="username max-w-full overflow-hidden text-ellipsis font-['Gotham'] text-sm font-bold text-white text-shadow">
-						{friend?.id ? friend?.id + "" : "User not logged in"}
-					</span> */}
-					<span className="song-title max-h-7  overflow-hidden text-ellipsis font-['Montserrat'] text-sm font-[500] text-white text-shadow ">{song.name}</span>
-					<span className="artist-name  font-['Montserrat'] text-sm  text-white text-shadow ">{song.artist}</span>
-					{/* </div> */}
+					<span className="song-title text-shadow  max-h-7 overflow-hidden text-ellipsis font-['Montserrat'] text-sm font-[500] text-white ">{song.name}</span>
+					<span className="artist-name  text-shadow font-['Montserrat']  text-sm text-white ">{song.artist}</span>
 				</div>
 			</div>
-			{/* <div className="like-button-container"> */}
-			{/* <SendButton lastPlayedSong = {song} user = {user} friend = {friend}/> */}
-			{/* </div> */}
 		</div>
 	);
 }

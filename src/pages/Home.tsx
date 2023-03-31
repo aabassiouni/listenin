@@ -16,12 +16,14 @@ import SpotifyWebApi from "spotify-web-api-js";
 import NewCard from "../components/NewCard";
 import toast, { Toaster } from "react-hot-toast";
 import { FriendsContextProvider } from "../context/friendsContext";
+import { useFriends } from "../context/friendsContext";
 
 export type User = {
 	id: string;
 	name: string;
 	email: string;
 	spotifyID: string;
+	profilePicture?: string;
 	accountSetup?: boolean;
 	refresh_token?: string;
 };
@@ -36,8 +38,9 @@ export type Song = {
 function Home() {
 	console.log("Home component is being rendered");
 
-	const { token, isLoggedIn, getRefreshToken } = useUser();
-	const [user, setUser] = useState<User>({ id: "", name: "", email: "", spotifyID: "" });
+	const { token, isLoggedIn, getRefreshToken, user, setUser } = useUser();
+	// const [user, setUser] = useState<User>({ id: "", name: "", email: "", spotifyID: "" });
+	const { friends, setFriends} = useFriends();
 	const [isLoading, setIsLoading] = useState<Boolean>(true);
 
 	const auth = getAuth(app);
@@ -49,30 +52,42 @@ function Home() {
 
 		async function fetchData() {
 			try {
-				const spotifyProfile = await spotifyApi.getMe().catch((err) => {
+				const spotifyProfile = await spotifyApi.getMe()
+				.catch((err) => {
 					getRefreshToken();
 				});
+				
+				//typescript is so annoying
+				// if(!spotifyProfile?.images) {
+				// 	throw new Error("spotifyProfile is undefined");
+				// }
+
+				console.log("spotifyProfile is", spotifyProfile)
 
 				const spotifyID = spotifyProfile?.id;
 
 				const userProfile = await axios.get(import.meta.env.VITE_API_URL + `/users/${spotifyID}`);
 				console.log("userProfile in home is", userProfile);
+				
 				const firebase_token = await axios.get(import.meta.env.VITE_API_URL + `/users/${spotifyID}/firebase_token`);
 
 				signInWithCustomToken(auth, firebase_token.data).catch((error) => {
 					console.log("firebase error is", error);
 				});
-
+				
+				
 				const userObj = {
-					id: userProfile?.data?.spotifyID,
+					id: userProfile?.data?.username,
 					name: userProfile?.data?.email,
 					email: userProfile?.data?.email,
 					spotifyID: userProfile?.data?.spotifyID,
+					// profilePicture: spotifyProfile?.images ? spotifyProfile?.images[0]?.url : "",
 				};
 
 				if (userProfile.data) {
 					console.log("setting user to", userObj);
 					setUser(userObj);
+					setFriends(userProfile.data.friends);
 				}
 
 				setIsLoading(false);
@@ -93,20 +108,20 @@ function Home() {
 	}
 
 	return (
-		<div className="Home h-screen max-h-screen overflow-clip bg-black">
+		<div className="Home safe-h-screen max-safe-h-screen overflow-clip bg-black">
 			<Toaster position="bottom-center" />
 			<NavBar />
 			<div className="Spacer p-2"></div>
 			<NewCard spotifyApi={spotifyApi} user={user} />
 			<div className="Spacer p-2"></div>
-			<FriendsContextProvider>
+			{/* <FriendsContextProvider> */}
 				<div className="mx-6 flex justify-between">
-					<h1 className="font-['Montserrat'] text-4xl font-bold text-white">Chats</h1>
+					<h1 className="font-['Montserrat'] text-4xl font-semibold text-white">Chats</h1>
 					<AddFriendsButton user={user} />
 				</div>
 				<div className="Spacer p-2"></div>
 				<FriendsList user={user} />
-			</FriendsContextProvider>
+			{/* </FriendsContextProvider> */}
 		</div>
 	);
 }

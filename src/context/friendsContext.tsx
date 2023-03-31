@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect, useContext, useReducer, useMemo } from "react";
-
+import axios from "axios";
+import { useUser } from "./userContext";
 
 interface UserContextProps {
 	token: string | null;
@@ -24,10 +25,18 @@ export const FriendsContext = createContext<FriendsContextProps>({
 export function FriendsContextProvider({ children }: { children: React.ReactNode }) {
 
     const [friends, setFriends] = useState([]);
-
+	const { user } = useUser();
+	console.log("user is", user);
 
 	useEffect(() => {
-		
+		async function getFriends() {
+			const userProfile = await axios.get(import.meta.env.VITE_API_URL + `/users/${user?.spotifyID}`);
+			console.log("userProfile is", userProfile);
+
+			setFriends(userProfile?.data?.friends);
+		}
+
+		getFriends();
 	}, []);
 
 

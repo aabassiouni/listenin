@@ -1,9 +1,10 @@
 import React from "react";
 import { useUser } from "./context/userContext";
+import {useFriends} from "./context/friendsContext";
 import Login from "./pages/Login";
 import Home from "./pages/Home.jsx";
 import Setup from "./pages/Setup.jsx";
-import Messages from "./pages/Messenger";
+import Messenger from "./pages/Messenger";
 import LoadingPage from "./components/LoadingPage";
 
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
@@ -29,7 +30,7 @@ function App() {
 	console.log("App.js is being rendered");
 
 	const { token, isLoggedIn } = useUser();
-
+	const {friends } = useFriends();
 	console.log("token in app is " + token);
 
 	return (
@@ -62,7 +63,7 @@ function App() {
 						path="/messages/:messageID"
 						element={
 							<RequireAuth>
-								<Messages />
+								<Messenger />
 							</RequireAuth>
 						}
 					/>
