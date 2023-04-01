@@ -23,7 +23,7 @@ function SearchResult(props: { user: User; result: User }) {
 		console.log("target_id is", target_id);
 		const user = props.user;
 
-		const url = import.meta.env.VITE_API_URL + `/users/${user.id}/sendFriendRequest?target_id=${target_id}`;
+		const url = import.meta.env.VITE_API_URL + `/users/${user.spotifyID}/sendFriendRequest?target_id=${target_id}`;
 		const { data } = await axios.put(url);
 		console.log("data is", data);
 		if (data.message == "already sent") {

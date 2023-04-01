@@ -62,6 +62,7 @@ export default function NewCard(props: Props) {
 				}
 			}
 		}
+		fetchSong();
 		const interval = setInterval(fetchSong, 50000);
 
 		return () => clearInterval(interval); //This is important
@@ -103,7 +104,7 @@ export default function NewCard(props: Props) {
 	}
 
 	return (
-		<div className="mx-6 flex flex-col rounded-xl bg-palette-100 ">
+		<div className="mx-6 flex flex-col rounded-xl bg-palette-100">
 			<div className="flex flex-row items-center border-b-2 border-black/20 p-2 pl-2">
 				<Avatar.Root className=" mx-2 inline-flex h-[45px] w-[45px] select-none items-center justify-center overflow-hidden rounded-full bg-blackA3 align-middle">
 					{/* <Avatar.Image className="h-full  w-full rounded-[inherit] object-cover" src={user?.profilePicture ?? ""} /> */}

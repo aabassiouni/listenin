@@ -58,7 +58,14 @@ function App() {
 								<Home />
 							</RequireAuth>
 						}
+					>
+						<Route
+						path="/home/messages/:messageID"
+						element={
+								<Messenger />
+						}
 					/>
+					</Route>
 					<Route
 						path="/messages/:messageID"
 						element={

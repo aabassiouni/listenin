@@ -5,15 +5,14 @@ import axios from "axios";
 import { useFriends } from "../context/friendsContext.js";
 
 type Props = {
-
 	user: User;
 };
 
 function FriendsList(props: Props) {
 	console.log("FriendsList is being rendered");
 
-	const { friends, setFriends } = useFriends();
-	const [isLoading, setIsLoading] = useState<Boolean>(true);
+	const { friends, setFriends, isLoading } = useFriends();
+	// const [isLoading, setIsLoading] = useState<Boolean>(true);
 	// const following = props.following;
 	const user = props.user;
 	useEffect(() => {
@@ -27,7 +26,7 @@ function FriendsList(props: Props) {
 		// }
 
 		// getFriends();
-		setIsLoading(false);
+		// setIsLoading(false);
 	}, []);
 
 	if (isLoading) {
@@ -35,17 +34,22 @@ function FriendsList(props: Props) {
 	}
 
 	return (
-		<div className="friends-list flex h-full w-full flex-col rounded-xl bg-palette-100">
-			<div className="friends-list-card-container flex flex-col h-full items-center overflow-scroll py-6">
-				{friends.map((friendID, idx) => {
-					return (
-					
+		// <div className="friends-list flex h-full md:w-full flex-col rounded-xl max-h-[50%] overflow-scroll bg-palette-100 md: md:grow md:justify-center md:mx-6">
+		// <div className="friends-list-card-container flex flex-col md:w-full items-center overflow-scroll py-6 ">
+		<div className="overf ">
+			{friends ? friends.map((friendID, idx) => {
+				return (
+					<>
+						<FriendCard key={friendID.user} user={user} friendID={friendID.user} />
+						{/* <FriendCard key={friendID.user} user={user} friendID={friendID.user} />
 							<FriendCard key={friendID.user} user={user} friendID={friendID.user} />
-						
-					);
-				})}
-			</div>
+							<FriendCard key={friendID.user} user={user} friendID={friendID.user} /> */}
+					</>
+				);
+			}) : <></>}
 		</div>
+		// </div>
+		// </div>
 	);
 }
 

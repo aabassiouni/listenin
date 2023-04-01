@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import SendButton from "./SendButton";
 import axios from "axios";
 import EmptyAlbumArt from "../assets/empty-album-art.png";
 // import EmptyProfilePic from "../assets/empty-profile-pic.png";
 import * as Avatar from "@radix-ui/react-avatar";
 import { Song, User } from "../pages/Home";
 import { useNavigate } from "react-router-dom";
+import { isMobile } from "react-device-detect";
 
 type Props = {
 	user: User;
@@ -66,12 +66,17 @@ function FriendCard(props: Props) {
 		<div
 			onClick={() => {
 				console.log("clicked");
+				if(isMobile){
 				navigate(`/messages/${friend.spotifyID}`);
+				} else {
+					navigate(`/home/messages/${friend.spotifyID}`);
+				}
+
 				// console.log("friend is", friend);
 			}}
-			className="friend-card flex min-w-full"
+			className="friend-card flex flex-1 w-full  justify-center"
 		>
-			<div className="flex w-full cursor-pointer flex-col border-b border-black bg-palette-200 p-2">
+			<div className="flex w-full cursor-pointer flex-col border-b border-black bg-palette-200 p-2 ">
 				<div className="flex">
 					<Avatar.Root className="h-[45px] w-[45px] select-none items-center justify-center rounded-full bg-blackA3">
 						{/* <Avatar.Image className="rounded-full " src={EmptyProfilePic} /> */}

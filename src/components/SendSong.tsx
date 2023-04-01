@@ -1,10 +1,7 @@
 import React, { useEffect, useState, MouseEvent } from "react";
-// import { Modal } from "flowbite";
 import { spotifyApi } from "../spotify/spotify";
 import * as Dialog from "@radix-ui/react-dialog";
-import * as RadioGroup from "@radix-ui/react-radio-group";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
-import * as Separator from "@radix-ui/react-separator";
 import * as Tabs from "@radix-ui/react-tabs";
 import { MagnifyingGlassIcon, PaperPlaneIcon } from "@radix-ui/react-icons";
 import EmptyAlbumArt from "../assets/empty-album-art.png";
@@ -13,6 +10,7 @@ import axios from "axios";
 import { Song, User } from "../pages/Home";
 import { useParams } from "react-router-dom";
 import { useFriends } from "../context/friendsContext";
+
 type SongSearchResultProps = {
 	song: Song;
 };
@@ -52,6 +50,7 @@ function SendSong() {
 	const { user } = useUser();
 	const [selectedSong, setSelectedSong] = useState<Song>({ name: "Not Checked", albumArt: EmptyAlbumArt, artist: "", id: "" });
     const [keyboardOpen, setKeyboardOpen] = useState(false);
+    const { friends } = useFriends();
 
     useEffect(() => {
         const handleResize = () => {
@@ -63,7 +62,7 @@ function SendSong() {
         };
       }, [keyboardOpen]);
 
-	const { friends } = useFriends();
+	
 	function handleNoteChange(event: React.ChangeEvent<HTMLInputElement>) {
 		setNote(event.target.value);
 	}
@@ -122,11 +121,11 @@ function SendSong() {
 	return (
 		<Dialog.Root>
 			<Dialog.Trigger asChild={true}>
-				<button className="text-shadow w-full min-w-[20rem] gap-2 rounded-xl bg-palette-100 p-4 text-center font-['Montserrat'] text-2xl text-white">Send Song</button>
+				<button className="text-shadow w-full min-w-[20rem] gap-2 rounded-xl bg-palette-100 p-4 text-center font-['Montserrat'] font-medium text-2xl text-black">Send Song</button>
 			</Dialog.Trigger>
 			<Dialog.Portal>
 				<Dialog.Overlay className="fixed inset-0 bg-blackA9 data-[state=open]:animate-overlayShow" />
-				<Dialog.Content className="fixed top-1/2 left-[50%]  max-h-[70 w-full max-w-[450p translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-palette-100 px-[25px]  shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none data-[state=open]:animate-contentShow">
+				<Dialog.Content className="fixed top-1/2 left-[50%]  max-h-[70 md:w-1/3 w-full max-w-[450p translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-palette-100 px-[25px]  shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none data-[state=open]:animate-contentShow">
 					<Dialog.Title className="pb-3 text-center font-['Montserrat'] text-lg font-medium text-mauve12"></Dialog.Title>
 					<Tabs.Root
 						className="flex flex-col gap-1"

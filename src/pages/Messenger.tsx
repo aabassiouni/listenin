@@ -1,5 +1,5 @@
 import * as Avatar from "@radix-ui/react-avatar";
-import { useEffect, useState,useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Messages from "../components/Messages";
 import axios from "axios";
@@ -14,6 +14,7 @@ import { useUser } from "../context/userContext";
 import { useFriends } from "../context/friendsContext";
 import LoadingPage from "../components/LoadingPage";
 import SendSong from "../components/SendSong";
+import { isMobile } from "react-device-detect";
 
 type Message = {
 	note: string;
@@ -38,9 +39,10 @@ function Message(props: MessageProps) {
 		artist: "",
 		id: "",
 	});
-	const [isLoading, setIsLoading] = useState<boolean>(true);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 
 	useEffect(() => {
+		setIsLoading(true);
 		console.log("useEffect in Message is being called");
 		spotifyApi.getTrack(message?.song_id).then((response: { name: any; album: { images: { url: any }[] }; artists: { name: any }[]; id: any }) => {
 			console.log("song is", response);
@@ -54,9 +56,25 @@ function Message(props: MessageProps) {
 		});
 	}, []);
 
+	if (isLoading) {
+		return (
+			<div
+				className={
+					message.sender_id == user.spotifyID
+						? "m-5 my-2 flex w-3/4 grow-0 flex-col self-end rounded-lg bg-palette-100 md:w-1/4"
+						: "m-5 my-2 flex w-3/4 grow-0 flex-col rounded-lg bg-palette-100 md:w-1/4"
+				}
+			></div>
+		);
+	}
+
 	return (
 		<div
-			className={message.sender_id == user.spotifyID ? "m-5 my-2 flex w-3/4 grow-0 flex-col self-end rounded-lg bg-palette-100" : "m-5 my-2 flex w-3/4 grow-0 flex-col rounded-lg bg-palette-100"}
+			className={
+				message.sender_id == user.spotifyID
+					? "m-5 my-2 flex w-3/4 grow-0 flex-col self-end rounded-lg bg-palette-100 md:w-1/4"
+					: "m-5 my-2 flex w-3/4 grow-0 flex-col rounded-lg bg-palette-100 md:w-1/4"
+			}
 		>
 			<div className="relative flex flex-row items-center border-b-2 p-3">
 				<img className="song-img block h-20 w-20" src={song.albumArt} />
@@ -76,7 +94,7 @@ function Message(props: MessageProps) {
 export default function Messenger() {
 	const { messageID } = useParams();
 	const [messages, setMessages] = useState<Message[]>([]);
-	const [isLoading, setIsLoading] = useState<boolean>(true);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [conversationID, setConversationID] = useState<string>("");
 	const { token, isLoggedIn, getRefreshToken, user, setUser } = useUser();
 	const [friendProfile, setFriendProfile] = useState<User | null>(null);
@@ -91,18 +109,6 @@ export default function Messenger() {
 
 	const navigate = useNavigate();
 
-	const messagesDummy = [
-		{
-			note: "This is a sample note",
-			song_id: "6y0igZArWVi6Iz0rj35c1Y",
-			sender_id: "aabassiouni",
-		},
-		{
-			note: "This is a sample note",
-			song_id: "6y0igZArWVi6Iz0rj35c1Y",
-			sender_id: "aabassiouni",
-		},
-	];
 	useEffect(() => {
 		if (!user) {
 			navigate("/");
@@ -111,11 +117,12 @@ export default function Messenger() {
 
 	useEffect(() => {
 		// 👇️ scroll to bottom every time messages change
-		messagesEndRef.current?.scrollIntoView({behavior: "auto"});
-	  }, [messages])
+		messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+	}, [messages]);
 
 	useEffect(() => {
 		if (user) {
+			setIsLoading(true);
 			console.log(friends);
 			const conversationID = friends?.find(({ user }) => user === messageID).conversationID;
 			axios.get(import.meta.env.VITE_API_URL + `/users/${messageID}`).then((response) => {
@@ -170,49 +177,55 @@ export default function Messenger() {
 			setIsLoading(false);
 			return unsub;
 		}
-	}, []);
+	}, [messageID]);
 
 	if (isLoading) {
 		return <LoadingPage />;
 	}
 
 	return (
-		<div className="messenger safe-h-screen max-safe-h-screen flex flex-col">
+		<div className="messenger safe-h-screen md:max-safe-h-screen flex flex-col md:h-full">
 			<div className=" flex gap-3 bg-black p-4 text-white ">
-				<button
-					onClick={() => {
-						navigate("/");
-					}}
-				>
-					<svg width="32" height="32" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<path
-							d="M6.85355 3.14645C7.04882 3.34171 7.04882 3.65829 6.85355 3.85355L3.70711 7H12.5C12.7761 7 13 7.22386 13 7.5C13 7.77614 12.7761 8 12.5 8H3.70711L6.85355 11.1464C7.04882 11.3417 7.04882 11.6583 6.85355 11.8536C6.65829 12.0488 6.34171 12.0488 6.14645 11.8536L2.14645 7.85355C1.95118 7.65829 1.95118 7.34171 2.14645 7.14645L6.14645 3.14645C6.34171 2.95118 6.65829 2.95118 6.85355 3.14645Z"
-							fill="currentColor"
-							fillRule="evenodd"
-							clipRule="evenodd"
-						></path>
-					</svg>
-				</button>
+				{isMobile ? (
+					<button
+						onClick={() => {
+							navigate("/");
+						}}
+					>
+						<svg width="32" height="32" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<path
+								d="M6.85355 3.14645C7.04882 3.34171 7.04882 3.65829 6.85355 3.85355L3.70711 7H12.5C12.7761 7 13 7.22386 13 7.5C13 7.77614 12.7761 8 12.5 8H3.70711L6.85355 11.1464C7.04882 11.3417 7.04882 11.6583 6.85355 11.8536C6.65829 12.0488 6.34171 12.0488 6.14645 11.8536L2.14645 7.85355C1.95118 7.65829 1.95118 7.34171 2.14645 7.14645L6.14645 3.14645C6.34171 2.95118 6.65829 2.95118 6.85355 3.14645Z"
+								fill="currentColor"
+								fillRule="evenodd"
+								clipRule="evenodd"
+							></path>
+						</svg>
+					</button>
+				) : null}
 				<Avatar.Root className=" mx-2 inline-flex h-[45px] w-[45px] select-none items-center justify-center overflow-hidden rounded-full align-middle">
 					{/* <Avatar.Image className="h-full  w-full rounded-[inherit] object-cover" src={EmptyAlbumArt} /> */}
-					<Avatar.Fallback className="leading-1 flex h-full w-full items-center justify-center rounded-full bg-white text-black text-xl text-">
+					<Avatar.Fallback className="leading-1 text- flex h-full w-full items-center justify-center rounded-full bg-white text-xl text-black">
 						{friendProfile?.id ? friendProfile?.id[0].toUpperCase() : "U"}
 					</Avatar.Fallback>
 				</Avatar.Root>
 				<p className="self-center font-['Montserrat'] text-xl">{friendProfile?.id}</p>
 			</div>
-			<div className="flex w-full flex-1 flex-col grow overflow-scroll bg-palette-400 ">
-				<div className="flex w-full flex-col pt- ">
-					{messages.map((message) => {
-						return (
-							<div className="flex max-w-full flex-1 flex-col">
-								<Message message={message} />
-							</div>
-						);
-					})}
-					<div ref={messagesEndRef} />
+			{isLoading ? (
+				<div className="flex w-full flex-1 grow flex-col overflow-scroll bg-palette-400 "></div>
+			) : (
+				<div className="flex w-full flex-1 grow flex-col overflow-scroll bg-palette-400 ">
+					<div className="pt- flex w-full flex-col ">
+						{messages.map((message) => {
+							return (
+								<div className="flex max-w-full flex-1 flex-col">
+									<Message message={message} />
+								</div>
+							);
+						})}
+						<div ref={messagesEndRef} />
+					</div>
 				</div>
-			</div>
+			)}
 			<div className="bg-black p-3">
 				{/* <button className="text-shadow w-full min-w-[20rem] gap-2 rounded-xl bg-palette-100 p-4 text-center font-['Montserrat'] text-2xl text-white">Send Song</button> */}
 				<SendSong />

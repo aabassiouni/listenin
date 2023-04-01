@@ -1,6 +1,5 @@
 import React, { useState, MouseEvent } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
@@ -35,7 +34,7 @@ export default function Setup(props: Props) {
 	}
 
 	return (
-		<div className="flex h-screen w-screen items-center justify-center bg-palette-300">
+		<div className="flex h-screen w-screen items-center justify-center bg-black">
 			<Dialog.Root open={true}>
 				<Dialog.Trigger asChild={true}></Dialog.Trigger>
 				<Dialog.Portal>
@@ -49,11 +48,10 @@ export default function Setup(props: Props) {
 								type="text"
 								placeholder="Username"
 							/>
-							<button onClick={handleClick} type="button" className="loginButton cursor-pointer rounded-xl border bg-palette-100 p-3">
+							<button onClick={handleClick} type="button" className="loginButton cursor-pointer font-['Montserrat'] font-semibold rounded-xl border bg-palette-100 p-3">
 								Submit
 							</button>
 						</form>
-						{username}
 
 						<Dialog.Close />
 					</Dialog.Content>

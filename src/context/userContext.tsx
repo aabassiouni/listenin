@@ -1,7 +1,7 @@
-import { createContext, useState, useEffect, useContext, useReducer, useMemo } from "react";
+import { createContext, useState, useEffect, useContext} from "react";
 import { getHashParams } from "../util/util";
-import { app } from "../firebase";
-import { getAuth, signInWithCustomToken } from "firebase/auth";
+// import { app } from "../firebase";
+// import { getAuth, signInWithCustomToken } from "firebase/auth";
 
 interface UserContextProps {
 	token: string | null;
@@ -11,7 +11,7 @@ interface UserContextProps {
 	getRefreshToken: () => Promise<void>;
 	user: any;
 	setUser: any;
-	
+
 
 }
 
