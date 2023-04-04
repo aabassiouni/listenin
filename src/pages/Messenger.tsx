@@ -1,10 +1,9 @@
 import * as Avatar from "@radix-ui/react-avatar";
 import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import Messages from "../components/Messages";
 import axios from "axios";
 import { db } from "../firebase";
-import { doc, getDocs, collection, query, where, onSnapshot, orderBy } from "firebase/firestore";
+import { getDocs, collection, query, onSnapshot, orderBy } from "firebase/firestore";
 import { getAuth, signInWithCustomToken } from "firebase/auth";
 import { app } from "../firebase";
 import EmptyAlbumArt from "../assets/empty-album-art.png";
@@ -44,13 +43,14 @@ function Message(props: MessageProps) {
 	useEffect(() => {
 		setIsLoading(true);
 		console.log("useEffect in Message is being called");
-		spotifyApi.getTrack(message?.song_id).then((response: { name: any; album: { images: { url: any }[] }; artists: { name: any }[]; id: any }) => {
+		spotifyApi.getTrack(message?.song_id).then((response: { external_urls: any; name: any; album: { images: { url: any }[] }; artists: { name: any }[]; id: any }) => {
 			console.log("song is", response);
 			setSong({
 				name: response.name,
 				albumArt: response.album.images[0].url,
 				artist: response.artists[0].name,
 				id: response.id,
+				spotifyURL: response.external_urls.spotify,
 			});
 			setIsLoading(false);
 		});
@@ -69,7 +69,8 @@ function Message(props: MessageProps) {
 	}
 
 	return (
-		<div
+		<a
+			href={song.spotifyURL}
 			className={
 				message.sender_id == user.spotifyID
 					? "m-5 my-2 flex w-3/4 grow-0 flex-col self-end rounded-lg bg-palette-100 md:w-1/4"
@@ -87,7 +88,7 @@ function Message(props: MessageProps) {
 				<p className="w-full rounded-full bg-white py-1 px-2 font-['Montserrat'] font-medium text-black empty:py-4">{message.note}</p>
 				<p></p>
 			</div>
-		</div>
+		</a>
 	);
 }
 

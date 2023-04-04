@@ -30,6 +30,7 @@ export type Song = {
 	albumArt: string;
 	artist: string;
 	id: string;
+	spotifyURL?: string;
 };
 
 function Home() {
@@ -136,7 +137,7 @@ function Home() {
 				</div>
 
 				<div className="hidden grow rounded-xl h-full bg-palette-400 md:block">
-					{}<Outlet />
+					<Outlet />
 					</div>
 				{/* <div className="md: hidden grow w-full bg-red-800 md:block">asdf</div> */}
 			</div>
