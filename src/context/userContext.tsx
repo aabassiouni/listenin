@@ -1,7 +1,5 @@
 import { createContext, useState, useEffect, useContext} from "react";
 import { getHashParams } from "../util/util";
-// import { app } from "../firebase";
-// import { getAuth, signInWithCustomToken } from "firebase/auth";
 
 interface UserContextProps {
 	token: string | null;
@@ -43,7 +41,7 @@ export function UserContextProvider({ children }: { children: React.ReactNode })
 			setIsLoggedIn(true);
 		} else {
 			localStorage.removeItem("access_token");
-			// localStorage.removeItem("refresh_token");
+			localStorage.removeItem("refresh_token");
 
 			const params = getHashParams();
 			const access_token = params.access_token;
@@ -64,15 +62,12 @@ export function UserContextProvider({ children }: { children: React.ReactNode })
 
 	async function getRefreshToken() {
 		console.log("getRefreshToken is being called");
-		// setIsLoading(true);
 		const refresh_token = localStorage.getItem("refresh_token");
 		console.log("refresh token in getRefreshToken is", refresh_token);
 		const response = await fetch(import.meta.env.VITE_API_URL + `/refresh_token?refresh_token=${refresh_token}`);
 		const data = await response.json();
 		setToken(data.access_token);
 		localStorage.setItem("access_token", data.access_token);
-
-		// setIsLoading(false);
 	}
 
 	function logout() {

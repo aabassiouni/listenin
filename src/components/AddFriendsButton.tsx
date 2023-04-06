@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { PlusIcon } from "@radix-ui/react-icons";
 import * as Avatar from "@radix-ui/react-avatar";
 import * as Tabs from "@radix-ui/react-tabs";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { useFriends } from "../context/friendsContext";
 import axios from "axios";
 import type { User } from "../pages/Home";
@@ -56,10 +56,8 @@ function PendingRequest(props: { request: any; acceptRequest: any }) {
 	const acceptRequest = props.acceptRequest;
 
 	useEffect(() => {
-		
-		console.log("fetching user from api in pending request")
+		console.log("fetching user from api in pending request");
 		axios.get(import.meta.env.VITE_API_URL + `/users/${request}`).then((res) => {
-			// console.log(res.data);
 			var userObj: User = {
 				id: res.data.username,
 				email: res.data.email,
@@ -67,7 +65,6 @@ function PendingRequest(props: { request: any; acceptRequest: any }) {
 				spotifyID: res.data.spotifyID,
 			};
 
-			// console.log("userFromApi is", userObj);
 			setFriend(userObj);
 			setIsLoading(false);
 		});
@@ -177,7 +174,7 @@ export default function AddFriendsButton(props: AddFriendsButtonProps) {
 						>
 							<Tabs.List className="flex shrink-0 border-mauve6">
 								<Tabs.Trigger
-									className="flex h-[45px] flex-1 cursor-default select-none items-center font-semibold justify-center bg-white px-5 font-['Montserrat'] text-[15px] leading-none text-palette-400 outline-none first:rounded-l-md last:rounded-r-md hover:text-palette-100 data-[state=active]:text-palette-100 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative data-[state=active]:focus:shadow-[0_0_0_2px] data-[state=active]:focus:shadow-black"
+									className="flex h-[45px] flex-1 cursor-default select-none items-center justify-center bg-white px-5 font-['Montserrat'] text-[15px] font-semibold leading-none text-palette-400 outline-none first:rounded-l-md last:rounded-r-md hover:text-palette-100 data-[state=active]:text-palette-100 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative data-[state=active]:focus:shadow-[0_0_0_2px] data-[state=active]:focus:shadow-black"
 									value="add"
 								>
 									Add Friends
@@ -185,7 +182,7 @@ export default function AddFriendsButton(props: AddFriendsButtonProps) {
 
 								<Tabs.Trigger
 									value="pending"
-									className="flex h-[45px] flex-1 cursor-default select-none items-center font-semibold justify-center bg-white px-5 font-['Montserrat'] text-[15px] leading-none text-palette-400 outline-none first:rounded-l-md last:rounded-r-md hover:text-palette-100 data-[state=active]:text-palette-100 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative data-[state=active]:focus:shadow-[0_0_0_2px] data-[state=active]:focus:shadow-black"
+									className="flex h-[45px] flex-1 cursor-default select-none items-center justify-center bg-white px-5 font-['Montserrat'] text-[15px] font-semibold leading-none text-palette-400 outline-none first:rounded-l-md last:rounded-r-md hover:text-palette-100 data-[state=active]:text-palette-100 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative data-[state=active]:focus:shadow-[0_0_0_2px] data-[state=active]:focus:shadow-black"
 								>
 									Pending Requests
 								</Tabs.Trigger>
@@ -227,9 +224,8 @@ export default function AddFriendsButton(props: AddFriendsButtonProps) {
 									{requests &&
 										requests.map((request) => {
 											console.log("request is: ", request);
-										
-												return <PendingRequest request={request} acceptRequest={acceptRequest} />;
-											
+
+											return <PendingRequest request={request} acceptRequest={acceptRequest} />;
 										})}
 								</div>
 							</Tabs.Content>

@@ -1,4 +1,6 @@
 import SpotifyLogo from "../assets/Spotify_Icon_RGB_Black.png";
+
+
 function LoginButton() {
 	console.log("LoginButton is being rendered");
 

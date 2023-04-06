@@ -33,19 +33,3 @@ body {
 code {
 	font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
-
-@font-face {
-	font-family: "Gotham";
-	src: local("Gotham"), url("./fonts/GothamMedium.ttf") format("truetype");
-	font-weight: 500;
-}
-@font-face {
-	font-family: "Gotham";
-	src: local("Gotham"), url("./fonts/GothamBook.ttf") format("truetype");
-	font-weight: 200;
-}
-@font-face {
-	font-family: "Gotham";
-	src: local("Gotham"), url("./fonts/Gotham-Bold.otf") format("opentype");
-	font-weight: 700;
-}

@@ -1,6 +1,6 @@
 import React from "react";
 import { useUser } from "./context/userContext";
-import {useFriends} from "./context/friendsContext";
+import { useFriends } from "./context/friendsContext";
 import Login from "./pages/Login";
 import Home from "./pages/Home.jsx";
 import Setup from "./pages/Setup.jsx";
@@ -12,6 +12,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 type Props = {
 	children: React.ReactNode;
 };
+
 function RequireAuth({ children }: Props): any {
 	const { token, isLoggedIn, isLoading } = useUser();
 
@@ -30,7 +31,6 @@ function App() {
 	console.log("App.js is being rendered");
 
 	const { token, isLoggedIn } = useUser();
-	const {friends } = useFriends();
 	console.log("token in app is " + token);
 
 	return (
@@ -46,11 +46,7 @@ function App() {
 						}
 					/>
 					<Route path="/login" element={<Login />} />
-					{/* <Route path= "/setup" element={
-							<RequireAuth>
-								<Setup />
-							</RequireAuth>
-						}/> */}
+
 					<Route
 						path="/home"
 						element={
@@ -59,12 +55,7 @@ function App() {
 							</RequireAuth>
 						}
 					>
-						<Route
-						path="/home/messages/:messageID"
-						element={
-								<Messenger />
-						}
-					/>
+						<Route path="/home/messages/:messageID" element={<Messenger />} />
 					</Route>
 					<Route
 						path="/messages/:messageID"
@@ -76,7 +67,6 @@ function App() {
 					/>
 				</Routes>
 			</Router>
-			{/* } */}
 		</div>
 	);
 }

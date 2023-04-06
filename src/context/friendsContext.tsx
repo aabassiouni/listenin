@@ -2,14 +2,7 @@ import { createContext, useState, useEffect, useContext, useReducer, useMemo } f
 import axios from "axios";
 import { useUser } from "./userContext";
 
-interface UserContextProps {
-	token: string | null;
-	isLoggedIn: boolean;
-	isLoading: boolean;
-	logout: () => void;
-	getRefreshToken: () => Promise<void>;
 
-}
 
 interface FriendsContextProps {
     friends: any[];

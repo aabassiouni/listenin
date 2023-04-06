@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import EmptyAlbumArt from "../assets/empty-album-art.png";
-// import EmptyProfilePic from "../assets/empty-profile-pic.png";
 import * as Avatar from "@radix-ui/react-avatar";
 import { Song, User } from "../pages/Home";
 import { useNavigate } from "react-router-dom";
 import { isMobile } from "react-device-detect";
+import SpotifyLogo from "../assets/Spotify_Icon_RGB_Black.png";
 
 type Props = {
 	user: User;
@@ -19,7 +19,6 @@ function FriendCard(props: Props) {
 	const user = props.user;
 	var friendID = props.friendID;
 	const navigate = useNavigate();
-
 
 	useEffect(() => {
 		// fetch friend data from api
@@ -43,18 +42,6 @@ function FriendCard(props: Props) {
 			setIsLoading(false);
 		});
 	}, []);
-	// async function handleClick() {
-	// 	var userID = propsUser;
-
-	// 	await axios.get(`http://localhost:8888/users/?userID=${userID}`).then((res) => {
-	// 		var userFromApi = res.data;
-	// 		setFriend(userFromApi);
-	// 		setSong({
-	// 			name: res.data.lastPlayed.name,
-	// 			albumArt: EmptyAlbumArt,
-	// 			artist: res.data.lastPlayed.artist,
-	// 		});
-	// 	});
 
 	if (isLoading)
 		return (
@@ -66,22 +53,22 @@ function FriendCard(props: Props) {
 		<div
 			onClick={() => {
 				console.log("clicked");
-				if(isMobile){
-				navigate(`/messages/${friend.spotifyID}`);
+				if (isMobile) {
+					navigate(`/messages/${friend.spotifyID}`);
 				} else {
 					navigate(`/home/messages/${friend.spotifyID}`);
 				}
 
 				// console.log("friend is", friend);
 			}}
-			className="friend-card flex flex-1 w-full  justify-center"
+			className="friend-card flex w-full flex-1  justify-center"
 		>
 			<div className="flex w-full cursor-pointer flex-col border-b border-black bg-palette-200 p-2 ">
 				<div className="flex">
 					<Avatar.Root className="h-[45px] w-[45px] select-none items-center justify-center rounded-full bg-blackA3">
 						{/* <Avatar.Image className="rounded-full " src={EmptyProfilePic} /> */}
 						<Avatar.Fallback className="leading-1 flex h-full w-full items-center justify-center rounded-full bg-white text-xl text-violet11">
-							{friend?.id ? friend?.id[0].toUpperCase() : "U"}
+							{friend?.id ? friend?.id[0].toUpperCase() : "?"}
 						</Avatar.Fallback>
 					</Avatar.Root>
 					<p className="username text-shadow max-w-full self-center overflow-hidden text-ellipsis pl-3 font-['Montserrat'] text-sm font-medium text-white">
@@ -89,12 +76,8 @@ function FriendCard(props: Props) {
 					</p>
 				</div>
 				<div className="text-container flex w-full items-center gap-2 py-1  ">
-					<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
-						<path
-							fill="currentColor"
-							d="m12 3l.01 10.55c-.59-.34-1.27-.55-2-.55a4.001 4.001 0 1 0 0 8c2.22 0 3.99-1.79 3.99-4V7h4V3h-6zm-1.99 16c-1.1 0-2-.9-2-2s.9-2 2-2s2 .9 2 2s-.9 2-2 2z"
-						/>
-					</svg>
+					<img src={SpotifyLogo} alt="" className="h-w-5 ml-1 w-5" />
+
 					<span className="song-title text-shadow  max-h-7 overflow-hidden text-ellipsis font-['Montserrat'] text-sm font-[500] text-white ">{song.name}</span>
 					<span className="artist-name  text-shadow font-['Montserrat']  text-sm text-white ">{song.artist}</span>
 				</div>
