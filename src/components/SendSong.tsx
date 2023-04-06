@@ -47,6 +47,7 @@ function SendSong() {
 	const [searchResults, setSearchResults] = useState<Song[]>([]);
 	const [note, setNote] = useState<string>("");
 	const [search, setSearch] = useState<string>("");
+    const [isOpen, setIsOpen] = useState(false);
 	const { user } = useUser();
 	const [selectedSong, setSelectedSong] = useState<Song>({ name: "Not Checked", albumArt: EmptyAlbumArt, artist: "", id: "" });
     const [keyboardOpen, setKeyboardOpen] = useState(false);
@@ -115,11 +116,15 @@ function SendSong() {
         console.log("sending message to", friend.user,"with sing", selectedSong.name, "and with data", data);
 		axios.put(import.meta.env.VITE_API_URL + `/send/${friend.conversationID}`, data).then(() => {
 			console.log("message sent successfully");
+		    setIsOpen(false);
+
 		});
 	}
 
 	return (
-		<Dialog.Root>
+		<Dialog.Root open={isOpen} onOpenChange={()=>{
+            setIsOpen(!isOpen);
+        }}>
 			<Dialog.Trigger asChild={true}>
 				<button className="text-shadow w-full min-w-[20rem] gap-2 rounded-xl bg-palette-100 p-4 text-center font-['Montserrat'] font-medium text-2xl text-black">Send Song</button>
 			</Dialog.Trigger>
