@@ -6,7 +6,6 @@ const { getFirestore, Timestamp, FieldValue } = require("firebase-admin/firestor
 const { initializeApp, applicationDefault, cert } = require("firebase-admin/app");
 const { getAuth, createCustomToken } = require("firebase-admin/auth");
 
-const server = require("../server.js");
 const User = require("../models/User");
 
 
@@ -67,7 +66,7 @@ router.get("/", function (req, res) {
 				grant_type: "authorization_code",
 			},
 			headers: {
-				Authorization: "Basic " + new Buffer(client_id + ":" + client_secret).toString("base64"),
+				Authorization: "Basic " + new Buffer.from(client_id + ":" + client_secret).toString("base64"),
 			},
 			json: true,
 		};

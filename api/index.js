@@ -9,7 +9,7 @@ dotenv.config();
 
 
 const User = require("./models/User.js");
-const { initializeApp, applicationDefault, cert } = require("firebase-admin/app");
+const { initializeApp, cert } = require("firebase-admin/app");
 const { getFirestore, Timestamp, FieldValue } = require("firebase-admin/firestore");
 const { getAuth, createCustomToken } = require("firebase-admin/auth");
 
@@ -34,10 +34,15 @@ const db = getFirestore();
 const app = express();
 app.use(express.json());
 
-app.use("/images", express.static(path.join(__dirname, "public/images")))
+app.use("/api/images", express.static(path.join(__dirname, "public/images")))
 .use(cors())
 .use(cookieParser());
 
+app.get('/api', (req, res) => {
+	res.setHeader('Content-Type', 'text/html');
+	res.setHeader('Cache-Control', 's-max-age=1, stale-while-revalidate');
+	res.end(`Hello! you shouldnt be here`);
+  });
 
 const userRoute = require("./routes/users.js");
 const loginRoute = require("./routes/login.js");
@@ -47,13 +52,15 @@ const searchRoute = require("./routes/search.js");
 const refreshRoute = require("./routes/refresh-token.js");
 const adminRoute = (process.env.NODE_ENV == "development" ? require("./routes/admin.js") : null);
 
-app.use("/login", loginRoute);
-app.use("/callback", callbackRoute);
-app.use("/users", userRoute);
-app.use("/send", sendRoute);
-app.use("/search", searchRoute);
-app.use("/refresh_token", refreshRoute);
+app.use("/api/login", loginRoute);
+app.use("/api/callback", callbackRoute);
+app.use("/api/users", userRoute);
+app.use("/api/send", sendRoute);
+app.use("/api/search", searchRoute);
+app.use("/api/refresh_token", refreshRoute);
 // app.use("/admin", adminRoute);
 
 console.log("Express Server listening on 8888");
 app.listen(8888);
+
+module.exports = app;
