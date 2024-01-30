@@ -26,7 +26,7 @@ mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopol
 
 
 initializeApp({
-	credential: cert(JSON.parse(process.env.FIREBASE_CONFIG)),
+	credential: cert(JSON.parse(process.env.FIREBASE_CONFIG.replace(/^'|'$/g, ''))),
 });
 
 const db = getFirestore();
@@ -61,6 +61,6 @@ app.use("/api/refresh_token", refreshRoute);
 // app.use("/admin", adminRoute);
 
 console.log("Express Server listening on 8888");
-app.listen(8888);
+// app.listen(8888);
 
 module.exports = app;
