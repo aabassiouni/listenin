@@ -27,7 +27,6 @@ interface MessageProps {
 }
 
 function Message(props: MessageProps) {
-	console.log("Message is being rendered");
 	const { user } = useUser();
 	const message = props.message;
 	console.log("message is", message);
@@ -42,7 +41,6 @@ function Message(props: MessageProps) {
 
 	useEffect(() => {
 		setIsLoading(true);
-		console.log("useEffect in Message is being called");
 		spotifyApi.getTrack(message?.song_id).then((response: { external_urls: any; name: any; album: { images: { url: any }[] }; artists: { name: any }[]; id: any }) => {
 			console.log("song is", response);
 			setSong({

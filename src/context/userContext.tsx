@@ -9,8 +9,6 @@ interface UserContextProps {
 	getRefreshToken: () => Promise<void>;
 	user: any;
 	setUser: any;
-
-
 }
 
 export const UserContext = createContext<UserContextProps>({

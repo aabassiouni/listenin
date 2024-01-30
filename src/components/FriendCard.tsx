@@ -23,7 +23,6 @@ function FriendCard(props: Props) {
 	useEffect(() => {
 		// fetch friend data from api
 		axios.get(import.meta.env.VITE_API_URL + `/users/${friendID}`).then((res) => {
-			console.log(res.data);
 			var userObj: User = {
 				id: res.data.username,
 				email: res.data.email,
@@ -31,7 +30,6 @@ function FriendCard(props: Props) {
 				spotifyID: res.data.spotifyID,
 			};
 
-			console.log("userFromApi is", userObj);
 			setFriend(userObj);
 			setSong({
 				name: res.data.lastPlayed.name,
@@ -59,7 +57,6 @@ function FriendCard(props: Props) {
 					navigate(`/home/messages/${friend.spotifyID}`);
 				}
 
-				// console.log("friend is", friend);
 			}}
 			className="friend-card flex w-full flex-1  justify-center"
 		>

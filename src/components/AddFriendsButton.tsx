@@ -18,14 +18,11 @@ function SearchResult(props: { user: User; result: User }) {
 
 	async function handleAddClick() {
 		setIsLoading(true);
-		console.log("result in search result is", result);
 		const target_id = result.spotifyID;
-		console.log("target_id is", target_id);
 		const user = props.user;
 
 		const url = import.meta.env.VITE_API_URL + `/users/${user.spotifyID}/sendFriendRequest?target_id=${target_id}`;
 		const { data } = await axios.put(url);
-		console.log("data is", data);
 		if (data.message == "already sent") {
 			toast.error("Already sent");
 		}
@@ -52,11 +49,9 @@ function PendingRequest(props: { request: any; acceptRequest: any }) {
 	const request = props.request;
 	const [friend, setFriend] = useState<User | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
-	console.log("request in pending", request);
 	const acceptRequest = props.acceptRequest;
 
 	useEffect(() => {
-		console.log("fetching user from api in pending request");
 		axios.get(import.meta.env.VITE_API_URL + `/users/${request}`).then((res) => {
 			var userObj: User = {
 				id: res.data.username,

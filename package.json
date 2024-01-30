@@ -24,6 +24,7 @@
     "@types/spotify-web-api-js": "^0.21.0",
     "axios": "1.2.4",
     "daisyui": "^2.51.0",
+    "dayjs": "^1.11.7",
     "firebase": "^9.17.1",
     "flowbite": "^1.6.3",
     "flowbite-react": "^0.3.8",

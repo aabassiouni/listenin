@@ -19,14 +19,11 @@ function SongSearchResult(props: SongSearchResultProps) {
 	const song = props?.song;
 
 	function handleClick() {
-		// props.setSong(song);
-		// props.setIsOpen(false);
 		console.log("clicked songsearchresult");
 	}
 	return (
 		<div
 			onClick={handleClick}
-			// className="song-search-result focus:bg-red-800 flex w-full grow-0 flex-row items-center gap-3 rounded-lg border-2 border-gray-700 bg-white p-2 focus:border-2 focus:border-palette-300 focus:bg-palette-200/50"
 			className=" flex gap-3"
 		>
 			<img src={song.albumArt} alt="album art" className="h-12 w-12" />
@@ -100,11 +97,7 @@ function SendSong() {
 		}
 	}
 	function handleSendClick() {
-		console.log("clicked send");
-		console.log("selectedSong is", selectedSong);
-		console.log("user is", user);
 		const friend = friends.find((friend) => friend.user === messageID);
-		console.log("friend is", friend);
 
 		const data = {
 			sender_id: user?.spotifyID,
@@ -112,10 +105,7 @@ function SendSong() {
 			note: note,
 			timestamp: Date.now(),
 		};
-		console.log("message id in sendclick is", friend.conversationID);
-        console.log("sending message to", friend.user,"with sing", selectedSong.name, "and with data", data);
 		axios.put(import.meta.env.VITE_API_URL + `/send/${friend.conversationID}`, data).then(() => {
-			console.log("message sent successfully");
 		    setIsOpen(false);
 
 		});
@@ -195,7 +185,6 @@ function SendSong() {
 															<>
 																<button
 																	onClick={() => {
-																		console.log(song);
 																		setSelectedSong(song);
 																	}}
 																	className="song-search-result flex w-full grow-0 flex-row items-center gap-3 rounded-lg border-2 border-gray-700 bg-white p-2 focus:border-2 focus:border-palette-300 focus:bg-[#2fad62]"

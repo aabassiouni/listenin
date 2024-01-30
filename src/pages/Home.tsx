@@ -9,7 +9,7 @@ import AddFriendsButton from "../components/AddFriendsButton";
 import Setup from "./Setup";
 import { getAuth, signInWithCustomToken } from "firebase/auth";
 import { app } from "../firebase";
-import NewCard from "../components/NewCard";
+import Card from "../components/NewCard";
 import { Toaster } from "react-hot-toast";
 import { useFriends } from "../context/friendsContext";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
@@ -37,7 +37,6 @@ function Home() {
 	console.log("Home component is being rendered");
 
 	const { token, isLoggedIn, getRefreshToken, user, setUser } = useUser();
-	// const [user, setUser] = useState<User>({ id: "", name: "", email: "", spotifyID: "" });
 	const { friends, setFriends } = useFriends();
 	const [isLoading, setIsLoading] = useState<Boolean>(true);
 
@@ -59,12 +58,10 @@ function Home() {
 				// 	throw new Error("spotifyProfile is undefined");
 				// }
 
-				console.log("spotifyProfile is", spotifyProfile);
 
 				const spotifyID = spotifyProfile?.id;
 
 				const userProfile = await axios.get(import.meta.env.VITE_API_URL + `/users/${spotifyID}`);
-				console.log("userProfile in home is", userProfile);
 
 				const firebase_token = await axios.get(import.meta.env.VITE_API_URL + `/users/${spotifyID}/firebase_token`);
 
@@ -82,16 +79,12 @@ function Home() {
 				};
 
 				if (userProfile.data) {
-					console.log("setting user to", userObj);
 					setUser(userObj);
 					setFriends(userProfile.data.friends);
 				}
 
 				setIsLoading(false);
-				console.log("setting isLoading to false");
 			} catch (err) {
-				console.log("error in fetchData", err);
-				console.log("error is", err);
 			}
 		}
 
@@ -110,7 +103,7 @@ function Home() {
 			<NavBar />
 			<div className=" md:flex md:overflow-clip">
 				<div className="flex flex-col md:mx-3 md:basis-1/4">
-					<NewCard spotifyApi={spotifyApi} user={user} />
+					<Card spotifyApi={spotifyApi} user={user} />
 					<div className="Spacer p-2"></div>
 					<div className="md:w mx-6 flex justify-between">
 						<h1 className="font-['Montserrat'] text-4xl font-semibold text-white">Chats</h1>
