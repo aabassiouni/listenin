@@ -9,19 +9,16 @@ const UserSchema = new mongoose.Schema(
     },
     lastPlayed:{
       type: Object,
-      default: {name: "Not Checked", 
-                albumArt: null,
-                artist: "",
-                id: null,
+      default: {song_id: "", 
                 timestamp: null, },
     },
     username: {
       type: String,
-      default: null,
     },
     spotifyID: {
       type: String,
-      default: null,
+      unique: true,
+      required: true,
     },
     accountSetup:{
       type: Boolean,
